@@ -1,1 +1,1 @@
-# react2021Q3-pointing-poker
+# pointing-poker
