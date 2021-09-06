@@ -11,6 +11,7 @@
     "test": "react-scripts test"
   },
   "dependencies": {
+    "antd": "^4.16.13",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
