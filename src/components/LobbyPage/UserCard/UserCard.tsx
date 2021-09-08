@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Avatar, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
+import './userCard.css';
 
 export interface UserData {
   firstName: string;
@@ -10,14 +11,16 @@ export interface UserData {
   avatar?: string;
 }
 
-function userCard(props: UserData): JSX.Element {
+function UserCard(props: UserData): JSX.Element {
   const { firstName, lastName, position, userRole, avatar } = props;
   const { Meta } = Card;
   return (
-    <Card
-      className="user-card_container"
-      extra={userRole === 'scram master' ? '' : <CloseOutlined />}
-    >
+    <Card className="user-card_container">
+      {userRole === 'scram master' ? (
+        <></>
+      ) : (
+        <CloseOutlined className="delete_member" />
+      )}
       <p className="user-card_role">{userRole}:</p>
       <Meta
         avatar={
@@ -37,4 +40,4 @@ function userCard(props: UserData): JSX.Element {
   );
 }
 
-export default userCard;
+export default UserCard;
