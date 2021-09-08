@@ -1,11 +1,13 @@
 import * as React from 'react';
-import LobbyPagePlayers from './LobbyPagePlayers';
+import './lobbyPage.css';
+import LobbyPageScramMaster from './LobbyPageScramMaster';
+// import LobbyPagePlayers from './LobbyPagePlayers';
 
-function lobbyPage(): JSX.Element {
+function LobbyPage(): JSX.Element {
   return (
     <div className="lobby-page">
-      <LobbyPagePlayers />
+      <LobbyPageScramMaster />
     </div>
   );
 }
-export default lobbyPage;
+export default LobbyPage;
