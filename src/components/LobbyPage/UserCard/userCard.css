@@ -1,0 +1,29 @@
+.user-card_container {
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px -2px rgba(34, 60, 80, 0.6);
+  width: 300px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.user-card_role {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-card-body {
+  padding: 10px;
+}
+
+.ant-card-extra {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.ant-card-head {
+  min-height: 25px;
+}
+
+.anticon-close:hover {
+  cursor: pointer;
+  color: #d70505;
+}
