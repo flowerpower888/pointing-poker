@@ -28,15 +28,19 @@ const Home: FC = () => {
   };
 
   const searchGame = async (id: string) => {
-    setIsLoading(true);
-    try {
-      await gameAPI.getGameInfo(id);
-      setIsErrorShown(false);
-      setIsPopupShown(true);
-    } catch {
+    if (id === '') {
       setIsErrorShown(true);
-    } finally {
-      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+      try {
+        await gameAPI.getGameInfo(id);
+        setIsErrorShown(false);
+        setIsPopupShown(true);
+      } catch {
+        setIsErrorShown(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
   return (
