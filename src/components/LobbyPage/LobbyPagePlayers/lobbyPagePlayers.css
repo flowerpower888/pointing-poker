@@ -1,0 +1,11 @@
+.lobby-exit-btn {
+  width: 190px;
+  box-shadow: 2px 2px 2px -2px #2b3a67;
+  font-weight: 500;
+  font-size: 18px;
+  align-items: center;
+  text-align: center;
+  padding: 6px 15px;
+  color: #2b3a67;
+}
+

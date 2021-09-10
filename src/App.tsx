@@ -1,9 +1,9 @@
 import React from 'react';
-import LobbyForm from './components/LobbyForm';
+import LobbyPage from './components/LobbyPage';
 
 const App: React.FunctionComponent = () => (
   <>
-    <LobbyForm />
+    <LobbyPage />
   </>
 );
 
