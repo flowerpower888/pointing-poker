@@ -15,7 +15,10 @@
     "project": "tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": ["eslint-plugin-import-helpers", "prettier"],
+  "plugins": [
+    "eslint-plugin-import-helpers",
+    "prettier"
+  ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
