@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import 'antd/dist/antd.css';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
 import UploadAvatar from '../UploadAvatar';
@@ -11,13 +12,22 @@ const LobbyForm: React.FunctionComponent = () => {
   const [role, setRole] = useState<string>('player');
   const [imageFile, setImageFile] = useState<Blob | null>(null);
 
-  const onFinish = (values: { field: string }) => {
-    const imagePath = '';
+  const onFinish = async (values: { field: string }) => {
+    let imagePath = '';
+
     if (imageFile) {
-      console.log(imageFile);
-      const data = new FormData();
-      data.append('image', imageFile);
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      imagePath = await axios
+        .post(`http://localhost:3001/api/upload`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(res => res.data);
     }
+
     console.log('Success:', { ...values, role, imagePath });
   };
 

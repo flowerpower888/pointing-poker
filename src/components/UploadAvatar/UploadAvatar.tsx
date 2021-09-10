@@ -20,7 +20,11 @@ const UploadAvatar: React.FunctionComponent<Props> = ({ setImageFile }) => (
       maxCount={1}
       beforeUpload={() => false}
       onChange={(info: UploadChangeParam<UploadFile>) => {
-        setImageFile(info.file as unknown as Blob);
+        setImageFile(
+          info.file.status === 'removed'
+            ? null
+            : (info.file as unknown as Blob),
+        );
       }}
     >
       <Button icon={<PlusOutlined />}>Upload image</Button>
