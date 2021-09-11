@@ -21,3 +21,9 @@
   margin-top: 20px;
   margin-left: 20px;
 }
+
+.user-card_container {
+  width: 300px;
+  margin-top: 20px !important;
+  margin-left: 20px !important;
+}
