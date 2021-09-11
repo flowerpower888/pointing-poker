@@ -12,11 +12,11 @@ function LobbyPagePlayers(): JSX.Element {
     <>
       <h2 className="lobby-title"> Spring planning</h2>
       <UserCard
-        avatar=""
+        imagePath=""
         firstName="User"
         lastName="Name"
         userRole="scram master"
-        position="student"
+        jobPosition="student"
       />
       <div className="lobby-page_btn-container">
         <Button className="lobby-exit-btn" type="default" size="large">

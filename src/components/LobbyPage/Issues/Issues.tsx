@@ -11,11 +11,25 @@ import { FormEvent, useState } from 'react';
 import './issues.css';
 import { v4 as uuidv4 } from 'uuid';
 
-function Issues(): JSX.Element {
+type Props = {
+  issueList: string[];
+  setIssueList: React.Dispatch<React.SetStateAction<string[]>>;
+  editable?: boolean;
+  onIssueClick?: (index: number) => void;
+  currentIssue?: number;
+};
+
+const Issues: React.FunctionComponent<Props> = ({
+  issueList,
+  setIssueList,
+  editable = true,
+  onIssueClick,
+  currentIssue,
+}) => {
   const [newIssue, setNewIssue] = useState('');
-  const [issueList, setIssueList] = useState(Array<string>());
   const [isEditing, setIsEditing] = useState(false);
-  const [currentIssue, setCurrentIssue] = useState({ value: '', index: NaN });
+  const [currentItem, setCurrentItem] = useState({ value: '', index: NaN });
+
   const addIssue = (event: FormEvent) => {
     event.preventDefault();
     if (newIssue.length > 0) {
@@ -27,13 +41,13 @@ function Issues(): JSX.Element {
   const editIssue = (event: FormEvent) => {
     event.preventDefault();
     const tempList = issueList;
-    tempList[currentIssue.index] = currentIssue.value;
+    tempList[currentItem.index] = currentItem.value;
     setIssueList(tempList);
     setIsEditing(false);
   };
 
   return (
-    <>
+    <div className="issues">
       <h2 className="lobby-title">Issues</h2>
       {isEditing ? (
         <form
@@ -42,13 +56,13 @@ function Issues(): JSX.Element {
           onSubmit={editIssue}
         >
           <Input
-            value={currentIssue.value}
+            value={currentItem.value}
             type="text"
             className="new-issue_input"
             onChange={event =>
-              setCurrentIssue({
+              setCurrentItem({
                 value: event.target.value,
-                index: currentIssue.index,
+                index: currentItem.index,
               })
             }
           />
@@ -86,18 +100,25 @@ function Issues(): JSX.Element {
           />
         </form>
       )}
-      <div className="issue_container">
+      <ul className="issue_container">
         {issueList.map((el, index) => (
-          <div className="issue-item" key={uuidv4()}>
+          <li
+            className={`issue-item ${currentIssue === index ? 'current' : ''}`}
+            key={uuidv4()}
+            onClick={onIssueClick ? () => onIssueClick(index) : undefined}
+            role="presentation"
+          >
             {el}
             <div>
-              <EditOutlined
-                className="edit-issue_icon"
-                onClick={() => {
-                  setCurrentIssue({ value: el, index });
-                  setIsEditing(true);
-                }}
-              />
+              {editable && (
+                <EditOutlined
+                  className="edit-issue_icon"
+                  onClick={() => {
+                    setCurrentItem({ value: el, index });
+                    setIsEditing(true);
+                  }}
+                />
+              )}
               <DeleteOutlined
                 className="delete-issue_icon"
                 color="red"
@@ -106,11 +127,11 @@ function Issues(): JSX.Element {
                 }}
               />
             </div>
-          </div>
+          </li>
         ))}
-      </div>
-    </>
+      </ul>
+    </div>
   );
-}
+};
 
 export default Issues;

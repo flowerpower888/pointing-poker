@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import UserCard from '../UserCard/UserCard';
@@ -7,18 +7,21 @@ import 'antd/dist/antd.css';
 import './lobbyPageScramMaster.css';
 import members from '../ConstantsHardCode';
 import Issues from '../Issues/Issues';
+import issues from '../../../shared/issues';
 
 function LobbyPageScramMaster(): JSX.Element {
+  const [issueList, setIssueList] = useState(issues);
+
   return (
     <>
       <h2 className="lobby-title"> Spring planning</h2>
       <div className="scram-card_container">
         <UserCard
-          avatar=""
+          imagePath=""
           firstName="User"
           lastName="Name"
           userRole="scram master"
-          position="student"
+          jobPosition="student"
         />
         <Paragraph
           className="lobby-copy-link"
@@ -41,7 +44,7 @@ function LobbyPageScramMaster(): JSX.Element {
         </Button>
       </div>
       <MembersList users={members} />
-      <Issues />
+      <Issues issueList={issueList} setIssueList={setIssueList} />
     </>
   );
 }

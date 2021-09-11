@@ -6,14 +6,15 @@ import './userCard.css';
 export interface UserData {
   firstName: string;
   lastName?: string;
-  position?: string;
+  jobPosition?: string;
   userRole: 'scram master' | 'player' | 'observer';
-  avatar?: string;
+  imagePath?: string;
 }
 
 function UserCard(props: UserData): JSX.Element {
-  const { firstName, lastName, position, userRole, avatar } = props;
+  const { firstName, lastName, jobPosition, userRole, imagePath } = props;
   const { Meta } = Card;
+
   return (
     <Card className="user-card_container">
       {userRole === 'scram master' ? (
@@ -28,13 +29,13 @@ function UserCard(props: UserData): JSX.Element {
             style={{ backgroundColor: '#51d7c2' }}
             size="large"
             alt="user avatar"
-            src={avatar}
+            src={imagePath}
           >
             {firstName[0] + (lastName ? lastName[0] : '')}
           </Avatar>
         }
         title={`${firstName} ${lastName}`}
-        description={position}
+        description={jobPosition}
       />
     </Card>
   );

@@ -25,6 +25,16 @@
   padding: 1px;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.issue-item:hover {
+  background: rgb(81 215 194 / 0.2);
+}
+
+.issue-item.current {
+  background: rgb(81 215 194 / 0.3);
 }
 
 .edit-issue_icon,
