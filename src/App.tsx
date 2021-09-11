@@ -1,9 +1,14 @@
 import React from 'react';
-import LobbyPage from './components/LobbyPage';
+import './App.css';
+import Header from './components/Header';
+import Home from './components/Home';
+import Footer from './components/Footer';
 
 const App: React.FunctionComponent = () => (
   <>
-    <LobbyPage />
+    <Header />
+    <Home />
+    <Footer />
   </>
 );
 
