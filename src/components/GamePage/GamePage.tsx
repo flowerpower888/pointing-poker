@@ -88,7 +88,7 @@ const GamePage: React.FunctionComponent = () => {
             </Button>
           </Row>
 
-          <Row align="middle" justify="center">
+          <Row align="middle">
             <Issues
               issueList={issueList}
               setIssueList={setIssueList}
