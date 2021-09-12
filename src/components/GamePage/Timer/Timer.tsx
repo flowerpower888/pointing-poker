@@ -6,7 +6,9 @@ type Props = {
   limit: number;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
-  currentIssue: number;
+  currentIssue: string;
+  onRoundEnd: () => void;
+  onRoundStart: () => void;
 };
 
 const Timer: React.FunctionComponent<Props> = ({
@@ -14,6 +16,8 @@ const Timer: React.FunctionComponent<Props> = ({
   status,
   setStatus,
   currentIssue,
+  onRoundEnd,
+  onRoundStart,
 }) => {
   const [btnText, setBtnText] = useState('Run round');
   const [seconds, setSeconds] = useState(limit);
@@ -34,12 +38,16 @@ const Timer: React.FunctionComponent<Props> = ({
       setBtnText('Restart round');
     };
 
-    if (seconds === 0) stop();
-  }, [seconds, limit, timerInterval, status, setStatus]);
+    if (seconds === 0) {
+      stop();
+      onRoundEnd();
+    }
+  }, [seconds, limit, timerInterval, status, setStatus, onRoundEnd]);
 
   const start = () => {
     if (status === 'stopped') {
       setStatus('started');
+      onRoundStart();
       setTimerInterval(
         window.setInterval(() => {
           setSeconds(prev => prev - 1);

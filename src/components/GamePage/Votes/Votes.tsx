@@ -1,28 +1,45 @@
+import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
-import React from 'react';
 import members from '../../LobbyPage/ConstantsHardCode';
 import UserCard from '../../LobbyPage/UserCard';
 import './Votes.scss';
 
-const Votes: React.FunctionComponent = () => {
-  const data = members
-    .filter(member => member.userRole !== 'observer')
-    .map(member => {
-      const player = {
-        key: member.firstName,
-        player: (
-          <UserCard
-            firstName={member.firstName}
-            userRole={member.userRole}
-            imagePath={member.imagePath}
-            avatarSize="small"
-          />
-        ),
-        score: 'In progress',
-      };
+type Props = {
+  score: number[] | null;
+};
 
-      return player;
-    });
+const Votes: React.FunctionComponent<Props> = ({ score }) => {
+  const [data, setData] = useState<
+    | {
+        key: string;
+        player: JSX.Element;
+        score: string | number;
+      }[]
+    | null
+  >(null);
+
+  useEffect(() => {
+    setData(
+      members
+        .filter(member => member.userRole !== 'observer')
+        .map((member, i) => {
+          const player = {
+            key: member.firstName,
+            player: (
+              <UserCard
+                firstName={member.firstName}
+                userRole={member.userRole}
+                imagePath={member.imagePath}
+                avatarSize="small"
+              />
+            ),
+            score: score?.[i] || 'In progress',
+          };
+
+          return player;
+        }),
+    );
+  }, [score]);
 
   const columns = [
     {
@@ -39,12 +56,14 @@ const Votes: React.FunctionComponent = () => {
 
   return (
     <div className="voting">
-      <Table
-        dataSource={data}
-        columns={columns}
-        pagination={false}
-        size="small"
-      />
+      {data && (
+        <Table
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+          size="small"
+        />
+      )}
     </div>
   );
 };

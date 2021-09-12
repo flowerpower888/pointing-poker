@@ -15,8 +15,8 @@ type Props = {
   issueList: string[];
   setIssueList: React.Dispatch<React.SetStateAction<string[]>>;
   editable?: boolean;
-  onIssueClick?: (index: number) => void;
-  currentIssue?: number;
+  onIssueClick?: (issue: string) => void;
+  currentIssue?: string | null;
 };
 
 const Issues: React.FunctionComponent<Props> = ({
@@ -103,9 +103,9 @@ const Issues: React.FunctionComponent<Props> = ({
       <ul className="issue_container">
         {issueList.map((el, index) => (
           <li
-            className={`issue-item ${currentIssue === index ? 'current' : ''}`}
+            className={`issue-item ${currentIssue === el ? 'current' : ''}`}
             key={uuidv4()}
-            onClick={onIssueClick ? () => onIssueClick(index) : undefined}
+            onClick={onIssueClick ? () => onIssueClick(el) : undefined}
             role="presentation"
           >
             {el}
