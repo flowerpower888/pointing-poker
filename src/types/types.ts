@@ -19,3 +19,8 @@ export type GameInfo = {
   status: GameStatus;
   members: Array<Member>;
 };
+
+export type Card = {
+  value: string;
+  imagePath?: string;
+};

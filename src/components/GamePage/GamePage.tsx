@@ -6,6 +6,7 @@ import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
 import members from '../LobbyPage/ConstantsHardCode';
+import Cards from './Cards';
 import './GamePage.scss';
 
 interface RoundResult {
@@ -87,7 +88,7 @@ const GamePage: React.FunctionComponent = () => {
             </Button>
           </Row>
 
-          <Row align="middle">
+          <Row align="middle" justify="center">
             <Issues
               issueList={issueList}
               setIssueList={setIssueList}
@@ -128,6 +129,10 @@ const GamePage: React.FunctionComponent = () => {
         <Col lg={7} sm={24} xs={24}>
           <Votes score={score} />
         </Col>
+      </Row>
+
+      <Row className="cards-container" justify="center" gutter={[16, 16]}>
+        <Cards />
       </Row>
     </div>
   );
