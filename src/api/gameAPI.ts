@@ -3,13 +3,15 @@ import { GameInfo, Member } from '../types/types';
 import instance from './api';
 
 const gameAPI = {
-  create(owner: Member): Promise<AxiosResponse> {
+  create(
+    owner: Member,
+  ): Promise<AxiosResponse<{ userId: string; gameId: string }>> {
     return instance.post(`/api/games`, {
       owner,
     });
   },
-  start(): Promise<AxiosResponse> {
-    return instance.put(`/api/games/status`);
+  start(gameId: string): Promise<AxiosResponse> {
+    return instance.put(`/api/games/status/${gameId}`);
   },
   addPhoto(imageFile: Blob): Promise<AxiosResponse<string>> {
     const formData = new FormData();

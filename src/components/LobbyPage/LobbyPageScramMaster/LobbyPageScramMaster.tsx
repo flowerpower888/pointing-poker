@@ -9,6 +9,7 @@ import members from '../ConstantsHardCode';
 import Issues from '../Issues/Issues';
 
 function LobbyPageScramMaster(): JSX.Element {
+  const gameId = localStorage.getItem('gameId');
   return (
     <>
       <h2 className="lobby-title"> Spring planning</h2>
@@ -20,10 +21,7 @@ function LobbyPageScramMaster(): JSX.Element {
           userRole="scram master"
           position="student"
         />
-        <Paragraph
-          className="lobby-copy-link"
-          copyable={{ text: 'base url + game ID' }}
-        >
+        <Paragraph className="lobby-copy-link" copyable={{ text: `${gameId}` }}>
           Link to share
         </Paragraph>
       </div>

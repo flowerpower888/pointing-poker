@@ -30,7 +30,8 @@ const Home: FC = () => {
     } else {
       setIsLoading(true);
       try {
-        await gameAPI.getGameInfo(id);
+        const response = await gameAPI.getGameInfo(id);
+        localStorage.setItem('gameId', response.data.id);
         setIsErrorShown(false);
         setIsPopupShown(true);
       } catch {
