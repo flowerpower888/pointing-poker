@@ -5,22 +5,19 @@ import Text from 'antd/lib/typography/Text';
 import siteName from '../../assets/siteName.png';
 import styles from './Home.module.scss';
 import gameAPI from '../../api/gameAPI';
+import LobbyForm from '../LobbyForm';
 
 const { Title } = Typography;
-
-type PropsType = {
-  isOwner: boolean;
-};
-
-const PopupTub: FC<PropsType> = ({ isOwner }) => (
-  <div>IsOwner: {`${isOwner}`}</div>
-);
 
 const Home: FC = () => {
   const [isPopupShown, setIsPopupShown] = useState<boolean>(false);
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [isErrorShown, setIsErrorShown] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const closePopup = () => {
+    setIsPopupShown(false);
+  };
 
   const onClickStart = async () => {
     setIsOwner(true);
@@ -90,7 +87,7 @@ const Home: FC = () => {
           )}
         </div>
       </div>
-      {isPopupShown && <PopupTub isOwner={isOwner} />}
+      {isPopupShown && <LobbyForm isOwner={isOwner} closePopup={closePopup} />}
     </div>
   );
 };

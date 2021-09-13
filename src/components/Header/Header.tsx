@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './Header.module.scss';
 import logo from '../../assets/logo.png';
 
-const Header = () => (
+const Header: FC = () => (
   <header className={styles.header}>
     <div className={styles.firstLine} />
     <div className={styles.secondLine} />

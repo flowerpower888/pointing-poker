@@ -1,38 +1,57 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import 'antd/dist/antd.css';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
 import UploadAvatar from '../UploadAvatar';
 import './LobbyForm.scss';
+import gameAPI from '../../api/gameAPI';
+import memberAPI from '../../api/memberAPI';
+import { Role } from '../../types/types';
 
-const LobbyForm: React.FunctionComponent = () => {
+type PropsType = {
+  isOwner: boolean;
+  closePopup: () => void;
+};
+
+type FormValuesType = {
+  firstName: string;
+  lastName?: string;
+  jobPosition?: string;
+};
+
+const LobbyForm: React.FunctionComponent<PropsType> = ({
+  isOwner,
+  closePopup,
+}) => {
   const { Title } = Typography;
 
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [role, setRole] = useState<string>('player');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [role, setRole] = useState<Role>('player');
   const [imageFile, setImageFile] = useState<Blob | null>(null);
 
-  const onFinish = async (values: { field: string }) => {
+  const onFinish = async (values: FormValuesType) => {
+    setIsLoading(true);
     let imagePath = '';
 
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append('image', imageFile);
+    try {
+      if (imageFile) {
+        imagePath = await gameAPI.addPhoto(imageFile).then(res => res.data);
+      }
 
-      imagePath = await axios
-        .post(`http://localhost:3001/api/upload`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then(res => res.data);
+      if (isOwner) {
+        await gameAPI.create({ ...values, role, imagePath });
+      } else {
+        await memberAPI.add({ ...values, role, imagePath });
+      }
+      closePopup();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
     }
-
-    console.log('Success:', { ...values, role, imagePath });
   };
 
   return (
-    <Modal visible={isOpen} footer={null} onCancel={() => setIsOpen(false)}>
+    <Modal visible footer={null} onCancel={closePopup}>
       <Title>Connect to lobby</Title>
 
       <Form
@@ -70,10 +89,10 @@ const LobbyForm: React.FunctionComponent = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isLoading}>
             Confirm
           </Button>
-          <Button htmlType="button" onClick={() => setIsOpen(false)}>
+          <Button htmlType="button" onClick={closePopup}>
             Cancel
           </Button>
         </Form.Item>
