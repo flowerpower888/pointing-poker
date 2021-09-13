@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import 'antd/dist/antd.css';
+import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
 import UploadAvatar from '../UploadAvatar';
 import './LobbyForm.scss';
@@ -27,6 +27,7 @@ const LobbyForm: React.FunctionComponent<PropsType> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [role, setRole] = useState<Role>('player');
   const [imageFile, setImageFile] = useState<Blob | null>(null);
+  const history = useHistory();
 
   const onFinish = async (values: FormValuesType) => {
     setIsLoading(true);
@@ -46,7 +47,7 @@ const LobbyForm: React.FunctionComponent<PropsType> = ({
     } catch (e) {
       console.log(e);
     } finally {
-      setIsLoading(false);
+      history.push(`/lobby/${isOwner ? 'master' : 'member'}`);
     }
   };
 
