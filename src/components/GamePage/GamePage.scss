@@ -1,0 +1,9 @@
+.user-card_container {
+  min-width: 300px;
+}
+
+@media (max-width: 988px) {
+  .ant-divider {
+    display: none;
+  }
+}

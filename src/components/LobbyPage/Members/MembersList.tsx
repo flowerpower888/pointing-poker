@@ -14,8 +14,8 @@ function MembersList(props: { users: UserData[] }): JSX.Element {
             firstName={el.firstName}
             lastName={el.lastName}
             userRole={el.userRole}
-            avatar={el.avatar}
-            position={el.position}
+            imagePath={el.imagePath}
+            jobPosition={el.jobPosition}
           />
         ))}
       </div>

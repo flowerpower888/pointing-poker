@@ -2,18 +2,22 @@ import * as React from 'react';
 import { Avatar, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import './userCard.css';
+import { AvatarSize } from 'antd/lib/avatar/SizeContext';
 
 export interface UserData {
   firstName: string;
   lastName?: string;
-  position?: string;
+  jobPosition?: string;
   userRole: 'scram master' | 'player' | 'observer';
-  avatar?: string;
+  imagePath?: string;
+  avatarSize?: AvatarSize;
 }
 
 function UserCard(props: UserData): JSX.Element {
-  const { firstName, lastName, position, userRole, avatar } = props;
+  const { firstName, lastName, jobPosition, userRole, imagePath, avatarSize } =
+    props;
   const { Meta } = Card;
+
   return (
     <Card className="user-card_container">
       {userRole === 'scram master' ? (
@@ -26,15 +30,15 @@ function UserCard(props: UserData): JSX.Element {
         avatar={
           <Avatar
             style={{ backgroundColor: '#51d7c2' }}
-            size="large"
+            size={avatarSize || 'large'}
             alt="user avatar"
-            src={avatar}
+            src={imagePath}
           >
             {firstName[0] + (lastName ? lastName[0] : '')}
           </Avatar>
         }
-        title={`${firstName} ${lastName}`}
-        description={position}
+        title={`${firstName}${lastName || ''}`}
+        description={jobPosition}
       />
     </Card>
   );

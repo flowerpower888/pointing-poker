@@ -15,14 +15,12 @@
     "project": "tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": [
-    "eslint-plugin-import-helpers",
-    "prettier"
-  ],
+  "plugins": ["eslint-plugin-import-helpers", "prettier"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
+    "react/require-default-props": "off",
     "prettier/prettier": "error",
     "jsx-a11y/label-has-associated-control": [
       "error",

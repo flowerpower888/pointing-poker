@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import 'antd/dist/antd.css';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
-import UploadAvatar from '../UploadAvatar';
+import UploadAvatar from './UploadAvatar';
 import './LobbyForm.scss';
 
 const LobbyForm: React.FunctionComponent = () => {

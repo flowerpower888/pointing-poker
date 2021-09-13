@@ -4,21 +4,33 @@ const members: UserData[] = [
   {
     firstName: 'Kate',
     lastName: 'Matveyeva',
-    position: 'student',
+    jobPosition: 'student',
     userRole: 'player',
   },
   {
     firstName: 'Sergey',
     lastName: 'Mouk',
-    position: 'lead developer',
+    jobPosition: 'lead developer',
     userRole: 'observer',
+  },
+  {
+    firstName: 'Bibo',
+    lastName: '',
+    jobPosition: 'developer',
+    userRole: 'player',
+  },
+  {
+    firstName: 'Bobo',
+    lastName: '',
+    jobPosition: 'student',
+    userRole: 'player',
   },
   {
     firstName: 'Nikola',
     lastName: 'Mouk',
-    position: 'junior director',
+    jobPosition: 'junior director',
     userRole: 'player',
-    avatar:
+    imagePath:
       'https://image.freepik.com/free-vector/profile-icon-male-avatar_48369-2131.jpg',
   },
 ];
