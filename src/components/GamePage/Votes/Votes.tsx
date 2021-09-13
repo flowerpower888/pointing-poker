@@ -5,7 +5,7 @@ import UserCard from '../../LobbyPage/UserCard';
 import './Votes.scss';
 
 type Props = {
-  score: number[] | null;
+  score?: string[];
 };
 
 const Votes: React.FunctionComponent<Props> = ({ score }) => {

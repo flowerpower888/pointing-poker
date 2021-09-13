@@ -14,6 +14,18 @@ const members: UserData[] = [
     userRole: 'observer',
   },
   {
+    firstName: 'Bibo',
+    lastName: '',
+    jobPosition: 'developer',
+    userRole: 'player',
+  },
+  {
+    firstName: 'Bobo',
+    lastName: '',
+    jobPosition: 'student',
+    userRole: 'player',
+  },
+  {
     firstName: 'Nikola',
     lastName: 'Mouk',
     jobPosition: 'junior director',

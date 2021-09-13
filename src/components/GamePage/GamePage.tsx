@@ -7,62 +7,75 @@ import Timer from './Timer';
 import Votes from './Votes';
 import members from '../LobbyPage/ConstantsHardCode';
 import Cards from './Cards';
+import { CardModel, RoundResult } from '../../types/types';
+import Statistics from './Statistics';
 import './GamePage.scss';
-
-interface RoundResult {
-  issue: string;
-  score: {
-    player: string;
-    vote: number;
-  }[];
-}
 
 const GamePage: React.FunctionComponent = () => {
   const [issueList, setIssueList] = useState(issues);
   const [currentIssue, setCurrentIssue] = useState<string>(issueList[0]);
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
-  const [score, setScore] = useState<number[] | null>(null);
+  const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
 
   useEffect(() => {
-    setScore(null);
+    setRoundResult(null);
   }, [currentIssue]);
-
-  const getRoundResult = (): Promise<RoundResult> => {
-    const random = () => Math.floor(Math.random() * 15) + 1;
-
-    const roundResult = {
-      issue: currentIssue,
-      score: members.map(member => {
-        const { firstName } = member;
-
-        const memberScore = {
-          player: firstName,
-          vote: random(),
-        };
-
-        return memberScore;
-      }),
-    };
-
-    return new Promise(resolve => {
-      resolve(roundResult);
-    });
-  };
 
   const onIssueClick = (issue: string) => {
     if (timerStatus !== 'started') setCurrentIssue(issue);
   };
 
   const onRoundStart = () => {
-    setScore(null);
+    setRoundResult(null);
   };
 
   const onRoundEnd = async () => {
-    const roundScore = await getRoundResult().then(roundResult =>
-      roundResult.score.reduce((acc: number[], cur) => [...acc, cur.vote], []),
-    );
+    const getRoundResult = async (): Promise<RoundResult> => {
+      const getPercentage = (cards: CardModel[]) => {
+        let percentage: { card: CardModel; percents: string }[] = [];
+        const uniqueCards = Array.from(new Set(cards));
 
-    setScore(roundScore);
+        uniqueCards.forEach(cur => {
+          const occurrences = cards.filter(card => card.value === cur.value);
+
+          const percents = `${(
+            (occurrences.length * 100) /
+            cards.length
+          ).toFixed(0)}%`;
+
+          percentage = [...percentage, { card: cur, percents }];
+        });
+
+        return percentage;
+      };
+
+      const cards = await fetch('./cardSet.json').then(res => res.json());
+
+      const result: RoundResult = {
+        issue: currentIssue,
+        score: members
+          .filter(member => member.userRole !== 'observer')
+          .map(member => {
+            const { firstName } = member;
+
+            const memberScore = {
+              player: firstName,
+              card: cards[Math.floor(Math.random() * cards.length)],
+            };
+
+            return memberScore;
+          }),
+      };
+
+      return new Promise(resolve => {
+        resolve({
+          ...result,
+          statistics: getPercentage(result.score.map(player => player.card)),
+        });
+      });
+    };
+
+    setRoundResult(await getRoundResult());
   };
 
   return (
@@ -96,6 +109,7 @@ const GamePage: React.FunctionComponent = () => {
               onIssueClick={onIssueClick}
               currentIssue={currentIssue}
             />
+
             <Row>
               <Timer
                 limit={3}
@@ -122,18 +136,20 @@ const GamePage: React.FunctionComponent = () => {
               )}
             </Row>
           </Row>
+
+          {roundResult && <Statistics statistics={roundResult.statistics} />}
         </Col>
 
         <Divider type="vertical" style={{ height: 'auto' }} />
 
         <Col lg={7} sm={24} xs={24}>
-          <Votes score={score} />
+          <Votes score={roundResult?.score.map(player => player.card.value)} />
         </Col>
       </Row>
 
-      <Row className="cards-container" justify="center" gutter={[16, 16]}>
+      {/* <Row className="cards-container" justify="center" gutter={[16, 16]}>
         <Cards />
-      </Row>
+      </Row> */}
     </div>
   );
 };
