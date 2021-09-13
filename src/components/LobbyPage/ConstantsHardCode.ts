@@ -1,24 +1,29 @@
-import { UserData } from './UserCard/UserCard';
+import { Member } from '../../types/types';
 
-const members: UserData[] = [
+const members: Member[] = [
   {
     firstName: 'Kate',
+    isOwner: false,
     lastName: 'Matveyeva',
-    position: 'student',
+    jobPosition: 'student',
     userRole: 'player',
+    imagePath: '',
   },
   {
     firstName: 'Sergey',
+    isOwner: false,
     lastName: 'Mouk',
-    position: 'lead developer',
+    jobPosition: 'lead developer',
     userRole: 'observer',
+    imagePath: '',
   },
   {
     firstName: 'Nikola',
+    isOwner: false,
     lastName: 'Mouk',
-    position: 'junior director',
+    jobPosition: 'junior director',
     userRole: 'player',
-    avatar:
+    imagePath:
       'https://image.freepik.com/free-vector/profile-icon-male-avatar_48369-2131.jpg',
   },
 ];

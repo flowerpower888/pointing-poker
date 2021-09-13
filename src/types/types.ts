@@ -5,7 +5,7 @@ export type Member = {
   jobPosition?: string;
   imagePath: string;
   isOwner?: boolean;
-  role: Role;
+  userRole: Role;
 };
 
 export type Role = 'observer' | 'player';

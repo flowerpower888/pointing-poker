@@ -15,11 +15,12 @@ function LobbyPageScramMaster(): JSX.Element {
       <h2 className="lobby-title"> Spring planning</h2>
       <div className="scram-card_container">
         <UserCard
-          avatar=""
+          isOwner
+          imagePath=""
           firstName="User"
           lastName="Name"
-          userRole="scram master"
-          position="student"
+          userRole="observer"
+          jobPosition="student"
         />
         <Paragraph className="lobby-copy-link" copyable={{ text: `${gameId}` }}>
           Link to share

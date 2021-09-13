@@ -39,14 +39,18 @@ const LobbyForm: React.FunctionComponent<PropsType> = ({
       }
 
       if (isOwner) {
-        const response = await gameAPI.create({ ...values, role, imagePath });
+        const response = await gameAPI.create({
+          ...values,
+          userRole: role,
+          imagePath,
+        });
         localStorage.setItem('gameId', response.data.gameId);
         localStorage.setItem('userId', response.data.userId);
       } else {
         const gameId = localStorage.getItem('gameId');
         if (gameId) {
           const response = await memberAPI.add(
-            { ...values, role, imagePath },
+            { ...values, userRole: role, imagePath },
             gameId,
           );
           localStorage.setItem('userId', response.data.userId);

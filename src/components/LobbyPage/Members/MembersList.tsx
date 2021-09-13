@@ -1,8 +1,9 @@
 import * as React from 'react';
-import UserCard, { UserData } from '../UserCard/UserCard';
+import { Member } from '../../../types/types';
+import UserCard from '../UserCard/UserCard';
 import './membersList.css';
 
-function MembersList(props: { users: UserData[] }): JSX.Element {
+function MembersList(props: { users: Member[] }): JSX.Element {
   const { users } = props;
   return (
     <>
@@ -13,9 +14,10 @@ function MembersList(props: { users: UserData[] }): JSX.Element {
             key={Date.now()}
             firstName={el.firstName}
             lastName={el.lastName}
+            isOwner={el.isOwner}
             userRole={el.userRole}
-            avatar={el.avatar}
-            position={el.position}
+            imagePath={el.imagePath}
+            jobPosition={el.jobPosition}
           />
         ))}
       </div>
