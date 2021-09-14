@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import UserCard from '../UserCard/UserCard';
@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 import './lobbyPageScramMaster.css';
 import members from '../ConstantsHardCode';
 import Issues from '../Issues/Issues';
+import issues from '../../../shared/issues';
 
 function LobbyPageScramMaster(): JSX.Element {
   const gameId = localStorage.getItem('gameId');
@@ -40,7 +41,7 @@ function LobbyPageScramMaster(): JSX.Element {
         </Button>
       </div>
       <MembersList users={members} />
-      <Issues />
+      <Issues issueList={issueList} setIssueList={setIssueList} />
     </>
   );
 }

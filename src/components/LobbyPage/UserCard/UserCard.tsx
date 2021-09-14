@@ -8,6 +8,7 @@ function UserCard(props: Member): JSX.Element {
   const { firstName, lastName, jobPosition, userRole, imagePath, isOwner } =
     props;
   const { Meta } = Card;
+
   return (
     <Card className="user-card_container">
       {isOwner ? <></> : <CloseOutlined className="delete_member" />}
@@ -18,7 +19,7 @@ function UserCard(props: Member): JSX.Element {
         avatar={
           <Avatar
             style={{ backgroundColor: '#51d7c2' }}
-            size="large"
+            size={avatarSize || 'large'}
             alt="user avatar"
             src={imagePath}
           >

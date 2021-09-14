@@ -18,6 +18,18 @@ const members: Member[] = [
     imagePath: '',
   },
   {
+    firstName: 'Bibo',
+    lastName: '',
+    jobPosition: 'developer',
+    userRole: 'player',
+  },
+  {
+    firstName: 'Bobo',
+    lastName: '',
+    jobPosition: 'student',
+    userRole: 'player',
+  },
+  {
     firstName: 'Nikola',
     isOwner: false,
     lastName: 'Mouk',

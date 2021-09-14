@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
-import UploadAvatar from '../UploadAvatar';
+import UploadAvatar from './UploadAvatar';
 import './LobbyForm.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
