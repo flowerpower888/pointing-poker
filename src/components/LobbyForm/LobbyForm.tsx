@@ -46,6 +46,7 @@ const LobbyForm: React.FunctionComponent<PropsType> = ({
         });
         localStorage.setItem('gameId', response.data.gameId);
         localStorage.setItem('userId', response.data.userId);
+        history.push(`/${response.data.gameId}`);
       } else {
         const gameId = localStorage.getItem('gameId');
         if (gameId) {
@@ -54,9 +55,9 @@ const LobbyForm: React.FunctionComponent<PropsType> = ({
             gameId,
           );
           localStorage.setItem('userId', response.data.userId);
+          history.push(`/${gameId}`);
         }
       }
-      history.push(`/lobby/${isOwner ? 'master' : 'member'}`);
     } catch (e) {
       console.log(e);
     } finally {
