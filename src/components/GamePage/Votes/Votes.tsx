@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import UserCard from '../../LobbyPage/UserCard';
 import './votes.scss';
 import { Member } from '../../../types/types';
+import columns from '../../../utils/votesTableColumns';
 
 type VotesPropsType = {
   score?: string[];
@@ -40,19 +41,6 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({ score }) => {
         }),
     );
   }, [score]);
-
-  const columns = [
-    {
-      title: 'Score',
-      dataIndex: 'score',
-      key: 'score',
-    },
-    {
-      title: 'Player',
-      dataIndex: 'player',
-      key: 'player',
-    },
-  ];
 
   return (
     <div className="voting">

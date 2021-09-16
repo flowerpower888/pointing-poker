@@ -1,6 +1,6 @@
 import { Button, Col, Divider, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import issues from '../../shared/issues';
+import issues from '../../utils/issues';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
