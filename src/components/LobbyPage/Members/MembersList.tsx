@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Member } from '../../../types/types';
 import UserCard from '../UserCard/UserCard';
-import './membersList.css';
+import './membersList.scss';
 
 function MembersList(props: { users: Member[] }): JSX.Element {
   const { users } = props;

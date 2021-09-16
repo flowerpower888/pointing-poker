@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Avatar, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-import './userCard.css';
+import './userCard.scss';
 import { Member } from '../../../types/types';
 
 function UserCard(props: Member): JSX.Element {
