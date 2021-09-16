@@ -5,7 +5,7 @@ type CardPropsType = {
   value: string;
   active?: string | null;
   setActive?: React.Dispatch<React.SetStateAction<string | null>>;
-  imagePath?: string | undefined;
+  imagePath?: string;
 };
 
 const Card: React.FunctionComponent<CardPropsType> = ({
