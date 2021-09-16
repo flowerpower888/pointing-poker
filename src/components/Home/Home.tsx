@@ -25,7 +25,7 @@ const Home: FC = () => {
   };
 
   const searchGame = async (id: string) => {
-    if (id === '') {
+    if (!id) {
       setIsErrorShown(true);
     } else {
       setIsLoading(true);

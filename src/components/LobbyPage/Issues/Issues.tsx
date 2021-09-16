@@ -28,7 +28,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
 }) => {
   const [newIssue, setNewIssue] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [currentItem, setCurrentItem] = useState({ value: '', index: NaN });
+  const [currentItem, setCurrentItem] = useState({ value: '', index: 0 });
 
   const addIssue = (event: FormEvent) => {
     event.preventDefault();
