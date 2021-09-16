@@ -6,7 +6,7 @@ import LobbyPageScramMaster from './LobbyPageScramMaster';
 import LobbyPagePlayers from './LobbyPagePlayers';
 import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
-import { GameInfo } from '../../types/types';
+import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
 
 type GameParams = {
   gameId: string;

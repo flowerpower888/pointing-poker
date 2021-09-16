@@ -1,6 +1,6 @@
 import { Col } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { CardModel } from '../../../types/types';
+import { CardModel } from '../../../models/RoundResult/RoundModel';
 import Card from './Card';
 
 const Cards: React.FunctionComponent = () => {

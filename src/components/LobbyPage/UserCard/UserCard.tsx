@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Avatar, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import './userCard.scss';
-import { Member } from '../../../types/types';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 
 type UserCardPropsType = Member;
 

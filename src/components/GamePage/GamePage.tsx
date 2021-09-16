@@ -5,9 +5,10 @@ import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
-import { CardModel, GameInfo, RoundResult } from '../../types/types';
 import Statistics from './Statistics';
 import './gamePage.scss';
+import { CardModel, RoundResult } from '../../models/RoundResult/RoundModel';
+import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
 
 type Game = {
   info: GameInfo;

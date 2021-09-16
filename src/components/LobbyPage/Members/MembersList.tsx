@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Member } from '../../../types/types';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import UserCard from '../UserCard/UserCard';
 import './membersList.scss';
 

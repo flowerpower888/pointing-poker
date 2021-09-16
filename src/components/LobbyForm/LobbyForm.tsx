@@ -5,7 +5,7 @@ import UploadAvatar from './UploadAvatar';
 import './lobbyForm.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
-import { Role } from '../../types/types';
+import { Role } from '../../models/GameInfoAggregate/GameInfoModel';
 
 type LobbyFormPropsType = {
   isOwner: boolean;
