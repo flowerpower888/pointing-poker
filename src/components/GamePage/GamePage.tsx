@@ -6,8 +6,9 @@ import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
 import members from '../LobbyPage/ConstantsHardCode';
+import { UserData } from '../LobbyPage/UserCard/UserCard';
 import Cards from './Cards';
-import { CardModel, RoundResult } from '../../types/types';
+import { RoundResult } from '../../types/types';
 import Statistics from './Statistics';
 import './GamePage.scss';
 
@@ -16,6 +17,9 @@ const GamePage: React.FunctionComponent = () => {
   const [currentIssue, setCurrentIssue] = useState<string>(issueList[0]);
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
+  const [players, setPlayers] = useState<UserData[]>(
+    members.filter(member => member.userRole !== 'observer'),
+  );
 
   useEffect(() => {
     setRoundResult(null);
@@ -31,51 +35,43 @@ const GamePage: React.FunctionComponent = () => {
 
   const onRoundEnd = async () => {
     const getRoundResult = async (): Promise<RoundResult> => {
-      const getPercentage = (cards: CardModel[]) => {
-        let percentage: { card: CardModel; percents: string }[] = [];
-        const uniqueCards = Array.from(new Set(cards));
-
-        uniqueCards.forEach(cur => {
-          const occurrences = cards.filter(card => card.value === cur.value);
-
-          const percents = `${(
-            (occurrences.length * 100) /
-            cards.length
-          ).toFixed(0)}%`;
-
-          percentage = [...percentage, { card: cur, percents }];
-        });
-
-        return percentage;
-      };
-
       const cards = await fetch('./cardSet.json').then(res => res.json());
 
       const result: RoundResult = {
         issue: currentIssue,
-        score: members
-          .filter(member => member.userRole !== 'observer')
-          .map(member => {
-            const { firstName } = member;
+        score: players
+          .filter(player => player.userRole !== 'observer')
+          .map(player => {
+            const { firstName } = player;
 
-            const memberScore = {
+            const playerScore = {
               player: firstName,
               card: cards[Math.floor(Math.random() * cards.length)],
             };
 
-            return memberScore;
+            return playerScore;
           }),
       };
 
       return new Promise(resolve => {
-        resolve({
-          ...result,
-          statistics: getPercentage(result.score.map(player => player.card)),
-        });
+        resolve(result);
       });
     };
 
     setRoundResult(await getRoundResult());
+  };
+
+  const onPlayerKick = async (firstName: string) => {
+    setPlayers(prev => prev.filter(player => player.firstName !== firstName));
+
+    if (roundResult) {
+      setRoundResult({
+        ...roundResult,
+        score: roundResult?.score.filter(
+          playerScore => playerScore.player !== firstName,
+        ),
+      });
+    }
   };
 
   return (
@@ -137,13 +133,17 @@ const GamePage: React.FunctionComponent = () => {
             </Row>
           </Row>
 
-          {roundResult && <Statistics statistics={roundResult.statistics} />}
+          {roundResult && <Statistics roundResult={roundResult} />}
         </Col>
 
         <Divider type="vertical" style={{ height: 'auto' }} />
 
         <Col lg={7} sm={24} xs={24}>
-          <Votes score={roundResult?.score.map(player => player.card.value)} />
+          <Votes
+            players={players}
+            score={roundResult?.score.map(player => player.card.value)}
+            onPlayerKick={onPlayerKick}
+          />
         </Col>
       </Row>
 

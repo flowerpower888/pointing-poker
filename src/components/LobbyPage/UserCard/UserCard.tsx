@@ -11,11 +11,19 @@ export interface UserData {
   userRole: 'scram master' | 'player' | 'observer';
   imagePath?: string;
   avatarSize?: AvatarSize;
+  showPlayerKickConfirm?: (firstName: string) => void;
 }
 
 function UserCard(props: UserData): JSX.Element {
-  const { firstName, lastName, jobPosition, userRole, imagePath, avatarSize } =
-    props;
+  const {
+    firstName,
+    lastName,
+    jobPosition,
+    userRole,
+    imagePath,
+    avatarSize,
+    showPlayerKickConfirm,
+  } = props;
   const { Meta } = Card;
 
   return (
@@ -23,7 +31,14 @@ function UserCard(props: UserData): JSX.Element {
       {userRole === 'scram master' ? (
         <></>
       ) : (
-        <CloseOutlined className="delete_member" />
+        <CloseOutlined
+          className="delete_member"
+          onClick={
+            showPlayerKickConfirm
+              ? () => showPlayerKickConfirm(firstName)
+              : undefined
+          }
+        />
       )}
       <p className="user-card_role">{userRole}:</p>
       <Meta

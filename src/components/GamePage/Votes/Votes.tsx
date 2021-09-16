@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
-import members from '../../LobbyPage/ConstantsHardCode';
+import { Modal, Table } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { UserData } from '../../LobbyPage/UserCard/UserCard';
 import UserCard from '../../LobbyPage/UserCard';
 import './Votes.scss';
 
 type Props = {
+  players: UserData[];
   score?: string[];
+  onPlayerKick: (firstName: string) => Promise<void>;
 };
 
-const Votes: React.FunctionComponent<Props> = ({ score }) => {
+const Votes: React.FunctionComponent<Props> = ({
+  players,
+  score,
+  onPlayerKick,
+}) => {
+  const { confirm } = Modal;
+
   const [data, setData] = useState<
     | {
         key: string;
@@ -19,27 +28,41 @@ const Votes: React.FunctionComponent<Props> = ({ score }) => {
   >(null);
 
   useEffect(() => {
-    setData(
-      members
-        .filter(member => member.userRole !== 'observer')
-        .map((member, i) => {
-          const player = {
-            key: member.firstName,
-            player: (
-              <UserCard
-                firstName={member.firstName}
-                userRole={member.userRole}
-                imagePath={member.imagePath}
-                avatarSize="small"
-              />
-            ),
-            score: score?.[i] || 'In progress',
-          };
+    const showPlayerKickConfirm = (firstName: string) => {
+      confirm({
+        title: `Do you really want to kick member ${firstName}?`,
+        icon: <ExclamationCircleOutlined />,
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk() {
+          onPlayerKick(firstName);
+        },
+        centered: true,
+        maskClosable: true,
+      });
+    };
 
-          return player;
-        }),
+    setData(
+      players.map((member, i) => {
+        const player = {
+          key: member.firstName,
+          player: (
+            <UserCard
+              firstName={member.firstName}
+              userRole={member.userRole}
+              imagePath={member.imagePath}
+              avatarSize="small"
+              showPlayerKickConfirm={showPlayerKickConfirm}
+            />
+          ),
+          score: score?.[i] || 'In progress',
+        };
+
+        return player;
+      }),
     );
-  }, [score]);
+  }, [score, players, onPlayerKick, confirm]);
 
   const columns = [
     {
