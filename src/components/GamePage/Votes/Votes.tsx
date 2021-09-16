@@ -4,11 +4,11 @@ import UserCard from '../../LobbyPage/UserCard';
 import './Votes.scss';
 import { Member } from '../../../types/types';
 
-type Props = {
+type VotesPropsType = {
   score?: string[];
 };
 
-const Votes: React.FunctionComponent<Props> = ({ score }) => {
+const Votes: React.FunctionComponent<VotesPropsType> = ({ score }) => {
   const members = Array<Member>();
   const [data, setData] = useState<
     | {

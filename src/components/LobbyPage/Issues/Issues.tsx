@@ -11,7 +11,7 @@ import { FormEvent, useState } from 'react';
 import './issues.css';
 import { v4 as uuidv4 } from 'uuid';
 
-type Props = {
+type IssuesPropsType = {
   issueList: string[];
   setIssueList: React.Dispatch<React.SetStateAction<string[]>>;
   editable?: boolean;
@@ -19,7 +19,7 @@ type Props = {
   currentIssue?: string | null;
 };
 
-const Issues: React.FunctionComponent<Props> = ({
+const Issues: React.FunctionComponent<IssuesPropsType> = ({
   issueList,
   setIssueList,
   editable = true,

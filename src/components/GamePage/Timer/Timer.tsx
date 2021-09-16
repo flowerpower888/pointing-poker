@@ -2,7 +2,7 @@ import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './Timer.scss';
 
-type Props = {
+type TimerPropsType = {
   limit: number;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
@@ -11,7 +11,7 @@ type Props = {
   onRoundStart: () => void;
 };
 
-const Timer: React.FunctionComponent<Props> = ({
+const Timer: React.FunctionComponent<TimerPropsType> = ({
   limit,
   status,
   setStatus,

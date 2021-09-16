@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './Card.scss';
 
-type Props = {
+type CardPropsType = {
   value: string;
   active?: string | null;
   setActive?: React.Dispatch<React.SetStateAction<string | null>>;
   imagePath?: string | undefined;
 };
 
-const Card: React.FunctionComponent<Props> = ({
+const Card: React.FunctionComponent<CardPropsType> = ({
   value,
   active,
   setActive,

@@ -4,11 +4,11 @@ import { Stats } from '../../../types/types';
 import Card from '../Cards/Card';
 import './Statistics.scss';
 
-type Props = {
+type StatPropsType = {
   statistics: Stats[] | undefined;
 };
 
-const Statistics: React.FunctionComponent<Props> = ({ statistics }) => {
+const Statistics: React.FunctionComponent<StatPropsType> = ({ statistics }) => {
   console.log(statistics);
 
   return (

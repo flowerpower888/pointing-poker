@@ -7,7 +7,7 @@ import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
 import { Role } from '../../types/types';
 
-type PropsType = {
+type LobbyFormPropsType = {
   isOwner: boolean;
   closePopup: () => void;
 };
@@ -18,7 +18,7 @@ type FormValuesType = {
   jobPosition?: string;
 };
 
-const LobbyForm: React.FunctionComponent<PropsType> = ({
+const LobbyForm: React.FunctionComponent<LobbyFormPropsType> = ({
   isOwner,
   closePopup,
 }) => {

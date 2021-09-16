@@ -5,11 +5,13 @@ import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import ImgCrop from 'antd-img-crop';
 import './UploadAvatar.scss';
 
-type Props = {
+type UploadAvatarPropsType = {
   setImageFile: React.Dispatch<React.SetStateAction<Blob | null>>;
 };
 
-const UploadAvatar: React.FunctionComponent<Props> = ({ setImageFile }) => (
+const UploadAvatar: React.FunctionComponent<UploadAvatarPropsType> = ({
+  setImageFile,
+}) => (
   <ImgCrop rotate>
     <Upload
       name="avatar"
