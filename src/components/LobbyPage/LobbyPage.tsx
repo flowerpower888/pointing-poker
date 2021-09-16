@@ -6,6 +6,7 @@ import LobbyPageScramMaster from './LobbyPageScramMaster';
 import LobbyPagePlayers from './LobbyPagePlayers';
 import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
+import { GameInfo } from '../../types/types';
 
 type GameParams = {
   gameId: string;
@@ -15,10 +16,12 @@ function LobbyPage(): JSX.Element {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { gameId } = useParams<GameParams>();
   const [isOwner, setIsOwner] = useState(false);
+  const [gameData, setGameData] = useState({} as GameInfo);
   // const [gameStatus, setGameStatus] = useState('created');
   useEffect(() => {
     async function getOwnerStatus() {
       const gameInfo = await gameAPI.getGameInfo(gameId);
+      setGameData(gameInfo.data);
       const owner = gameInfo.data.members.filter(el => el.isOwner)[0].id;
       setIsOwner(owner === localStorage.getItem('userId'));
       setIsLoaded(true);
@@ -32,9 +35,9 @@ function LobbyPage(): JSX.Element {
       {!isLoaded ? (
         <Preloader />
       ) : isOwner ? (
-        <LobbyPageScramMaster />
+        <LobbyPageScramMaster info={gameData} />
       ) : (
-        <LobbyPagePlayers />
+        <LobbyPagePlayers info={gameData} />
       )}
     </div>
   );

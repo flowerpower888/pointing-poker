@@ -1,29 +1,42 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { Button } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
+import { useState } from 'react';
 import UserCard from '../UserCard/UserCard';
 import MembersList from '../Members/MembersList';
 import 'antd/dist/antd.css';
 import './lobbyPageScramMaster.css';
-import members from '../ConstantsHardCode';
 import Issues from '../Issues/Issues';
-import issues from '../../../shared/issues';
+import { GameInfo } from '../../../types/types';
 
-function LobbyPageScramMaster(): JSX.Element {
-  const gameId = localStorage.getItem('gameId');
+type Game = {
+  info: GameInfo;
+};
+
+// TODO replace all path to constants
+
+function LobbyPageScramMaster(props: Game): JSX.Element {
+  const { info } = props;
+  const gameId = info.id;
+  const scrumMaster = info.members.filter(el => el.isOwner)[0];
+  const members = info.members.filter(el => !el.isOwner);
+  const [issueList, setIssueList] = useState(info.tasks);
   return (
     <>
       <h2 className="lobby-title"> Spring planning</h2>
       <div className="scram-card_container">
         <UserCard
           isOwner
-          imagePath=""
-          firstName="User"
-          lastName="Name"
-          userRole="observer"
-          jobPosition="student"
+          imagePath={scrumMaster.imagePath}
+          firstName={scrumMaster.firstName}
+          lastName={scrumMaster.lastName}
+          userRole={scrumMaster.userRole}
+          jobPosition={scrumMaster.jobPosition}
         />
-        <Paragraph className="lobby-copy-link" copyable={{ text: `${gameId}` }}>
+        <Paragraph
+          className="lobby-copy-link"
+          copyable={{ text: `localhost:3000/${gameId}` }}
+        >
           Link to share
         </Paragraph>
       </div>

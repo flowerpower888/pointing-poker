@@ -19,14 +19,14 @@ function UserCard(props: Member): JSX.Element {
         avatar={
           <Avatar
             style={{ backgroundColor: '#51d7c2' }}
-            size={avatarSize || 'large'}
+            size="large"
             alt="user avatar"
             src={imagePath}
           >
             {firstName[0] + (lastName ? lastName[0] : '')}
           </Avatar>
         }
-        title={`${firstName} ${lastName}`}
+        title={`${firstName} ${lastName || ''}`}
         description={jobPosition}
       />
     </Card>

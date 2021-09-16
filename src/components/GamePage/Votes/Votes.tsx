@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
-import members from '../../LobbyPage/ConstantsHardCode';
 import UserCard from '../../LobbyPage/UserCard';
 import './Votes.scss';
+import { Member } from '../../../types/types';
 
 type Props = {
   score?: string[];
 };
 
 const Votes: React.FunctionComponent<Props> = ({ score }) => {
+  const members = Array<Member>();
   const [data, setData] = useState<
     | {
         key: string;
@@ -30,7 +31,7 @@ const Votes: React.FunctionComponent<Props> = ({ score }) => {
                 firstName={member.firstName}
                 userRole={member.userRole}
                 imagePath={member.imagePath}
-                avatarSize="small"
+                // avatarSize="small"
               />
             ),
             score: score?.[i] || 'In progress',
