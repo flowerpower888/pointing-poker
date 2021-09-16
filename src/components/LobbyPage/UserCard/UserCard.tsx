@@ -4,7 +4,9 @@ import { CloseOutlined } from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../types/types';
 
-function UserCard(props: Member): JSX.Element {
+type UserCardPropsType = Member;
+
+function UserCard(props: UserCardPropsType): JSX.Element {
   const { firstName, lastName, jobPosition, userRole, imagePath, isOwner } =
     props;
   const { Meta } = Card;

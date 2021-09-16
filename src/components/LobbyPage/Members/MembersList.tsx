@@ -3,7 +3,11 @@ import { Member } from '../../../types/types';
 import UserCard from '../UserCard/UserCard';
 import './membersList.scss';
 
-function MembersList(props: { users: Member[] }): JSX.Element {
+type MembersListPropsType = {
+  users: Member[];
+};
+
+function MembersList(props: MembersListPropsType): JSX.Element {
   const { users } = props;
   return (
     <>
