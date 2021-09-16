@@ -56,10 +56,17 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
     }
   };
 
-  const format = (s: number): string => {
-    const ss = s % 60;
-    const mm = Math.floor(s / 60) % 60;
-    return [mm, ss].map(int => (int < 10 ? 0 + String(int) : int)).join(':');
+  const isSingleDigit = (number: number): boolean => number % 10 === number;
+
+  const format = (timeInSeconds: number): string => {
+    const secondsInAMinute = 60;
+    const minutesInAnHour = 60;
+    const minutesInTime = Math.floor(timeInSeconds / secondsInAMinute);
+    const minutesInTimeMinusHours = minutesInTime % minutesInAnHour;
+    const secondsInTimeMinusMinutes = timeInSeconds % secondsInAMinute;
+    return [minutesInTimeMinusHours, secondsInTimeMinusMinutes]
+      .map(int => (isSingleDigit(int) ? 0 + String(int) : int))
+      .join(':');
   };
 
   return (
