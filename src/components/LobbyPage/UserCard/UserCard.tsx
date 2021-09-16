@@ -12,7 +12,10 @@ function UserCard(props: UserCardPropsType): JSX.Element {
   const { Meta } = Card;
 
   return (
-    <Card className="user-card_container">
+    <Card
+      className="user-card_container"
+      style={{ marginLeft: '20px', marginTop: '20px' }}
+    >
       {isOwner ? <></> : <CloseOutlined className="delete_member" />}
       <p className="user-card_userRole">
         {isOwner ? 'Scrum master' : userRole}:
