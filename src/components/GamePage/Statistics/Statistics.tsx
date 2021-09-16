@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import React from 'react';
 import { Stats } from '../../../types/types';
 import Card from '../Cards/Card';
-import './Statistics.scss';
+import './statistics.scss';
 
 type StatPropsType = {
   statistics: Stats[] | undefined;

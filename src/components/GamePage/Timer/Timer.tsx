@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
-import './Timer.scss';
+import './timer.scss';
 
 type TimerPropsType = {
   limit: number;

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import './Preloader.scss';
+import './preloader.scss';
 
 const Preloader: FC = () => (
   <div className="preloader__container">

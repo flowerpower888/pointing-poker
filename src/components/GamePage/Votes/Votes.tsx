@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import UserCard from '../../LobbyPage/UserCard';
-import './Votes.scss';
+import './votes.scss';
 import { Member } from '../../../types/types';
 
 type VotesPropsType = {

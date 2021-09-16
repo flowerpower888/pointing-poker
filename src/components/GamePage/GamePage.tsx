@@ -7,7 +7,7 @@ import Timer from './Timer';
 import Votes from './Votes';
 import { CardModel, GameInfo, RoundResult } from '../../types/types';
 import Statistics from './Statistics';
-import './GamePage.scss';
+import './gamePage.scss';
 
 type Game = {
   info: GameInfo;

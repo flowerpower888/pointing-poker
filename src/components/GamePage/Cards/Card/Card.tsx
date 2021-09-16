@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Card.scss';
+import './card.scss';
 
 type CardPropsType = {
   value: string;
