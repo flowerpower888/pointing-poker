@@ -8,23 +8,22 @@ type VotesPropsType = {
   score?: string[];
 };
 
+type PlayerInfoForTable = {
+  key: string;
+  player: JSX.Element;
+  score: string | number;
+};
+
 const Votes: React.FunctionComponent<VotesPropsType> = ({ score }) => {
   const members = Array<Member>();
-  const [data, setData] = useState<
-    | {
-        key: string;
-        player: JSX.Element;
-        score: string | number;
-      }[]
-    | null
-  >(null);
+  const [data, setData] = useState<PlayerInfoForTable[] | null>(null);
 
   useEffect(() => {
     setData(
       members
         .filter(member => member.userRole !== 'observer')
         .map((member, i) => {
-          const player = {
+          const player: PlayerInfoForTable = {
             key: member.firstName,
             player: (
               <UserCard
