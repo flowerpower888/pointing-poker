@@ -4,27 +4,34 @@ import 'antd/dist/antd.css';
 import './lobbyPagePlayers.css';
 import MembersList from '../Members/MembersList';
 import UserCard from '../UserCard/UserCard';
-// eslint-disable-next-line import/no-named-as-default
-import members from '../ConstantsHardCode';
+import { GameInfo } from '../../../types/types';
 
-function LobbyPagePlayers(): JSX.Element {
+type Game = {
+  info: GameInfo;
+};
+
+function LobbyPagePlayers(props: Game): JSX.Element {
+  const { info } = props;
+  console.log(info);
+  const scrumMaster = info.members.filter(el => el.isOwner)[0];
+  const players = info.members.filter(el => !el.isOwner);
   return (
     <>
       <h2 className="lobby-title"> Spring planning</h2>
       <UserCard
         isOwner
-        imagePath=""
-        firstName="User"
-        lastName="Name"
-        userRole="observer"
-        jobPosition="student"
+        imagePath={scrumMaster.imagePath}
+        firstName={scrumMaster.firstName}
+        lastName={scrumMaster.lastName}
+        userRole={scrumMaster.userRole}
+        jobPosition={scrumMaster.jobPosition}
       />
       <div className="lobby-page_btn-container">
         <Button className="lobby-exit-btn" type="default" size="large">
           Exit
         </Button>
       </div>
-      <MembersList users={members} />
+      <MembersList users={players} />
     </>
   );
 }
