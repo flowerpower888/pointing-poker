@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Table } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { UserData } from '../../LobbyPage/UserCard/UserCard';
 import UserCard from '../../LobbyPage/UserCard';
-import './Votes.scss';
+import columns from '../../../utils/votesTableColumns';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
+import './votes.scss';
 
-type Props = {
-  players: UserData[];
+type VotesPropsType = {
+  players: Member[];
   score?: string[];
   onPlayerKick: (firstName: string) => Promise<void>;
 };
 
-const Votes: React.FunctionComponent<Props> = ({
+type PlayerInfoForTable = {
+  key: string;
+  player: JSX.Element;
+  score: string | number;
+};
+
+const Votes: React.FunctionComponent<VotesPropsType> = ({
   players,
   score,
   onPlayerKick,
 }) => {
   const { confirm } = Modal;
 
-  const [data, setData] = useState<
-    | {
-        key: string;
-        player: JSX.Element;
-        score: string | number;
-      }[]
-    | null
-  >(null);
+  const [data, setData] = useState<PlayerInfoForTable[] | null>(null);
 
   useEffect(() => {
     const showPlayerKickConfirm = (firstName: string) => {
@@ -52,7 +52,6 @@ const Votes: React.FunctionComponent<Props> = ({
               firstName={member.firstName}
               userRole={member.userRole}
               imagePath={member.imagePath}
-              avatarSize="small"
               showPlayerKickConfirm={showPlayerKickConfirm}
             />
           ),
@@ -63,19 +62,6 @@ const Votes: React.FunctionComponent<Props> = ({
       }),
     );
   }, [score, players, onPlayerKick, confirm]);
-
-  const columns = [
-    {
-      title: 'Score',
-      dataIndex: 'score',
-      key: 'score',
-    },
-    {
-      title: 'Player',
-      dataIndex: 'player',
-      key: 'player',
-    },
-  ];
 
   return (
     <div className="voting">

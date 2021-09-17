@@ -3,18 +3,11 @@ import Search from 'antd/lib/input/Search';
 import { Button, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import siteName from '../../assets/siteName.png';
-import styles from './Home.module.scss';
+import styles from './home.module.scss';
 import gameAPI from '../../api/gameAPI';
+import LobbyForm from '../LobbyForm';
 
 const { Title } = Typography;
-
-type PropsType = {
-  isOwner: boolean;
-};
-
-const PopupTub: FC<PropsType> = ({ isOwner }) => (
-  <div>IsOwner: {`${isOwner}`}</div>
-);
 
 const Home: FC = () => {
   const [isPopupShown, setIsPopupShown] = useState<boolean>(false);
@@ -22,18 +15,23 @@ const Home: FC = () => {
   const [isErrorShown, setIsErrorShown] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const closePopup = () => {
+    setIsPopupShown(false);
+  };
+
   const onClickStart = async () => {
     setIsOwner(true);
     setIsPopupShown(true);
   };
 
   const searchGame = async (id: string) => {
-    if (id === '') {
+    if (!id) {
       setIsErrorShown(true);
     } else {
       setIsLoading(true);
       try {
-        await gameAPI.getGameInfo(id);
+        const response = await gameAPI.getGameInfo(id);
+        localStorage.setItem('gameId', response.data.id);
         setIsErrorShown(false);
         setIsPopupShown(true);
       } catch {
@@ -90,7 +88,7 @@ const Home: FC = () => {
           )}
         </div>
       </div>
-      {isPopupShown && <PopupTub isOwner={isOwner} />}
+      {isPopupShown && <LobbyForm isOwner={isOwner} closePopup={closePopup} />}
     </div>
   );
 };

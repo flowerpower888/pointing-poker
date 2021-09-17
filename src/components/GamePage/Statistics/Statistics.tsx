@@ -1,14 +1,20 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { CardModel, RoundResult, Stats } from '../../../types/types';
+import {
+  CardModel,
+  RoundResult,
+  Stats,
+} from '../../../models/RoundResult/RoundModel';
 import Card from '../Cards/Card';
-import './Statistics.scss';
+import './statistics.scss';
 
-type Props = {
+type StatPropsType = {
   roundResult: RoundResult;
 };
 
-const Statistics: React.FunctionComponent<Props> = ({ roundResult }) => {
+const Statistics: React.FunctionComponent<StatPropsType> = ({
+  roundResult,
+}) => {
   const [statistics, setStatistics] = useState<Stats[] | null>(null);
 
   useEffect(() => {

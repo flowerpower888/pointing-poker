@@ -1,34 +1,28 @@
 import * as React from 'react';
 import { Avatar, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-import './userCard.css';
-import { AvatarSize } from 'antd/lib/avatar/SizeContext';
+import './userCard.scss';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 
-export interface UserData {
-  firstName: string;
-  lastName?: string;
-  jobPosition?: string;
-  userRole: 'scram master' | 'player' | 'observer';
-  imagePath?: string;
-  avatarSize?: AvatarSize;
+type UserCardPropsType = Member & {
   showPlayerKickConfirm?: (firstName: string) => void;
-}
+};
 
-function UserCard(props: UserData): JSX.Element {
+function UserCard(props: UserCardPropsType): JSX.Element {
   const {
     firstName,
     lastName,
     jobPosition,
     userRole,
     imagePath,
-    avatarSize,
+    isOwner,
     showPlayerKickConfirm,
   } = props;
   const { Meta } = Card;
 
   return (
     <Card className="user-card_container">
-      {userRole === 'scram master' ? (
+      {isOwner ? (
         <></>
       ) : (
         <CloseOutlined
@@ -40,19 +34,21 @@ function UserCard(props: UserData): JSX.Element {
           }
         />
       )}
-      <p className="user-card_role">{userRole}:</p>
+      <p className="user-card_userRole">
+        {isOwner ? 'Scrum master' : userRole}:
+      </p>
       <Meta
         avatar={
           <Avatar
             style={{ backgroundColor: '#51d7c2' }}
-            size={avatarSize || 'large'}
+            size="large"
             alt="user avatar"
             src={imagePath}
           >
             {firstName[0] + (lastName ? lastName[0] : '')}
           </Avatar>
         }
-        title={`${firstName}${lastName || ''}`}
+        title={`${firstName} ${lastName || ''}`}
         description={jobPosition}
       />
     </Card>
