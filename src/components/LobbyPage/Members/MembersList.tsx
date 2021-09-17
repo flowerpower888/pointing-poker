@@ -1,8 +1,13 @@
 import * as React from 'react';
-import UserCard, { UserData } from '../UserCard/UserCard';
-import './membersList.css';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
+import UserCard from '../UserCard/UserCard';
+import './membersList.scss';
 
-function MembersList(props: { users: UserData[] }): JSX.Element {
+type MembersListPropsType = {
+  users: Member[];
+};
+
+function MembersList(props: MembersListPropsType): JSX.Element {
   const { users } = props;
   return (
     <>
@@ -13,6 +18,7 @@ function MembersList(props: { users: UserData[] }): JSX.Element {
             key={Date.now()}
             firstName={el.firstName}
             lastName={el.lastName}
+            isOwner={el.isOwner}
             userRole={el.userRole}
             imagePath={el.imagePath}
             jobPosition={el.jobPosition}

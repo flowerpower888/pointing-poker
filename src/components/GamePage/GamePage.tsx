@@ -1,21 +1,26 @@
 import { Button, Col, Divider, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import issues from '../../shared/issues';
+import issues from '../../utils/issues';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
-import members from '../LobbyPage/ConstantsHardCode';
-import Cards from './Cards';
-import { CardModel, RoundResult } from '../../types/types';
 import Statistics from './Statistics';
-import './GamePage.scss';
+import './gamePage.scss';
+import { CardModel, RoundResult } from '../../models/RoundResult/RoundModel';
+import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
 
-const GamePage: React.FunctionComponent = () => {
+type Game = {
+  info: GameInfo;
+};
+function GamePage(props: Game): JSX.Element {
+  const { info } = props;
   const [issueList, setIssueList] = useState(issues);
   const [currentIssue, setCurrentIssue] = useState<string>(issueList[0]);
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
+  const { members } = info;
+  const scrumMaster = info.members.filter(el => el.isOwner)[0];
 
   useEffect(() => {
     setRoundResult(null);
@@ -50,20 +55,16 @@ const GamePage: React.FunctionComponent = () => {
       };
 
       const cards = await fetch('./cardSet.json').then(res => res.json());
-
       const result: RoundResult = {
         issue: currentIssue,
         score: members
           .filter(member => member.userRole !== 'observer')
           .map(member => {
             const { firstName } = member;
-
-            const memberScore = {
+            return {
               player: firstName,
               card: cards[Math.floor(Math.random() * cards.length)],
             };
-
-            return memberScore;
           }),
       };
 
@@ -89,11 +90,11 @@ const GamePage: React.FunctionComponent = () => {
             style={{ marginBottom: 30 }}
           >
             <UserCard
-              imagePath=""
-              firstName="User"
-              lastName="Name"
-              userRole="scram master"
-              jobPosition="student"
+              imagePath={scrumMaster.imagePath}
+              firstName={scrumMaster.firstName}
+              lastName={scrumMaster.lastName}
+              userRole={scrumMaster.userRole}
+              jobPosition={scrumMaster.jobPosition}
             />
 
             <Button type="default" size="large">
@@ -152,6 +153,6 @@ const GamePage: React.FunctionComponent = () => {
       </Row> */}
     </div>
   );
-};
+}
 
 export default GamePage;

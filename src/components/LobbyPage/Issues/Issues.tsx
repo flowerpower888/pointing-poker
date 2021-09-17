@@ -8,10 +8,10 @@ import {
   PlusOutlined,
 } from '@ant-design/icons/lib/icons';
 import { FormEvent, useState } from 'react';
-import './issues.css';
+import './issues.scss';
 import { v4 as uuidv4 } from 'uuid';
 
-type Props = {
+type IssuesPropsType = {
   issueList: string[];
   setIssueList: React.Dispatch<React.SetStateAction<string[]>>;
   editable?: boolean;
@@ -19,7 +19,7 @@ type Props = {
   currentIssue?: string | null;
 };
 
-const Issues: React.FunctionComponent<Props> = ({
+const Issues: React.FunctionComponent<IssuesPropsType> = ({
   issueList,
   setIssueList,
   editable = true,
@@ -28,7 +28,7 @@ const Issues: React.FunctionComponent<Props> = ({
 }) => {
   const [newIssue, setNewIssue] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [currentItem, setCurrentItem] = useState({ value: '', index: NaN });
+  const [currentItem, setCurrentItem] = useState({ value: '', index: 0 });
 
   const addIssue = (event: FormEvent) => {
     event.preventDefault();

@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
-import members from '../../LobbyPage/ConstantsHardCode';
 import UserCard from '../../LobbyPage/UserCard';
-import './Votes.scss';
+import './votes.scss';
+import columns from '../../../utils/votesTableColumns';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 
-type Props = {
+type VotesPropsType = {
   score?: string[];
 };
 
-const Votes: React.FunctionComponent<Props> = ({ score }) => {
-  const [data, setData] = useState<
-    | {
-        key: string;
-        player: JSX.Element;
-        score: string | number;
-      }[]
-    | null
-  >(null);
+type PlayerInfoForTable = {
+  key: string;
+  player: JSX.Element;
+  score: string | number;
+};
+
+const Votes: React.FunctionComponent<VotesPropsType> = ({ score }) => {
+  const members = Array<Member>();
+  const [data, setData] = useState<PlayerInfoForTable[] | null>(null);
 
   useEffect(() => {
     setData(
       members
         .filter(member => member.userRole !== 'observer')
         .map((member, i) => {
-          const player = {
+          const player: PlayerInfoForTable = {
             key: member.firstName,
             player: (
               <UserCard
                 firstName={member.firstName}
                 userRole={member.userRole}
                 imagePath={member.imagePath}
-                avatarSize="small"
+                // avatarSize="small"
               />
             ),
             score: score?.[i] || 'In progress',
@@ -40,19 +41,6 @@ const Votes: React.FunctionComponent<Props> = ({ score }) => {
         }),
     );
   }, [score]);
-
-  const columns = [
-    {
-      title: 'Score',
-      dataIndex: 'score',
-      key: 'score',
-    },
-    {
-      title: 'Player',
-      dataIndex: 'player',
-      key: 'player',
-    },
-  ];
 
   return (
     <div className="voting">

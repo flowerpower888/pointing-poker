@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Title from 'antd/lib/typography/Title';
 import { List, Avatar } from 'antd';
-import styles from './Footer.module.scss';
+import styles from './footer.module.scss';
 
-const Footer = () => {
+const Footer: FC = () => {
   const members = [
     {
       id: 0,
