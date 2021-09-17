@@ -7,6 +7,7 @@ import LobbyPagePlayers from './LobbyPagePlayers';
 import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
 import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
+import SocketHandler from '../../websockets-api/sockets';
 
 type GameParams = {
   gameId: string;
@@ -17,6 +18,7 @@ function LobbyPage(): JSX.Element {
   const { gameId } = useParams<GameParams>();
   const [isOwner, setIsOwner] = useState(false);
   const [gameData, setGameData] = useState({} as GameInfo);
+  let socketConnect: SocketHandler;
   // const [gameStatus, setGameStatus] = useState('created');
   useEffect(() => {
     async function getOwnerStatus() {
@@ -26,6 +28,8 @@ function LobbyPage(): JSX.Element {
       setIsOwner(owner === localStorage.getItem('userId'));
       setIsLoaded(true);
       // setGameStatus(gameInfo.data.status);
+      socketConnect = new SocketHandler(gameId);
+      socketConnect.handleAddMember(gameData, setGameData);
     }
     getOwnerStatus();
   }, []);
