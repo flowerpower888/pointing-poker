@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import UserCard from '../../LobbyPage/UserCard';
-import './votes.scss';
 import columns from '../../../utils/votesTableColumns';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
+import './votes.scss';
 
 type VotesPropsType = {
   score?: string[];

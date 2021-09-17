@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import './lobbyPage.scss';
 import LobbyPageScramMaster from './LobbyPageScramMaster';
 import LobbyPagePlayers from './LobbyPagePlayers';
 import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
 import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
+import './lobbyPage.scss';
 
 type GameParams = {
   gameId: string;

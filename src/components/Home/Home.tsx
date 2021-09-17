@@ -3,9 +3,9 @@ import Search from 'antd/lib/input/Search';
 import { Button, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import siteName from '../../assets/siteName.png';
-import styles from './home.module.scss';
 import gameAPI from '../../api/gameAPI';
 import LobbyForm from '../LobbyForm';
+import styles from './home.module.scss';
 
 const { Title } = Typography;
 

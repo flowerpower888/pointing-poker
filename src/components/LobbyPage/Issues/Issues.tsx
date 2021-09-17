@@ -8,8 +8,8 @@ import {
   PlusOutlined,
 } from '@ant-design/icons/lib/icons';
 import { FormEvent, useState } from 'react';
-import './issues.scss';
 import { v4 as uuidv4 } from 'uuid';
+import './issues.scss';
 
 type IssuesPropsType = {
   issueList: string[];

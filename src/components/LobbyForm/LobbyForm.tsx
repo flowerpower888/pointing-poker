@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
 import UploadAvatar from './UploadAvatar';
-import './lobbyForm.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
 import { Role } from '../../models/GameInfoAggregate/GameInfoModel';
+import './lobbyForm.scss';
 
 type LobbyFormPropsType = {
   isOwner: boolean;
