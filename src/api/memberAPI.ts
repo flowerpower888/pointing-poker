@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Member } from '../types/types';
+import { Member } from '../models/GameInfoAggregate/GameInfoModel';
 import instance from './api';
 
 const memberAPI = {

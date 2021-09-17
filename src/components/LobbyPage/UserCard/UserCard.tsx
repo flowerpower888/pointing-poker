@@ -1,16 +1,21 @@
 import * as React from 'react';
 import { Avatar, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-import './userCard.css';
-import { Member } from '../../../types/types';
+import './userCard.scss';
+import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 
-function UserCard(props: Member): JSX.Element {
+type UserCardPropsType = Member;
+
+function UserCard(props: UserCardPropsType): JSX.Element {
   const { firstName, lastName, jobPosition, userRole, imagePath, isOwner } =
     props;
   const { Meta } = Card;
 
   return (
-    <Card className="user-card_container">
+    <Card
+      className="user-card_container"
+      style={{ marginLeft: '20px', marginTop: '20px' }}
+    >
       {isOwner ? <></> : <CloseOutlined className="delete_member" />}
       <p className="user-card_userRole">
         {isOwner ? 'Scrum master' : userRole}:

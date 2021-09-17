@@ -1,14 +1,14 @@
 import { Col, Row } from 'antd';
 import React from 'react';
-import { Stats } from '../../../types/types';
+import { Stats } from '../../../models/RoundResult/RoundModel';
 import Card from '../Cards/Card';
-import './Statistics.scss';
+import './statistics.scss';
 
-type Props = {
+type StatPropsType = {
   statistics: Stats[] | undefined;
 };
 
-const Statistics: React.FunctionComponent<Props> = ({ statistics }) => {
+const Statistics: React.FunctionComponent<StatPropsType> = ({ statistics }) => {
   console.log(statistics);
 
   return (

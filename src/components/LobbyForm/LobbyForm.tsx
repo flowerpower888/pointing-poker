@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Switch, Typography, Modal } from 'antd';
 import UploadAvatar from './UploadAvatar';
-import './LobbyForm.scss';
+import './lobbyForm.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
-import { Role } from '../../types/types';
+import { Role } from '../../models/GameInfoAggregate/GameInfoModel';
 
-type PropsType = {
+type LobbyFormPropsType = {
   isOwner: boolean;
   closePopup: () => void;
 };
@@ -18,7 +18,7 @@ type FormValuesType = {
   jobPosition?: string;
 };
 
-const LobbyForm: React.FunctionComponent<PropsType> = ({
+const LobbyForm: React.FunctionComponent<LobbyFormPropsType> = ({
   isOwner,
   closePopup,
 }) => {

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Button } from 'antd';
 import 'antd/dist/antd.css';
-import './lobbyPagePlayers.css';
+import './lobbyPagePlayers.scss';
 import MembersList from '../Members/MembersList';
 import UserCard from '../UserCard/UserCard';
-import { GameInfo } from '../../../types/types';
+import { GameInfo } from '../../../models/GameInfoAggregate/GameInfoModel';
 
 type Game = {
   info: GameInfo;

@@ -3,7 +3,7 @@ import Search from 'antd/lib/input/Search';
 import { Button, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import siteName from '../../assets/siteName.png';
-import styles from './Home.module.scss';
+import styles from './home.module.scss';
 import gameAPI from '../../api/gameAPI';
 import LobbyForm from '../LobbyForm';
 
@@ -25,7 +25,7 @@ const Home: FC = () => {
   };
 
   const searchGame = async (id: string) => {
-    if (id === '') {
+    if (!id) {
       setIsErrorShown(true);
     } else {
       setIsLoading(true);

@@ -5,9 +5,9 @@ import { useState } from 'react';
 import UserCard from '../UserCard/UserCard';
 import MembersList from '../Members/MembersList';
 import 'antd/dist/antd.css';
-import './lobbyPageScramMaster.css';
+import './lobbyPageScramMaster.scss';
 import Issues from '../Issues/Issues';
-import { GameInfo } from '../../../types/types';
+import { GameInfo } from '../../../models/GameInfoAggregate/GameInfoModel';
 
 type Game = {
   info: GameInfo;
