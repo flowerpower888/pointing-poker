@@ -36,10 +36,7 @@ function LobbyPageScramMaster(props: Game): JSX.Element {
           userRole={scrumMaster.userRole}
           jobPosition={scrumMaster.jobPosition}
         />
-        <Paragraph
-          className="lobby-copy-link"
-          copyable={{ text: `localhost:3000/${gameId}` }}
-        >
+        <Paragraph className="lobby-copy-link" copyable={{ text: `${gameId}` }}>
           Link to share
         </Paragraph>
       </div>
