@@ -1,31 +1,45 @@
-import * as React from 'react';
+import React from 'react';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import UserCard from '../UserCard/UserCard';
 import './membersList.scss';
 
 type MembersListPropsType = {
-  users: Member[];
+  members: Member[];
 };
 
 function MembersList(props: MembersListPropsType): JSX.Element {
-  const { users } = props;
+  const { members } = props;
+
   return (
     <>
       <h2 className="lobby-title">Members:</h2>
       <div className="members-list">
-        {users.map(el => (
-          <UserCard
-            key={Date.now()}
-            firstName={el.firstName}
-            lastName={el.lastName}
-            isOwner={el.isOwner}
-            userRole={el.userRole}
-            imagePath={el.imagePath}
-            jobPosition={el.jobPosition}
-          />
-        ))}
+        {members.map(member => {
+          const {
+            firstName,
+            lastName,
+            isOwner,
+            userRole,
+            imagePath,
+            jobPosition,
+            id,
+          } = member;
+
+          return (
+            <UserCard
+              key={id}
+              firstName={firstName}
+              lastName={lastName}
+              isOwner={isOwner}
+              userRole={userRole}
+              imagePath={imagePath}
+              jobPosition={jobPosition}
+            />
+          );
+        })}
       </div>
     </>
   );
 }
+
 export default MembersList;

@@ -2,6 +2,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+
+  .user-card_container {
+    margin: 20px;
+    width: 280px;
+  }
 }
 
 .delete_member {
