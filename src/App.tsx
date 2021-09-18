@@ -4,15 +4,14 @@ import './app.scss';
 import Header from './components/Header';
 import Home from './components/Home';
 import Footer from './components/Footer';
-import LobbyPage from './components/LobbyPage';
-import GamePage from './components/GamePage';
+import MainPage from './components/MainPage/MainPage';
 
 const App: React.FunctionComponent = () => (
   <BrowserRouter>
     <Header />
     <Switch>
       <Route path="/:gameId">
-        <LobbyPage />
+        <MainPage />
       </Route>
       <Route exact path="/" render={() => <Home />} />
     </Switch>
