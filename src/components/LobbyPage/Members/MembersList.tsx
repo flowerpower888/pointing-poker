@@ -15,13 +15,14 @@ function MembersList(props: MembersListPropsType): JSX.Element {
       <div className="members-list">
         {users.map(el => (
           <UserCard
-            key={Date.now()}
+            key={el.id}
             firstName={el.firstName}
             lastName={el.lastName}
             isOwner={el.isOwner}
             userRole={el.userRole}
             imagePath={el.imagePath}
             jobPosition={el.jobPosition}
+            id={el.id}
           />
         ))}
       </div>

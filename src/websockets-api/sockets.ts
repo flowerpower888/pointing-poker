@@ -1,6 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
-import { GameInfo, Member } from '../models/GameInfoAggregate/GameInfoModel';
+import { GameInfo } from '../models/GameInfoAggregate/GameInfoModel';
 
 class SocketHandler {
   socket = io('http://localhost:3001');
@@ -11,21 +11,15 @@ class SocketHandler {
     this.gameId = gameId;
     this.socket.on('connect', () => {
       this.socket.emit('create', this.gameId);
-      console.log('connected');
     });
   }
 
-  // TODO fix members type
-  handleAddMember(
+  handleUpdateMembers(
     gameData: GameInfo,
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
-    this.socket.on('memberConnected', data => {
-      console.log(data);
-      const newGameData = gameData;
-      const members: Member[] = data[0];
-      newGameData.members = members;
-      setGameData(newGameData);
+    this.socket.on('membersChange', members => {
+      setGameData({ ...gameData, members });
     });
   }
 }

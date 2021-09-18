@@ -21,7 +21,7 @@ function LobbyPage(): JSX.Element {
   let socketConnect: SocketHandler;
   // const [gameStatus, setGameStatus] = useState('created');
   useEffect(() => {
-    async function getOwnerStatus() {
+    async function getGameStatus() {
       const gameInfo = await gameAPI.getGameInfo(gameId);
       setGameData(gameInfo.data);
       const owner = gameInfo.data.members.filter(el => el.isOwner)[0].id;
@@ -29,9 +29,9 @@ function LobbyPage(): JSX.Element {
       setIsLoaded(true);
       // setGameStatus(gameInfo.data.status);
       socketConnect = new SocketHandler(gameId);
-      socketConnect.handleAddMember(gameData, setGameData);
+      socketConnect.handleUpdateMembers(gameData, setGameData);
     }
-    getOwnerStatus();
+    getGameStatus();
   }, []);
   // TODO: add checking game status to render lobby or game page
   return (
