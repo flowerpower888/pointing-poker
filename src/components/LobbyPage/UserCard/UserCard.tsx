@@ -5,11 +5,12 @@ import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 
 type UserCardPropsType = Member & {
-  showPlayerKickConfirm?: (firstName: string) => void;
+  showPlayerKickConfirm?: (id: string, firstname: string) => void;
 };
 
 function UserCard(props: UserCardPropsType): JSX.Element {
   const {
+    id = '',
     firstName,
     lastName,
     jobPosition,
@@ -29,7 +30,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
           className="delete_member"
           onClick={
             showPlayerKickConfirm
-              ? () => showPlayerKickConfirm(firstName)
+              ? () => showPlayerKickConfirm(id, firstName)
               : undefined
           }
         />

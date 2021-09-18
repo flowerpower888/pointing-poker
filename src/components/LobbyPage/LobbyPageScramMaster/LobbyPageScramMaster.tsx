@@ -30,6 +30,7 @@ function LobbyPageScramMaster(props: Game): JSX.Element {
       <div className="scram-card_container">
         <UserCard
           isOwner
+          id={scrumMaster.id}
           imagePath={scrumMaster.imagePath}
           firstName={scrumMaster.firstName}
           lastName={scrumMaster.lastName}

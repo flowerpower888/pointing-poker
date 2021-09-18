@@ -49,10 +49,10 @@ function GamePage(props: Game): JSX.Element {
         score: players
           .filter(player => player.userRole !== 'observer')
           .map(player => {
-            const { firstName } = player;
+            const { id } = player;
 
             const playerScore = {
-              player: firstName,
+              playerId: id,
               card: cards[Math.floor(Math.random() * cards.length)],
             };
 
@@ -68,14 +68,14 @@ function GamePage(props: Game): JSX.Element {
     setRoundResult(await getRoundResult());
   };
 
-  const onPlayerKick = async (firstName: string) => {
-    setPlayers(prev => prev.filter(player => player.firstName !== firstName));
+  const onPlayerKick = async (id: string) => {
+    setPlayers(prev => prev.filter(player => player.id !== id));
 
     if (roundResult) {
       setRoundResult({
         ...roundResult,
         score: roundResult?.score.filter(
-          playerScore => playerScore.player !== firstName,
+          playerScore => playerScore.playerId !== id,
         ),
       });
     }
@@ -92,6 +92,7 @@ function GamePage(props: Game): JSX.Element {
             style={{ marginBottom: 30 }}
           >
             <UserCard
+              id={scrumMaster.id}
               imagePath={scrumMaster.imagePath}
               firstName={scrumMaster.firstName}
               lastName={scrumMaster.lastName}

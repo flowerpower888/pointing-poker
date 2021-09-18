@@ -9,7 +9,7 @@ import './votes.scss';
 type VotesPropsType = {
   players: Member[];
   score?: string[];
-  onPlayerKick: (firstName: string) => Promise<void>;
+  onPlayerKick: (id: string) => Promise<void>;
 };
 
 type PlayerInfoForTable = {
@@ -28,15 +28,15 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({
   const [data, setData] = useState<PlayerInfoForTable[] | null>(null);
 
   useEffect(() => {
-    const showPlayerKickConfirm = (firstName: string) => {
+    const showPlayerKickConfirm = (id: string, firstname: string) => {
       confirm({
-        title: `Do you really want to kick member ${firstName}?`,
+        title: `Do you really want to kick member ${firstname}?`,
         icon: <ExclamationCircleOutlined />,
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'No',
         onOk() {
-          onPlayerKick(firstName);
+          onPlayerKick(id);
         },
         centered: true,
         maskClosable: true,
@@ -49,6 +49,7 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({
           key: member.firstName,
           player: (
             <UserCard
+              id={member.id}
               firstName={member.firstName}
               userRole={member.userRole}
               imagePath={member.imagePath}
