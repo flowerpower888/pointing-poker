@@ -1,22 +1,38 @@
 import * as React from 'react';
-import { Avatar, Card } from 'antd';
+import { Avatar, Button, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
+import memberAPI from '../../../api/memberAPI';
 
 type UserCardPropsType = Member;
 
 function UserCard(props: UserCardPropsType): JSX.Element {
-  const { firstName, lastName, jobPosition, userRole, imagePath, isOwner } =
+  const { firstName, lastName, jobPosition, userRole, imagePath, isOwner, id } =
     props;
   const { Meta } = Card;
+  const deleteMember = () => {
+    const gameId = localStorage.getItem('gameId');
+    if (gameId && id) {
+      memberAPI.delete(id, gameId);
+    }
+  };
 
   return (
     <Card
       className="user-card_container"
       style={{ marginLeft: '20px', marginTop: '20px' }}
     >
-      {isOwner ? <></> : <CloseOutlined className="delete_member" />}
+      {isOwner ? (
+        <></>
+      ) : (
+        <Button
+          className="delete_member"
+          htmlType="button"
+          icon={<CloseOutlined />}
+          onClick={deleteMember}
+        />
+      )}
       <p className="user-card_userRole">
         {isOwner ? 'Scrum master' : userRole}:
       </p>
