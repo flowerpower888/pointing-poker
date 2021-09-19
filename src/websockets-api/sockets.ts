@@ -22,5 +22,14 @@ class SocketHandler {
       setGameData({ ...gameData, members });
     });
   }
+
+  handleUpdateIssues(
+    gameData: GameInfo,
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('issuesChange', tasks => {
+      setGameData({ ...gameData, tasks });
+    });
+  }
 }
 export default SocketHandler;
