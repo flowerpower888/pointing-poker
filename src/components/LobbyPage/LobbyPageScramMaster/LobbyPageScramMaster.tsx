@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button } from 'antd';
+import { Link, useRouteMatch } from 'react-router-dom';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import { useState } from 'react';
 import UserCard from '../UserCard/UserCard';
@@ -16,17 +17,20 @@ type Game = {
 // TODO replace all path to constants
 
 function LobbyPageScramMaster(props: Game): JSX.Element {
+  const match = useRouteMatch();
   const { info } = props;
   const gameId = info.id;
   const scrumMaster = info.members.filter(el => el.isOwner)[0];
   const members = info.members.filter(el => !el.isOwner);
   const [issueList, setIssueList] = useState(info.tasks);
+
   return (
     <>
       <h2 className="lobby-title"> Spring planning</h2>
       <div className="scram-card_container">
         <UserCard
           isOwner
+          id={scrumMaster.id}
           imagePath={scrumMaster.imagePath}
           firstName={scrumMaster.firstName}
           lastName={scrumMaster.lastName}
@@ -39,13 +43,16 @@ function LobbyPageScramMaster(props: Game): JSX.Element {
       </div>
 
       <div className="lobby-page_btn-container scram-page">
-        <Button
-          className="lobby-exit-btn lobby-exit-btn_scram "
-          type="primary"
-          size="large"
-        >
-          Start game
-        </Button>
+        <Link to={`${match.url}/game`}>
+          <Button
+            className="lobby-exit-btn lobby-exit-btn_scram "
+            type="primary"
+            size="large"
+          >
+            Start game
+          </Button>
+        </Link>
+
         <Button className="lobby-exit-btn" type="default" size="large">
           Cancel game
         </Button>

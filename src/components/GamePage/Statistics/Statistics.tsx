@@ -1,15 +1,42 @@
 import { Col, Row } from 'antd';
-import React from 'react';
-import { Stats } from '../../../models/RoundResult/RoundModel';
+import React, { useEffect, useState } from 'react';
+import {
+  CardModel,
+  RoundResult,
+  Stats,
+} from '../../../models/RoundResult/RoundModel';
 import Card from '../Cards/Card';
 import './statistics.scss';
 
 type StatPropsType = {
-  statistics: Stats[] | undefined;
+  roundResult: RoundResult;
 };
 
-const Statistics: React.FunctionComponent<StatPropsType> = ({ statistics }) => {
-  console.log(statistics);
+const Statistics: React.FunctionComponent<StatPropsType> = ({
+  roundResult,
+}) => {
+  const [statistics, setStatistics] = useState<Stats[] | null>(null);
+
+  useEffect(() => {
+    const getPercentage = (cards: CardModel[]) => {
+      let percentage: { card: CardModel; percents: string }[] = [];
+      const uniqueCards = Array.from(new Set(cards));
+
+      uniqueCards.forEach(cur => {
+        const occurrences = cards.filter(card => card.value === cur.value);
+
+        const percents = `${((occurrences.length * 100) / cards.length).toFixed(
+          0,
+        )}%`;
+
+        percentage = [...percentage, { card: cur, percents }];
+      });
+
+      return percentage;
+    };
+
+    setStatistics(getPercentage(roundResult.score.map(player => player.card)));
+  }, [roundResult.score]);
 
   return (
     <div className="statistics">

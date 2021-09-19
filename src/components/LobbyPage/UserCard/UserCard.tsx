@@ -4,19 +4,37 @@ import { CloseOutlined } from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 
-type UserCardPropsType = Member;
+type UserCardPropsType = Member & {
+  showPlayerKickConfirm?: (id: string, firstname: string) => void;
+};
 
 function UserCard(props: UserCardPropsType): JSX.Element {
-  const { firstName, lastName, jobPosition, userRole, imagePath, isOwner } =
-    props;
+  const {
+    id = '',
+    firstName,
+    lastName,
+    jobPosition,
+    userRole,
+    imagePath,
+    isOwner,
+    showPlayerKickConfirm,
+  } = props;
   const { Meta } = Card;
 
   return (
-    <Card
-      className="user-card_container"
-      style={{ marginLeft: '20px', marginTop: '20px' }}
-    >
-      {isOwner ? <></> : <CloseOutlined className="delete_member" />}
+    <Card className="user-card_container">
+      {isOwner ? (
+        <></>
+      ) : (
+        <CloseOutlined
+          className="delete_member"
+          onClick={
+            showPlayerKickConfirm
+              ? () => showPlayerKickConfirm(id, firstName)
+              : undefined
+          }
+        />
+      )}
       <p className="user-card_userRole">
         {isOwner ? 'Scrum master' : userRole}:
       </p>

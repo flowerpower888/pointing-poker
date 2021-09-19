@@ -5,21 +5,27 @@ import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
+import Cards from './Cards';
 import Statistics from './Statistics';
+import { RoundResult } from '../../models/RoundResult/RoundModel';
+import { GameInfo, Member } from '../../models/GameInfoAggregate/GameInfoModel';
 import './gamePage.scss';
-import { CardModel, RoundResult } from '../../models/RoundResult/RoundModel';
-import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
 
 type Game = {
   info: GameInfo;
 };
+
 function GamePage(props: Game): JSX.Element {
   const { info } = props;
+  const { members } = info;
+
   const [issueList, setIssueList] = useState(issues);
   const [currentIssue, setCurrentIssue] = useState<string>(issueList[0]);
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
-  const { members } = info;
+  const [players, setPlayers] = useState<Member[]>(
+    members.filter(member => member.userRole !== 'observer'),
+  );
   const scrumMaster = info.members.filter(el => el.isOwner)[0];
 
   useEffect(() => {
@@ -36,47 +42,43 @@ function GamePage(props: Game): JSX.Element {
 
   const onRoundEnd = async () => {
     const getRoundResult = async (): Promise<RoundResult> => {
-      const getPercentage = (cards: CardModel[]) => {
-        let percentage: { card: CardModel; percents: string }[] = [];
-        const uniqueCards = Array.from(new Set(cards));
+      const cards = await fetch('/cardSet.json').then(res => res.json());
 
-        uniqueCards.forEach(cur => {
-          const occurrences = cards.filter(card => card.value === cur.value);
-
-          const percents = `${(
-            (occurrences.length * 100) /
-            cards.length
-          ).toFixed(0)}%`;
-
-          percentage = [...percentage, { card: cur, percents }];
-        });
-
-        return percentage;
-      };
-
-      const cards = await fetch('./cardSet.json').then(res => res.json());
       const result: RoundResult = {
         issue: currentIssue,
-        score: members
-          .filter(member => member.userRole !== 'observer')
-          .map(member => {
-            const { firstName } = member;
-            return {
-              player: firstName,
+        score: players
+          .filter(player => player.userRole !== 'observer')
+          .map(player => {
+            const { id } = player;
+
+            const playerScore = {
+              playerId: id,
               card: cards[Math.floor(Math.random() * cards.length)],
             };
+
+            return playerScore;
           }),
       };
 
       return new Promise(resolve => {
-        resolve({
-          ...result,
-          statistics: getPercentage(result.score.map(player => player.card)),
-        });
+        resolve(result);
       });
     };
 
     setRoundResult(await getRoundResult());
+  };
+
+  const onPlayerKick = async (id: string) => {
+    setPlayers(prev => prev.filter(player => player.id !== id));
+
+    if (roundResult) {
+      setRoundResult({
+        ...roundResult,
+        score: roundResult?.score.filter(
+          playerScore => playerScore.playerId !== id,
+        ),
+      });
+    }
   };
 
   return (
@@ -90,6 +92,7 @@ function GamePage(props: Game): JSX.Element {
             style={{ marginBottom: 30 }}
           >
             <UserCard
+              id={scrumMaster.id}
               imagePath={scrumMaster.imagePath}
               firstName={scrumMaster.firstName}
               lastName={scrumMaster.lastName}
@@ -138,13 +141,17 @@ function GamePage(props: Game): JSX.Element {
             </Row>
           </Row>
 
-          {roundResult && <Statistics statistics={roundResult.statistics} />}
+          {roundResult && <Statistics roundResult={roundResult} />}
         </Col>
 
         <Divider type="vertical" style={{ height: 'auto' }} />
 
         <Col lg={7} sm={24} xs={24}>
-          <Votes score={roundResult?.score.map(player => player.card.value)} />
+          <Votes
+            players={players}
+            score={roundResult?.score.map(player => player.card.value)}
+            onPlayerKick={onPlayerKick}
+          />
         </Col>
       </Row>
 
