@@ -1,5 +1,9 @@
 import { AxiosResponse } from 'axios';
-import { GameInfo, Member } from '../models/GameInfoAggregate/GameInfoModel';
+import {
+  GameInfo,
+  GameStatus,
+  Member,
+} from '../models/GameInfoAggregate/GameInfoModel';
 import instance from './api';
 
 const gameAPI = {
@@ -11,7 +15,16 @@ const gameAPI = {
     });
   },
   start(gameId: string): Promise<AxiosResponse> {
-    return instance.put(`/api/games/status/${gameId}`);
+    const status: GameStatus = 'started';
+    return instance.put(`/api/status/${gameId}`, {
+      status,
+    });
+  },
+  complete(gameId: string): Promise<AxiosResponse> {
+    const status: GameStatus = 'completed';
+    return instance.put(`/api/status/${gameId}`, {
+      status,
+    });
   },
   addPhoto(imageFile: Blob): Promise<AxiosResponse<string>> {
     const formData = new FormData();

@@ -8,36 +8,20 @@ import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
 import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
 
-type GameParams = {
-  gameId: string;
+type Game = {
+  info: GameInfo;
 };
 
-function LobbyPage(): JSX.Element {
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { gameId } = useParams<GameParams>();
-  const [isOwner, setIsOwner] = useState(false);
-  const [gameData, setGameData] = useState({} as GameInfo);
-  // const [gameStatus, setGameStatus] = useState('created');
-  useEffect(() => {
-    async function getOwnerStatus() {
-      const gameInfo = await gameAPI.getGameInfo(gameId);
-      setGameData(gameInfo.data);
-      const owner = gameInfo.data.members.filter(el => el.isOwner)[0].id;
-      setIsOwner(owner === localStorage.getItem('userId'));
-      setIsLoaded(true);
-      // setGameStatus(gameInfo.data.status);
-    }
-    getOwnerStatus();
-  }, []);
-  // TODO: add checking game status to render lobby or game page
+function LobbyPage(props: Game): JSX.Element {
+  const { info: gameInfo } = props;
+  const ownerId = gameInfo.members.filter(el => el.isOwner)[0].id;
+  const isUserAnOwner = ownerId === localStorage.getItem('userId');
   return (
     <div className="lobby-page">
-      {!isLoaded ? (
-        <Preloader />
-      ) : isOwner ? (
-        <LobbyPageScramMaster info={gameData} />
+      {isUserAnOwner ? (
+        <LobbyPageScramMaster info={gameInfo} />
       ) : (
-        <LobbyPagePlayers info={gameData} />
+        <LobbyPagePlayers info={gameInfo} />
       )}
     </div>
   );
