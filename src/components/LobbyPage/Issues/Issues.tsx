@@ -46,6 +46,10 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
     setIsEditing(false);
   };
 
+  const deleteIssue = (index: number) => () => {
+    setIssueList(issueList.filter((val, i) => i !== index));
+  };
+
   return (
     <div className="issues">
       <h2 className="lobby-title">Issues</h2>
@@ -122,9 +126,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
               <DeleteOutlined
                 className="delete-issue_icon"
                 color="red"
-                onClick={() => {
-                  setIssueList(issueList.filter((val, i) => i !== index));
-                }}
+                onClick={deleteIssue(index)}
               />
             </div>
           </li>
