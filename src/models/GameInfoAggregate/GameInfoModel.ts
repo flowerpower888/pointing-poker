@@ -12,8 +12,15 @@ export type Role = 'observer' | 'player';
 
 export type GameStatus = 'created' | 'started' | 'completed';
 
+export type Issue = {
+  id: string;
+  title: string;
+  link?: string;
+  priority: 'low' | 'medium' | 'high';
+};
+
 export type GameInfo = {
-  tasks: any;
+  tasks: Array<Issue>;
   _id: string;
   id: string;
   status: GameStatus;
