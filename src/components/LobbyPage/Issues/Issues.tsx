@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input } from 'antd';
+import { Button, Col, Input } from 'antd';
 import {
   CheckOutlined,
   CloseOutlined,
@@ -18,6 +18,8 @@ type IssuesPropsType = {
   editable?: boolean;
   onIssueClick?: (issue: string) => void;
   currentIssue?: string | null;
+  showAddIssueInput?: boolean;
+  showDeleteBtn?: boolean;
 };
 
 const Issues: React.FunctionComponent<IssuesPropsType> = ({
@@ -26,6 +28,8 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
   editable = true,
   onIssueClick,
   currentIssue,
+  showAddIssueInput = true,
+  showDeleteBtn = true,
 }) => {
   const [newIssue, setNewIssue] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -52,88 +56,96 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
   };
 
   return (
-    <div className="issues">
-      <h2 className="lobby-title">Issues</h2>
-      {isEditing ? (
-        <form
-          className="issue_container"
-          id="lobby-input_edit-issue"
-          onSubmit={editIssue}
-        >
-          <Input
-            value={currentItem.value}
-            type="text"
-            className="new-issue_input"
-            onChange={event =>
-              setCurrentItem({
-                value: event.target.value,
-                index: currentItem.index,
-              })
-            }
-          />
-          <Button
-            className="add-issue_btn"
-            type="default"
-            htmlType="submit"
-            icon={<CheckOutlined />}
-          />
-          <Button
-            className="add-issue_btn"
-            type="default"
-            htmlType="button"
-            icon={<CloseOutlined onClick={() => setIsEditing(false)} />}
-          />
-        </form>
-      ) : (
-        <form
-          className="issue_container "
-          id="lobby-input_add-issue"
-          onSubmit={addIssue}
-        >
-          <Input
-            value={newIssue}
-            type="text"
-            className="new-issue_input"
-            placeholder="add new issue"
-            onChange={event => setNewIssue(event.target.value)}
-          />
-          <Button
-            className="add-issue_btn"
-            type="default"
-            htmlType="submit"
-            icon={<PlusOutlined className="new-issue_icon" />}
-          />
-        </form>
-      )}
-      <ul className="issue_container">
-        {issueList.map((el, index) => (
-          <li
-            className={`issue-item ${currentIssue === el ? 'current' : ''}`}
-            key={uuidv4()}
-            onClick={onIssueClick ? () => onIssueClick(el) : undefined}
-            role="presentation"
+    <Col span={12}>
+      <div className="issues">
+        <h2 className="lobby-title">Issues</h2>
+        {isEditing ? (
+          <form
+            className="issue_container"
+            id="lobby-input_edit-issue"
+            onSubmit={editIssue}
           >
-            {el}
-            <div>
-              {editable && (
-                <EditOutlined
-                  className="edit-issue_icon"
-                  onClick={() => {
-                    setCurrentItem({ value: el, index });
-                    setIsEditing(true);
-                  }}
+            <Input
+              value={currentItem.value}
+              type="text"
+              className="new-issue_input"
+              onChange={event =>
+                setCurrentItem({
+                  value: event.target.value,
+                  index: currentItem.index,
+                })
+              }
+            />
+            <Button
+              className="add-issue_btn"
+              type="default"
+              htmlType="submit"
+              icon={<CheckOutlined />}
+            />
+            <Button
+              className="add-issue_btn"
+              type="default"
+              htmlType="button"
+              icon={<CloseOutlined onClick={() => setIsEditing(false)} />}
+            />
+          </form>
+        ) : (
+          <form
+            className="issue_container "
+            id="lobby-input_add-issue"
+            onSubmit={addIssue}
+          >
+            {showAddIssueInput && (
+              <>
+                <Input
+                  value={newIssue}
+                  type="text"
+                  className="new-issue_input"
+                  placeholder="add new issue"
+                  onChange={event => setNewIssue(event.target.value)}
                 />
-              )}
-              <DeleteOutlined
-                className="delete-issue_icon"
-                color="red"
-                onClick={deleteIssue(index)}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+                <Button
+                  className="add-issue_btn"
+                  type="default"
+                  htmlType="submit"
+                  icon={<PlusOutlined className="new-issue_icon" />}
+                />
+              </>
+            )}
+          </form>
+        )}
+        <ul className="issue_container">
+          {issueList.map((el, index) => (
+            <li
+              className={`issue-item ${currentIssue === el ? 'current' : ''}`}
+              key={uuidv4()}
+              onClick={onIssueClick ? () => onIssueClick(el) : undefined}
+              role="presentation"
+            >
+              {el}
+              <div>
+                {editable && (
+                  <EditOutlined
+                    className="edit-issue_icon"
+                    onClick={() => {
+                      setCurrentItem({ value: el, index });
+                      setIsEditing(true);
+                    }}
+                  />
+                )}
+                {showDeleteBtn && (
+                  <DeleteOutlined
+                    className="delete-issue_icon"
+                    color="red"
+                    onClick={deleteIssue(index)}
+                  />
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Col>
   );
 };
 

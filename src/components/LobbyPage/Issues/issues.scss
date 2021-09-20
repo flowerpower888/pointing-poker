@@ -1,10 +1,10 @@
-.issue_container {
-  margin-left: 20px;
-  margin-top: 20px;
+.issues {
+  margin-bottom: 30px;
 }
 
-.new-issue_input {
-  max-width: 66%;
+#lobby-input_add-issue {
+  display: flex;
+  margin-bottom: 10px;
 }
 
 .new-issue_icon {
@@ -17,7 +17,6 @@
 }
 
 .issue-item {
-  max-width: 70%;
   border: 1px solid #d9d9d9;
   border-radius: 2px;
   font-size: 16px;
