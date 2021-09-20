@@ -1,5 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, FormEvent } from 'react';
 import { Button, Col, Input } from 'antd';
 import {
   CheckOutlined,
@@ -11,7 +10,6 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
 import issuesAPI from '../../../api/issuesAPI';
-import gameAPI from '../../../api/gameAPI';
 import './issues.scss';
 
 type IssuesPropsType = {
@@ -20,6 +18,7 @@ type IssuesPropsType = {
   currentIssue?: Issue | null;
   showAddIssueInput?: boolean;
   showDeleteBtn?: boolean;
+  tasks: Array<Issue>;
 };
 
 const Issues: React.FunctionComponent<IssuesPropsType> = ({
@@ -28,22 +27,11 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
   currentIssue,
   showAddIssueInput = true,
   showDeleteBtn = true,
+  tasks,
 }) => {
-  const { gameId } = useParams<{ gameId: string }>();
-
-  const [issueList, setIssueList] = useState<Issue[]>([]);
   const [newIssueTitle, setNewIssueTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<Issue>({} as Issue);
-
-  useEffect(() => {
-    const getTasks = async () => {
-      const gameInfo = (await gameAPI.getGameInfo(gameId)).data;
-      setIssueList(gameInfo.tasks);
-    };
-
-    getTasks();
-  }, []);
 
   const addIssue = (event: FormEvent) => {
     event.preventDefault();
@@ -55,7 +43,6 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
     };
 
     if (newIssueTitle.length > 0) {
-      setIssueList([...issueList, newIssue]);
       issuesAPI.add(newIssue);
       setNewIssueTitle('');
     }
@@ -63,16 +50,11 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
 
   const editIssue = (event: FormEvent) => {
     event.preventDefault();
-
-    setIssueList(
-      issueList.map(item => (item.id === currentItem.id ? currentItem : item)),
-    );
     issuesAPI.update(currentItem, currentItem.id);
     setIsEditing(false);
   };
 
   const deleteIssue = (id: string) => () => {
-    setIssueList(issueList.filter(issue => issue.id !== id));
     issuesAPI.delete(id);
   };
 
@@ -137,7 +119,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
           </form>
         )}
         <ul className="issue_container">
-          {issueList.map((issue, index) => (
+          {tasks.map(issue => (
             <li
               className={`issue-item ${
                 currentIssue?.id === issue.id ? 'current' : ''
@@ -153,7 +135,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
                     className="edit-issue_icon"
                     onClick={() => {
                       setCurrentItem(
-                        issueList.filter(
+                        tasks.filter(
                           issueListItem => issueListItem.id === issue.id,
                         )[0],
                       );

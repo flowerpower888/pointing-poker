@@ -113,6 +113,7 @@ function LobbyPage(props: Game): JSX.Element {
             editable={isUserAnOwner}
             showAddIssueInput={isUserAnOwner}
             showDeleteBtn={isUserAnOwner}
+            tasks={gameInfo.tasks}
           />
         </>
       )}

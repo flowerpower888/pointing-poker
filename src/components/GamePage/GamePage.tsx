@@ -143,6 +143,7 @@ function GamePage(props: Game): JSX.Element {
               currentIssue={currentIssue}
               showAddIssueInput={currentPlayer.isOwner}
               showDeleteBtn={currentPlayer.isOwner}
+              tasks={gameInfo.tasks}
             />
 
             <Col span={12}>
