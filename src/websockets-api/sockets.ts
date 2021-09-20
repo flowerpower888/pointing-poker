@@ -1,6 +1,9 @@
 import React from 'react';
 import io from 'socket.io-client';
-import { GameInfo } from '../models/GameInfoAggregate/GameInfoModel';
+import {
+  GameInfo,
+  GameStatus,
+} from '../models/GameInfoAggregate/GameInfoModel';
 
 class SocketHandler {
   socket = io('http://localhost:3001');
@@ -15,7 +18,6 @@ class SocketHandler {
   }
 
   handleUpdateMembers(
-    gameData: GameInfo,
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
     this.socket.on('membersChange', members => {
@@ -24,11 +26,20 @@ class SocketHandler {
   }
 
   handleUpdateIssues(
-    gameData: GameInfo,
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
     this.socket.on('issuesChange', tasks => {
       setGameData(prev => ({ ...prev, tasks }));
+    });
+  }
+
+  handleUpdateStatus(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+    setGameStatus: React.Dispatch<React.SetStateAction<GameStatus>>,
+  ): void {
+    this.socket.on('gameStatusChange', status => {
+      setGameData(prev => ({ ...prev, status }));
+      setGameStatus(status);
     });
   }
 }
