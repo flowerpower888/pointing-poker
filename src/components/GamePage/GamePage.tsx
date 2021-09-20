@@ -1,5 +1,6 @@
 import { Button, Col, Divider, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import issues from '../../utils/issues';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
@@ -8,16 +9,24 @@ import Votes from './Votes';
 import Cards from './Cards';
 import Statistics from './Statistics';
 import { RoundResult } from '../../models/RoundResult/RoundModel';
-import { GameInfo, Member } from '../../models/GameInfoAggregate/GameInfoModel';
+import {
+  GameInfo,
+  GameStatus,
+  Member,
+} from '../../models/GameInfoAggregate/GameInfoModel';
 import './gamePage.scss';
+import gameAPI from '../../api/gameAPI';
+import memberAPI from '../../api/memberAPI';
 
 type Game = {
   info: GameInfo;
+  setGameStatus: React.Dispatch<React.SetStateAction<GameStatus>>;
 };
 
 function GamePage(props: Game): JSX.Element {
-  const { info } = props;
-  const { members } = info;
+  const history = useHistory();
+  const { info: gameInfo, setGameStatus } = props;
+  const { members } = gameInfo;
 
   const [issueList, setIssueList] = useState(issues);
   const [currentIssue, setCurrentIssue] = useState<string>(issueList[0]);
@@ -26,7 +35,10 @@ function GamePage(props: Game): JSX.Element {
   const [players, setPlayers] = useState<Member[]>(
     members.filter(member => member.userRole !== 'observer'),
   );
-  const scrumMaster = info.members.filter(el => el.isOwner)[0];
+
+  const currentPlayer = gameInfo.members.filter(
+    member => member.id === localStorage.getItem('userId'),
+  )[0];
 
   useEffect(() => {
     setRoundResult(null);
@@ -79,6 +91,21 @@ function GamePage(props: Game): JSX.Element {
         ),
       });
     }
+
+    await memberAPI.delete(id, gameInfo.id);
+  };
+
+  const onStopGame = () => {
+    gameAPI.complete(gameInfo.id);
+    setGameStatus('completed');
+  };
+
+  const onExitGame = async () => {
+    if (currentPlayer.id) {
+      history.push('/');
+      await memberAPI.delete(currentPlayer.id, gameInfo.id);
+      localStorage.removeItem('userId');
+    }
   };
 
   return (
@@ -92,53 +119,65 @@ function GamePage(props: Game): JSX.Element {
             style={{ marginBottom: 30 }}
           >
             <UserCard
-              id={scrumMaster.id}
-              imagePath={scrumMaster.imagePath}
-              firstName={scrumMaster.firstName}
-              lastName={scrumMaster.lastName}
-              userRole={scrumMaster.userRole}
-              jobPosition={scrumMaster.jobPosition}
+              id={currentPlayer.id}
+              imagePath={currentPlayer.imagePath}
+              firstName={currentPlayer.firstName}
+              lastName={currentPlayer.lastName}
+              userRole={currentPlayer.userRole}
+              jobPosition={currentPlayer.jobPosition}
             />
 
-            <Button type="default" size="large">
-              Stop game
-            </Button>
+            {currentPlayer.isOwner ? (
+              <Button type="default" size="large" onClick={onStopGame}>
+                Stop game
+              </Button>
+            ) : (
+              <Button type="default" size="large" onClick={onExitGame}>
+                Exit
+              </Button>
+            )}
           </Row>
 
-          <Row align="middle">
+          <Row align="middle" justify="space-between">
             <Issues
               issueList={issueList}
               setIssueList={setIssueList}
               editable={false}
-              onIssueClick={onIssueClick}
+              onIssueClick={currentPlayer.isOwner ? onIssueClick : undefined}
               currentIssue={currentIssue}
+              showAddIssueInput={currentPlayer.isOwner}
+              showDeleteBtn={currentPlayer.isOwner}
             />
 
-            <Row>
-              <Timer
-                limit={3}
-                status={timerStatus}
-                setStatus={setTimerStatus}
-                currentIssue={currentIssue}
-                onRoundEnd={onRoundEnd}
-                onRoundStart={onRoundStart}
-              />
-              {issueList.indexOf(currentIssue) !== issueList.length - 1 && (
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={() =>
-                    setCurrentIssue(
-                      prev => issueList[issueList.indexOf(prev) + 1],
-                    )
-                  }
-                  disabled={timerStatus === 'started'}
-                  style={{ marginTop: 60, marginLeft: 10 }}
-                >
-                  Next issue
-                </Button>
-              )}
-            </Row>
+            <Col span={12}>
+              <Row justify="center">
+                <Timer
+                  limit={3}
+                  status={timerStatus}
+                  setStatus={setTimerStatus}
+                  currentIssue={currentIssue}
+                  onRoundEnd={onRoundEnd}
+                  onRoundStart={onRoundStart}
+                  showTimerBtn={currentPlayer.isOwner}
+                />
+                {issueList.indexOf(currentIssue) !== issueList.length - 1 &&
+                  currentPlayer.isOwner && (
+                    <Button
+                      type="primary"
+                      size="large"
+                      onClick={() =>
+                        setCurrentIssue(
+                          prev => issueList[issueList.indexOf(prev) + 1],
+                        )
+                      }
+                      disabled={timerStatus === 'started'}
+                      style={{ marginTop: 60, marginLeft: 10 }}
+                    >
+                      Next issue
+                    </Button>
+                  )}
+              </Row>
+            </Col>
           </Row>
 
           {roundResult && <Statistics roundResult={roundResult} />}
@@ -155,9 +194,11 @@ function GamePage(props: Game): JSX.Element {
         </Col>
       </Row>
 
-      {/* <Row className="cards-container" justify="center" gutter={[16, 16]}>
-        <Cards />
-      </Row> */}
+      {!currentPlayer.isOwner && (
+        <Row className="cards-container" justify="center" gutter={[16, 16]}>
+          <Cards />
+        </Row>
+      )}
     </div>
   );
 }
