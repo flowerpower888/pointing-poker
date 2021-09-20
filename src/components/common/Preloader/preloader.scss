@@ -1,5 +1,8 @@
 .preloader__container {
-  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 70px);
 }
 
 @keyframes ldio-xxreoseqrmo {

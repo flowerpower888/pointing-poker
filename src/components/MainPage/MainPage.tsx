@@ -21,6 +21,7 @@ const MainPage: React.FC = () => {
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
   let socketConnect: SocketHandler;
+
   useEffect(() => {
     async function getGameStatus() {
       const gameInfo = await gameAPI.getGameInfo(gameId);
@@ -35,7 +36,7 @@ const MainPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="lobby-page">
+    <div className="main-page">
       {!isLoaded && <Preloader />}
       {isLoaded && gameStatus === 'created' && <LobbyPage info={gameData} />}
       {isLoaded && gameStatus === 'started' && <GamePage info={gameData} />}
