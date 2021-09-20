@@ -11,7 +11,7 @@ export type Stats = {
 export type RoundResult = {
   issue: string;
   score: {
-    player: string;
+    playerId?: string;
     card: CardModel;
   }[];
   statistics?: Stats[];

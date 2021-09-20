@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Modal, Table } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import UserCard from '../../LobbyPage/UserCard';
-import './votes.scss';
 import columns from '../../../utils/votesTableColumns';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
+import './votes.scss';
 
 type VotesPropsType = {
+  players: Member[];
   score?: string[];
+  onPlayerKick: (id: string) => Promise<void>;
 };
 
 type PlayerInfoForTable = {
@@ -15,32 +18,51 @@ type PlayerInfoForTable = {
   score: string | number;
 };
 
-const Votes: React.FunctionComponent<VotesPropsType> = ({ score }) => {
-  const members = Array<Member>();
+const Votes: React.FunctionComponent<VotesPropsType> = ({
+  players,
+  score,
+  onPlayerKick,
+}) => {
+  const { confirm } = Modal;
+
   const [data, setData] = useState<PlayerInfoForTable[] | null>(null);
 
   useEffect(() => {
-    setData(
-      members
-        .filter(member => member.userRole !== 'observer')
-        .map((member, i) => {
-          const player: PlayerInfoForTable = {
-            key: member.firstName,
-            player: (
-              <UserCard
-                firstName={member.firstName}
-                userRole={member.userRole}
-                imagePath={member.imagePath}
-                // avatarSize="small"
-              />
-            ),
-            score: score?.[i] || 'In progress',
-          };
+    const showPlayerKickConfirm = (id: string, firstname: string) => {
+      confirm({
+        title: `Do you really want to kick member ${firstname}?`,
+        icon: <ExclamationCircleOutlined />,
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk() {
+          onPlayerKick(id);
+        },
+        centered: true,
+        maskClosable: true,
+      });
+    };
 
-          return player;
-        }),
+    setData(
+      players.map((member, i) => {
+        const player = {
+          key: member.firstName,
+          player: (
+            <UserCard
+              id={member.id}
+              firstName={member.firstName}
+              userRole={member.userRole}
+              imagePath={member.imagePath}
+              showPlayerKickConfirm={showPlayerKickConfirm}
+            />
+          ),
+          score: score?.[i] || 'In progress',
+        };
+
+        return player;
+      }),
     );
-  }, [score]);
+  }, [score, players, onPlayerKick, confirm]);
 
   return (
     <div className="voting">
