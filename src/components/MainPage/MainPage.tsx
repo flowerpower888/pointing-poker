@@ -28,7 +28,8 @@ const MainPage: React.FC = () => {
       setGameData(gameInfo.data);
       setGameStatus(gameInfo.data.status);
       socketConnect = new SocketHandler(gameId);
-      socketConnect.handleUpdateMembers(gameData, setGameData);
+      socketConnect.handleUpdateMembers(setGameData);
+      socketConnect.handleUpdateStatus(setGameData, setGameStatus);
       setIsLoaded(true);
     }
 
