@@ -19,7 +19,7 @@ class SocketHandler {
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
     this.socket.on('membersChange', members => {
-      setGameData({ ...gameData, members });
+      setGameData(prev => ({ ...prev, members }));
     });
   }
 
@@ -28,7 +28,7 @@ class SocketHandler {
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
     this.socket.on('issuesChange', tasks => {
-      setGameData({ ...gameData, tasks });
+      setGameData(prev => ({ ...prev, tasks }));
     });
   }
 }

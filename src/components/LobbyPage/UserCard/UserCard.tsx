@@ -7,7 +7,7 @@ import memberAPI from '../../../api/memberAPI';
 
 type UserCardPropsType = Member & {
   showPlayerKickConfirm?: (id: string, firstname: string) => void;
-};
+} & { isUserOwner?: boolean };
 
 function UserCard(props: UserCardPropsType): JSX.Element {
   const {
@@ -18,6 +18,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
     imagePath,
     isOwner,
     id,
+    isUserOwner,
     showPlayerKickConfirm,
   } = props;
   const { Meta } = Card;
@@ -28,6 +29,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       memberAPI.delete(id, gameId);
     }
   };
+  const deleteByVote = () => {};
 
   return (
     <Card
@@ -40,7 +42,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
           htmlType="button"
           icon={<CloseOutlined />}
           onClick={
-            showPlayerKickConfirm && isOwner
+            showPlayerKickConfirm && isUserOwner
               ? () => showPlayerKickConfirm(id || '', firstName)
               : undefined
           }
