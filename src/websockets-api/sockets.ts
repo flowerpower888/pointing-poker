@@ -28,7 +28,7 @@ class SocketHandler {
   handleUpdateIssues(
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
-    this.socket.on('issuesChange', tasks => {
+    this.socket.on('tasksChange', tasks => {
       setGameData(prev => ({ ...prev, tasks }));
     });
   }

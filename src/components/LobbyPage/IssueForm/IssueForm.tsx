@@ -4,7 +4,7 @@ import { Form, Input, Button, Select, Typography, Modal } from 'antd';
 type FormValuesType = {
   title: string;
   link?: string;
-  priority: 'low' | 'middle' | 'hight';
+  priority: 'low' | 'middle' | 'high';
 };
 
 const IssueForm: FC = () => {
