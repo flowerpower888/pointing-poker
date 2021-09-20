@@ -7,6 +7,7 @@ import {
   GameInfo,
   GameStatus,
 } from '../../models/GameInfoAggregate/GameInfoModel';
+import SocketHandler from '../../websockets-api/sockets';
 import LobbyPage from '../LobbyPage';
 import GamePage from '../GamePage';
 
@@ -19,15 +20,18 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  let socketConnect: SocketHandler;
   useEffect(() => {
-    async function getOwnerStatus() {
+    async function getGameStatus() {
       const gameInfo = await gameAPI.getGameInfo(gameId);
       setGameData(gameInfo.data);
       setGameStatus(gameInfo.data.status);
+      socketConnect = new SocketHandler(gameId);
+      socketConnect.handleUpdateMembers(gameData, setGameData);
       setIsLoaded(true);
     }
 
-    getOwnerStatus();
+    getGameStatus();
   }, []);
 
   return (

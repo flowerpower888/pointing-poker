@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Avatar, Card } from 'antd';
+import { Avatar, Button, Card } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
+import memberAPI from '../../../api/memberAPI';
 
 type UserCardPropsType = Member & {
   showPlayerKickConfirm?: (id: string, firstname: string) => void;
@@ -10,29 +11,36 @@ type UserCardPropsType = Member & {
 
 function UserCard(props: UserCardPropsType): JSX.Element {
   const {
-    id = '',
     firstName,
     lastName,
     jobPosition,
     userRole,
     imagePath,
     isOwner,
+    id,
     showPlayerKickConfirm,
   } = props;
   const { Meta } = Card;
+  const deleteMember = () => {
+    const gameId = localStorage.getItem('gameId');
+    if (gameId && id) {
+      memberAPI.delete(id, gameId);
+    }
+  };
 
   return (
-    <Card className="user-card_container">
+    <Card
+      className="user-card_container"
+      style={{ marginLeft: '20px', marginTop: '20px' }}
+    >
       {isOwner ? (
         <></>
       ) : (
-        <CloseOutlined
+        <Button
           className="delete_member"
-          onClick={
-            showPlayerKickConfirm
-              ? () => showPlayerKickConfirm(id, firstName)
-              : undefined
-          }
+          htmlType="button"
+          icon={<CloseOutlined />}
+          onClick={deleteMember}
         />
       )}
       <p className="user-card_userRole">

@@ -11,6 +11,10 @@ const memberAPI = {
       member,
     });
   },
+
+  delete(userId: string, gameId: string): Promise<AxiosResponse> {
+    return instance.delete(`/api/members/${gameId}/${userId}`);
+  },
 };
 
 export default memberAPI;

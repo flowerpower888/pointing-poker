@@ -9,34 +9,22 @@ type MembersListPropsType = {
 
 function MembersList(props: MembersListPropsType): JSX.Element {
   const { members } = props;
-
   return (
     <>
       <h2 className="lobby-title">Members:</h2>
       <div className="members-list">
-        {members.map(member => {
-          const {
-            firstName,
-            lastName,
-            isOwner,
-            userRole,
-            imagePath,
-            jobPosition,
-            id,
-          } = member;
-
-          return (
-            <UserCard
-              key={id}
-              firstName={firstName}
-              lastName={lastName}
-              isOwner={isOwner}
-              userRole={userRole}
-              imagePath={imagePath}
-              jobPosition={jobPosition}
-            />
-          );
-        })}
+        {members.map(el => (
+          <UserCard
+            key={el.id}
+            firstName={el.firstName}
+            lastName={el.lastName}
+            isOwner={el.isOwner}
+            userRole={el.userRole}
+            imagePath={el.imagePath}
+            jobPosition={el.jobPosition}
+            id={el.id}
+          />
+        ))}
       </div>
     </>
   );

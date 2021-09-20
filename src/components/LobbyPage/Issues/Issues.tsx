@@ -10,6 +10,7 @@ import {
 import { FormEvent, useState } from 'react';
 import './issues.scss';
 import { v4 as uuidv4 } from 'uuid';
+import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
 
 type IssuesPropsType = {
   issueList: string[];
@@ -44,6 +45,10 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
     tempList[currentItem.index] = currentItem.value;
     setIssueList(tempList);
     setIsEditing(false);
+  };
+
+  const deleteIssue = (index: number) => () => {
+    setIssueList(issueList.filter((val, i) => i !== index));
   };
 
   return (
@@ -122,9 +127,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
               <DeleteOutlined
                 className="delete-issue_icon"
                 color="red"
-                onClick={() => {
-                  setIssueList(issueList.filter((val, i) => i !== index));
-                }}
+                onClick={deleteIssue(index)}
               />
             </div>
           </li>

@@ -20,7 +20,12 @@
   min-height: 25px;
 }
 
-.anticon-close:hover {
+button.delete_member:hover {
   cursor: pointer;
   color: #d70505;
+}
+
+button.delete_member{
+position: absolute;
+  border: none;
 }

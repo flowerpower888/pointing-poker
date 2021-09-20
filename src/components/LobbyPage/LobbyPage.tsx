@@ -4,7 +4,7 @@ import Paragraph from 'antd/lib/typography/Paragraph';
 import UserCard from './UserCard';
 import MembersList from './Members';
 import Issues from './Issues';
-import { GameInfo } from '../../models/GameInfoAggregate/GameInfoModel';
+import { GameInfo, Issue } from '../../models/GameInfoAggregate/GameInfoModel';
 import './lobbyPage.scss';
 
 type Game = {
@@ -13,9 +13,14 @@ type Game = {
 
 function LobbyPage(props: Game): JSX.Element {
   const { info: gameInfo } = props;
-  const [issueList, setIssueList] = useState<string[]>(gameInfo.tasks);
+  const [issueList, setIssueList] = useState<string[]>(
+    gameInfo.tasks.map(task => task.title),
+  );
   const owner = gameInfo.members.find(member => member.isOwner) || null;
   const players = gameInfo.members.filter(member => !member.isOwner);
+  const isUserAnOwner = owner
+    ? owner.id === localStorage.getItem('userId')
+    : false;
 
   return (
     <div className="lobby-page">
@@ -45,7 +50,7 @@ function LobbyPage(props: Game): JSX.Element {
           </div>
 
           <div className="lobby-page_btn-container">
-            {owner.isOwner ? (
+            {isUserAnOwner ? (
               <>
                 <Button className="lobby-btn scram" type="primary" size="large">
                   Start game
@@ -63,7 +68,7 @@ function LobbyPage(props: Game): JSX.Element {
 
           <MembersList members={players} />
 
-          {owner.isOwner && issueList && (
+          {isUserAnOwner && issueList && (
             <Issues issueList={issueList} setIssueList={setIssueList} />
           )}
         </>
