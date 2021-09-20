@@ -9,6 +9,9 @@ type MembersListPropsType = {
 
 function MembersList(props: MembersListPropsType): JSX.Element {
   const { members } = props;
+  const isUserOwner =
+    members.filter(el => localStorage.getItem('userId') === el.id).length === 0;
+
   return (
     <>
       <h2 className="lobby-title">Members:</h2>
@@ -23,6 +26,7 @@ function MembersList(props: MembersListPropsType): JSX.Element {
             imagePath={el.imagePath}
             jobPosition={el.jobPosition}
             id={el.id}
+            isUserOwner={isUserOwner}
           />
         ))}
       </div>
