@@ -49,6 +49,7 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({
           key: member.firstName,
           player: (
             <UserCard
+              isOwner={member.isOwner}
               id={member.id}
               firstName={member.firstName}
               userRole={member.userRole}

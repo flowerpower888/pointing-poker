@@ -37,9 +37,13 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="main-page">
-      {!isLoaded && <Preloader />}
-      {isLoaded && gameStatus === 'created' && <LobbyPage info={gameData} />}
-      {isLoaded && gameStatus === 'started' && <GamePage info={gameData} />}
+      {!isLoaded ? (
+        <Preloader />
+      ) : gameStatus === 'started' ? (
+        <GamePage info={gameData} setGameStatus={setGameStatus} />
+      ) : (
+        <LobbyPage info={gameData} setGameStatus={setGameStatus} />
+      )}
     </div>
   );
 };

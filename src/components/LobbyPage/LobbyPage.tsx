@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button, Col } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import UserCard from './UserCard';
 import MembersList from './Members';
 import Issues from './Issues';
-import { GameInfo, Issue } from '../../models/GameInfoAggregate/GameInfoModel';
+import {
+  GameInfo,
+  GameStatus,
+  Issue,
+} from '../../models/GameInfoAggregate/GameInfoModel';
 import './lobbyPage.scss';
+import gameAPI from '../../api/gameAPI';
+import memberAPI from '../../api/memberAPI';
 
 type Game = {
   info: GameInfo;
+  setGameStatus: React.Dispatch<React.SetStateAction<GameStatus>>;
 };
 
 function LobbyPage(props: Game): JSX.Element {
-  const { info: gameInfo } = props;
+  const history = useHistory();
+
+  const { info: gameInfo, setGameStatus } = props;
   const [issueList, setIssueList] = useState<string[]>(
     gameInfo.tasks.map(task => task.title),
   );
@@ -21,6 +31,23 @@ function LobbyPage(props: Game): JSX.Element {
   const isUserAnOwner = owner
     ? owner.id === localStorage.getItem('userId')
     : false;
+
+  const onStartGame = () => {
+    gameAPI.start(gameInfo.id);
+    setGameStatus('started');
+  };
+
+  const onExit = async () => {
+    const playerId = gameInfo.members.find(
+      member => member.id === localStorage.getItem('userId'),
+    )?.id;
+
+    if (playerId) {
+      history.push('/');
+      await memberAPI.delete(playerId, gameInfo.id);
+      localStorage.removeItem('userId');
+    }
+  };
 
   return (
     <div className="lobby-page">
@@ -52,15 +79,33 @@ function LobbyPage(props: Game): JSX.Element {
           <div className="lobby-page_btn-container">
             {isUserAnOwner ? (
               <>
-                <Button className="lobby-btn scram" type="primary" size="large">
+                <Button
+                  className="lobby-btn scram"
+                  type="primary"
+                  size="large"
+                  onClick={onStartGame}
+                >
                   Start game
                 </Button>
-                <Button className="lobby-btn" type="default" size="large">
+                <Button
+                  className="lobby-btn"
+                  type="default"
+                  size="large"
+                  onClick={() => {
+                    if (gameInfo.status === 'started')
+                      gameAPI.complete(gameInfo.id);
+                  }}
+                >
                   Cancel game
                 </Button>
               </>
             ) : (
-              <Button className="lobby-btn player" type="default" size="large">
+              <Button
+                className="lobby-btn player"
+                type="default"
+                size="large"
+                onClick={onExit}
+              >
                 Exit
               </Button>
             )}

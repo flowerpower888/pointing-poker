@@ -21,6 +21,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
     showPlayerKickConfirm,
   } = props;
   const { Meta } = Card;
+
   const deleteMember = () => {
     const gameId = localStorage.getItem('gameId');
     if (gameId && id) {
@@ -33,14 +34,16 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       className="user-card_container"
       style={{ marginLeft: '20px', marginTop: '20px' }}
     >
-      {isOwner ? (
-        <></>
-      ) : (
+      {id !== localStorage.getItem('userId') && !isOwner && (
         <Button
           className="delete_member"
           htmlType="button"
           icon={<CloseOutlined />}
-          onClick={deleteMember}
+          onClick={
+            showPlayerKickConfirm && isOwner
+              ? () => showPlayerKickConfirm(id || '', firstName)
+              : undefined
+          }
         />
       )}
       <p className="user-card_userRole">

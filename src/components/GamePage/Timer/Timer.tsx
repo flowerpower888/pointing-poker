@@ -9,6 +9,7 @@ type TimerPropsType = {
   currentIssue: string;
   onRoundEnd: () => void;
   onRoundStart: () => void;
+  showTimerBtn?: boolean;
 };
 
 const Timer: React.FunctionComponent<TimerPropsType> = ({
@@ -18,6 +19,7 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
   currentIssue,
   onRoundEnd,
   onRoundStart,
+  showTimerBtn = true,
 }) => {
   const [btnText, setBtnText] = useState('Run round');
   const [seconds, setSeconds] = useState(limit);
@@ -73,15 +75,16 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
     <>
       <div className="timer">
         <div className="time">{format(seconds)}</div>
-
-        <Button
-          type="primary"
-          size="large"
-          disabled={status === 'started'}
-          onClick={start}
-        >
-          {btnText}
-        </Button>
+        {showTimerBtn && (
+          <Button
+            type="primary"
+            size="large"
+            disabled={status === 'started'}
+            onClick={start}
+          >
+            {btnText}
+          </Button>
+        )}
       </div>
     </>
   );
