@@ -1,17 +1,17 @@
 import { Button, Col, Divider, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import issues from '../../utils/issues';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
 import Cards from './Cards';
 import Statistics from './Statistics';
-import { RoundResult } from '../../models/RoundResult/RoundModel';
+import { RoundResult, CardModel } from '../../models/RoundResult/RoundModel';
 import {
   GameInfo,
   GameStatus,
+  Issue,
   Member,
 } from '../../models/GameInfoAggregate/GameInfoModel';
 import './gamePage.scss';
@@ -28,8 +28,7 @@ function GamePage(props: Game): JSX.Element {
   const { info: gameInfo, setGameStatus } = props;
   const { members } = gameInfo;
 
-  const [issueList, setIssueList] = useState(issues);
-  const [currentIssue, setCurrentIssue] = useState<string>(issueList[0]);
+  const [currentIssue, setCurrentIssue] = useState<Issue>(gameInfo.tasks[0]);
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [players, setPlayers] = useState<Member[]>(
@@ -44,7 +43,7 @@ function GamePage(props: Game): JSX.Element {
     setRoundResult(null);
   }, [currentIssue]);
 
-  const onIssueClick = (issue: string) => {
+  const onIssueClick = (issue: Issue) => {
     if (timerStatus !== 'started') setCurrentIssue(issue);
   };
 
@@ -57,7 +56,7 @@ function GamePage(props: Game): JSX.Element {
       const cards = await fetch('/cardSet.json').then(res => res.json());
 
       const result: RoundResult = {
-        issue: currentIssue,
+        issue: currentIssue.id,
         score: players
           .filter(player => player.userRole !== 'observer')
           .map(player => {
@@ -126,7 +125,6 @@ function GamePage(props: Game): JSX.Element {
               userRole={currentPlayer.userRole}
               jobPosition={currentPlayer.jobPosition}
             />
-
             {currentPlayer.isOwner ? (
               <Button type="default" size="large" onClick={onStopGame}>
                 Stop game
@@ -140,13 +138,12 @@ function GamePage(props: Game): JSX.Element {
 
           <Row align="middle" justify="space-between">
             <Issues
-              issueList={issueList}
-              setIssueList={setIssueList}
               editable={false}
               onIssueClick={currentPlayer.isOwner ? onIssueClick : undefined}
               currentIssue={currentIssue}
               showAddIssueInput={currentPlayer.isOwner}
               showDeleteBtn={currentPlayer.isOwner}
+              tasks={gameInfo.tasks}
             />
 
             <Col span={12}>
@@ -160,14 +157,18 @@ function GamePage(props: Game): JSX.Element {
                   onRoundStart={onRoundStart}
                   showTimerBtn={currentPlayer.isOwner}
                 />
-                {issueList.indexOf(currentIssue) !== issueList.length - 1 &&
+                {gameInfo.tasks.findIndex(
+                  issue => issue.id === currentIssue.id,
+                ) !==
+                  gameInfo.tasks.length - 1 &&
                   currentPlayer.isOwner && (
                     <Button
                       type="primary"
                       size="large"
                       onClick={() =>
                         setCurrentIssue(
-                          prev => issueList[issueList.indexOf(prev) + 1],
+                          prev =>
+                            gameInfo.tasks[gameInfo.tasks.indexOf(prev) + 1],
                         )
                       }
                       disabled={timerStatus === 'started'}
@@ -194,7 +195,7 @@ function GamePage(props: Game): JSX.Element {
         </Col>
       </Row>
 
-      {!currentPlayer.isOwner && (
+      {currentPlayer.userRole !== 'observer' && (
         <Row className="cards-container" justify="center" gutter={[16, 16]}>
           <Cards />
         </Row>

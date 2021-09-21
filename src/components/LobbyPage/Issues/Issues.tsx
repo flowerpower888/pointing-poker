@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Button, Col, Input } from 'antd';
 import {
   CheckOutlined,
@@ -7,52 +7,55 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons/lib/icons';
-import { FormEvent, useState } from 'react';
-import './issues.scss';
 import { v4 as uuidv4 } from 'uuid';
 import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
+import issuesAPI from '../../../api/issuesAPI';
+import './issues.scss';
 
 type IssuesPropsType = {
-  issueList: string[];
-  setIssueList: React.Dispatch<React.SetStateAction<string[]>>;
   editable?: boolean;
-  onIssueClick?: (issue: string) => void;
-  currentIssue?: string | null;
+  onIssueClick?: (issue: Issue) => void;
+  currentIssue?: Issue | null;
   showAddIssueInput?: boolean;
   showDeleteBtn?: boolean;
+  tasks: Array<Issue>;
 };
 
 const Issues: React.FunctionComponent<IssuesPropsType> = ({
-  issueList,
-  setIssueList,
   editable = true,
   onIssueClick,
   currentIssue,
   showAddIssueInput = true,
   showDeleteBtn = true,
+  tasks,
 }) => {
-  const [newIssue, setNewIssue] = useState('');
+  const [newIssueTitle, setNewIssueTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [currentItem, setCurrentItem] = useState({ value: '', index: 0 });
+  const [currentItem, setCurrentItem] = useState<Issue>({} as Issue);
 
   const addIssue = (event: FormEvent) => {
     event.preventDefault();
-    if (newIssue.length > 0) {
-      setIssueList([...issueList, newIssue]);
-      setNewIssue('');
+
+    const newIssue: Issue = {
+      id: uuidv4(),
+      title: newIssueTitle,
+      priority: 'medium',
+    };
+
+    if (newIssueTitle.length > 0) {
+      issuesAPI.add(newIssue);
+      setNewIssueTitle('');
     }
   };
 
   const editIssue = (event: FormEvent) => {
     event.preventDefault();
-    const tempList = issueList;
-    tempList[currentItem.index] = currentItem.value;
-    setIssueList(tempList);
+    issuesAPI.update(currentItem, currentItem.id);
     setIsEditing(false);
   };
 
-  const deleteIssue = (index: number) => () => {
-    setIssueList(issueList.filter((val, i) => i !== index));
+  const deleteIssue = (id: string) => () => {
+    issuesAPI.delete(id);
   };
 
   return (
@@ -66,13 +69,14 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
             onSubmit={editIssue}
           >
             <Input
-              value={currentItem.value}
+              value={currentItem.title}
               type="text"
               className="new-issue_input"
               onChange={event =>
                 setCurrentItem({
-                  value: event.target.value,
-                  index: currentItem.index,
+                  id: currentItem.id,
+                  title: event.target.value,
+                  priority: 'medium',
                 })
               }
             />
@@ -91,18 +95,18 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
           </form>
         ) : (
           <form
-            className="issue_container "
+            className="issue_container"
             id="lobby-input_add-issue"
             onSubmit={addIssue}
           >
             {showAddIssueInput && (
               <>
                 <Input
-                  value={newIssue}
+                  value={newIssueTitle}
                   type="text"
                   className="new-issue_input"
                   placeholder="add new issue"
-                  onChange={event => setNewIssue(event.target.value)}
+                  onChange={event => setNewIssueTitle(event.target.value)}
                 />
                 <Button
                   className="add-issue_btn"
@@ -115,20 +119,26 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
           </form>
         )}
         <ul className="issue_container">
-          {issueList.map((el, index) => (
+          {tasks.map(issue => (
             <li
-              className={`issue-item ${currentIssue === el ? 'current' : ''}`}
+              className={`issue-item ${
+                currentIssue?.id === issue.id ? 'current' : ''
+              }`}
               key={uuidv4()}
-              onClick={onIssueClick ? () => onIssueClick(el) : undefined}
+              onClick={onIssueClick ? () => onIssueClick(issue) : undefined}
               role="presentation"
             >
-              {el}
+              {issue.title}
               <div>
                 {editable && (
                   <EditOutlined
                     className="edit-issue_icon"
                     onClick={() => {
-                      setCurrentItem({ value: el, index });
+                      setCurrentItem(
+                        tasks.filter(
+                          issueListItem => issueListItem.id === issue.id,
+                        )[0],
+                      );
                       setIsEditing(true);
                     }}
                   />
@@ -137,7 +147,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
                   <DeleteOutlined
                     className="delete-issue_icon"
                     color="red"
-                    onClick={deleteIssue(index)}
+                    onClick={deleteIssue(issue.id)}
                   />
                 )}
               </div>

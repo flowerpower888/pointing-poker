@@ -1,12 +1,13 @@
 import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
 import './timer.scss';
 
 type TimerPropsType = {
   limit: number;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
-  currentIssue: string;
+  currentIssue: Issue;
   onRoundEnd: () => void;
   onRoundStart: () => void;
   showTimerBtn?: boolean;

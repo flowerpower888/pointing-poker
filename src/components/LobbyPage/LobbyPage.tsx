@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Col } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
@@ -8,7 +8,6 @@ import Issues from './Issues';
 import {
   GameInfo,
   GameStatus,
-  Issue,
 } from '../../models/GameInfoAggregate/GameInfoModel';
 import './lobbyPage.scss';
 import gameAPI from '../../api/gameAPI';
@@ -23,9 +22,6 @@ function LobbyPage(props: Game): JSX.Element {
   const history = useHistory();
 
   const { info: gameInfo, setGameStatus } = props;
-  const [issueList, setIssueList] = useState<string[]>(
-    gameInfo.tasks.map(task => task.title),
-  );
   const owner = gameInfo.members.find(member => member.isOwner) || null;
   const players = gameInfo.members.filter(member => !member.isOwner);
   const isUserAnOwner = owner
@@ -113,9 +109,12 @@ function LobbyPage(props: Game): JSX.Element {
 
           <MembersList members={players} />
 
-          {isUserAnOwner && issueList && (
-            <Issues issueList={issueList} setIssueList={setIssueList} />
-          )}
+          <Issues
+            editable={isUserAnOwner}
+            showAddIssueInput={isUserAnOwner}
+            showDeleteBtn={isUserAnOwner}
+            tasks={gameInfo.tasks}
+          />
         </>
       )}
     </div>
