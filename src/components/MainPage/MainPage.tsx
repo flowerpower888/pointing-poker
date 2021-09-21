@@ -20,22 +20,23 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  let socketConnect: SocketHandler;
 
   useEffect(() => {
     async function getGameStatus() {
       const gameInfo = await gameAPI.getGameInfo(gameId);
       setGameData(gameInfo.data);
       setGameStatus(gameInfo.data.status);
-
-      const socketConnect = new SocketHandler(gameId);
+      socketConnect = new SocketHandler(gameId);
       socketConnect.handleUpdateMembers(setGameData);
       socketConnect.handleUpdateStatus(setGameData, setGameStatus);
       socketConnect.handleUpdateIssues(setGameData);
+      socketConnect.handleUpdateCurrentIssue(setGameData);
       setIsLoaded(true);
     }
 
     getGameStatus();
-  }, [gameId]);
+  }, []);
 
   return (
     <div className="main-page">

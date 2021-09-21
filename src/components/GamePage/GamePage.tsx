@@ -17,6 +17,7 @@ import {
 import './gamePage.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
+import issuesAPI from '../../api/issuesAPI';
 
 type Game = {
   info: GameInfo;
@@ -28,7 +29,9 @@ function GamePage(props: Game): JSX.Element {
   const { info: gameInfo, setGameStatus } = props;
   const { members } = gameInfo;
 
-  const [currentIssue, setCurrentIssue] = useState<Issue>(gameInfo.tasks[0]);
+  const currentIssue =
+    gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
+    gameInfo.tasks[0];
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [players, setPlayers] = useState<Member[]>(
@@ -44,7 +47,9 @@ function GamePage(props: Game): JSX.Element {
   }, [currentIssue]);
 
   const onIssueClick = (issue: Issue) => {
-    if (timerStatus !== 'started') setCurrentIssue(issue);
+    if (timerStatus !== 'started') {
+      issuesAPI.setCurrent(issue.id);
+    }
   };
 
   const onRoundStart = () => {
@@ -166,9 +171,10 @@ function GamePage(props: Game): JSX.Element {
                       type="primary"
                       size="large"
                       onClick={() =>
-                        setCurrentIssue(
-                          prev =>
-                            gameInfo.tasks[gameInfo.tasks.indexOf(prev) + 1],
+                        issuesAPI.setCurrent(
+                          gameInfo.tasks[
+                            gameInfo.tasks.indexOf(currentIssue) + 1
+                          ].id,
                         )
                       }
                       disabled={timerStatus === 'started'}

@@ -33,6 +33,14 @@ class SocketHandler {
     });
   }
 
+  handleUpdateCurrentIssue(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('currentTaskChange', currentTaskId => {
+      setGameData(prev => ({ ...prev, currentTaskId }));
+    });
+  }
+
   handleUpdateStatus(
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
     setGameStatus: React.Dispatch<React.SetStateAction<GameStatus>>,
