@@ -42,5 +42,14 @@ class SocketHandler {
       setGameStatus(status);
     });
   }
+
+  handlerUpdateTimer(
+    setTimerStatus: React.Dispatch<React.SetStateAction<string>>,
+  ): void {
+    this.socket.on('timerStatus', status => {
+      console.log(status);
+      setTimerStatus(status);
+    });
+  }
 }
 export default SocketHandler;

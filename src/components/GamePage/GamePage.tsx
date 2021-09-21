@@ -17,6 +17,7 @@ import {
 import './gamePage.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
+import SocketHandler from '../../websockets-api/sockets';
 
 type Game = {
   info: GameInfo;
@@ -34,7 +35,8 @@ function GamePage(props: Game): JSX.Element {
   const [players, setPlayers] = useState<Member[]>(
     members.filter(member => member.userRole !== 'observer'),
   );
-
+  const socketConnect = new SocketHandler(gameInfo.id);
+  socketConnect.handlerUpdateTimer(setTimerStatus);
   const currentPlayer = gameInfo.members.filter(
     member => member.id === localStorage.getItem('userId'),
   )[0];

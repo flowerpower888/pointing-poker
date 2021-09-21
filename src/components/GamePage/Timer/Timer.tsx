@@ -2,6 +2,7 @@ import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
 import './timer.scss';
+import gameAPI from '../../../api/gameAPI';
 
 type TimerPropsType = {
   limit: number;
@@ -26,6 +27,15 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
   const [seconds, setSeconds] = useState(limit);
   const [timerInterval, setTimerInterval] = useState<number | null>(null);
 
+  const start = () => {
+    onRoundStart();
+    setTimerInterval(
+      window.setInterval(() => {
+        setSeconds(prev => prev - 1);
+      }, 1000),
+    );
+  };
+
   useEffect(() => {
     setBtnText('Run round');
   }, [currentIssue]);
@@ -47,17 +57,11 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
     }
   }, [seconds, limit, timerInterval, status, setStatus, onRoundEnd]);
 
-  const start = () => {
-    if (status === 'stopped') {
-      setStatus('started');
-      onRoundStart();
-      setTimerInterval(
-        window.setInterval(() => {
-          setSeconds(prev => prev - 1);
-        }, 1000),
-      );
+  useEffect(() => {
+    if (status === 'started') {
+      start();
     }
-  };
+  }, [start]);
 
   const isSingleDigit = (number: number): boolean => number % 10 === number;
 
@@ -81,7 +85,13 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
             type="primary"
             size="large"
             disabled={status === 'started'}
-            onClick={start}
+            onClick={() => {
+              setStatus('started');
+              const gameId = localStorage.getItem('gameId');
+              if (gameId) {
+                gameAPI.setTimerStatus(gameId);
+              }
+            }}
           >
             {btnText}
           </Button>
