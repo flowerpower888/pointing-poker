@@ -23,6 +23,10 @@ const issuesAPI = {
   delete(issueId: string): Promise<AxiosResponse> {
     return instance.delete(`/api/issues/${gameId}/${issueId}`);
   },
+
+  setCurrent(issueId: string): Promise<AxiosResponse> {
+    return instance.put(`/api/issues/${gameId}/current/${issueId}`);
+  },
 };
 
 export default issuesAPI;

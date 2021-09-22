@@ -21,6 +21,7 @@ export type Issue = {
 
 export type GameInfo = {
   tasks: Array<Issue>;
+  currentTaskId?: string;
   _id: string;
   id: string;
   status: GameStatus;
