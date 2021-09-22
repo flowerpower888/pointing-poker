@@ -67,7 +67,11 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       <Meta
         avatar={
           <Avatar
-            style={{ backgroundColor: '#51d7c2' }}
+            style={
+              imagePath
+                ? { backgroundColor: 'transparent' }
+                : { backgroundColor: '#51d7c2' }
+            }
             size="large"
             alt="user avatar"
             src={imagePath}
