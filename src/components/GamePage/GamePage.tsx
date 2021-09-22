@@ -35,7 +35,7 @@ function GamePage(props: Game): JSX.Element {
   const [players, setPlayers] = useState<Member[]>(
     members.filter(member => member.userRole !== 'observer'),
   );
-  const socketConnect = new SocketHandler(gameInfo.id);
+  const socketConnect = SocketHandler.getInstance();
   socketConnect.handlerUpdateTimer(setTimerStatus);
   const currentPlayer = gameInfo.members.filter(
     member => member.id === localStorage.getItem('userId'),

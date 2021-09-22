@@ -6,15 +6,32 @@ import {
 } from '../models/GameInfoAggregate/GameInfoModel';
 
 class SocketHandler {
+  private static instance: SocketHandler;
+
   socket = io('http://localhost:3001');
 
   gameId: string;
 
-  constructor(gameId: string) {
-    this.gameId = gameId;
+  constructor() {
+    this.gameId = '';
     this.socket.on('connect', () => {
-      this.socket.emit('create', this.gameId);
+      console.log('connected constructor', this.socket.id);
     });
+  }
+
+  static getInstance(): SocketHandler {
+    if (!SocketHandler.instance) {
+      SocketHandler.instance = new SocketHandler();
+    }
+    return SocketHandler.instance;
+  }
+
+  joinGameRoom(gameId: string): void {
+    if (this.gameId !== '' && gameId !== this.gameId) {
+      this.socket.emit('leaveGameRoom', this.gameId);
+    }
+    this.gameId = gameId;
+    this.socket.emit('joinGameRoom', this.gameId);
   }
 
   handleUpdateMembers(
@@ -28,8 +45,10 @@ class SocketHandler {
   handleUpdateIssues(
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
+    console.log('tasksChange handle', Date.now());
     this.socket.on('tasksChange', tasks => {
-      setGameData(prev => ({ ...prev, tasks }));
+      setGameData(tasks);
+      console.log('tasksChange handle msg', tasks, Date.now());
     });
   }
 

@@ -26,14 +26,13 @@ const MainPage: React.FC = () => {
       const gameInfo = await gameAPI.getGameInfo(gameId);
       setGameData(gameInfo.data);
       setGameStatus(gameInfo.data.status);
-
-      const socketConnect = new SocketHandler(gameId);
-      socketConnect.handleUpdateMembers(setGameData);
-      socketConnect.handleUpdateStatus(setGameData, setGameStatus);
-      socketConnect.handleUpdateIssues(setGameData);
       setIsLoaded(true);
     }
-
+    const socketConnect = SocketHandler.getInstance();
+    socketConnect.handleUpdateMembers(setGameData);
+    socketConnect.handleUpdateStatus(setGameData, setGameStatus);
+    socketConnect.handleUpdateIssues(setGameData);
+    socketConnect.joinGameRoom(gameId);
     getGameStatus();
   }, [gameId]);
 

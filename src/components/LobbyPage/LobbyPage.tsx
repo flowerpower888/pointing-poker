@@ -27,6 +27,8 @@ function LobbyPage(props: Game): JSX.Element {
   const isUserAnOwner = owner
     ? owner.id === localStorage.getItem('userId')
     : false;
+  if (isUserAnOwner) console.log("I'm an owner");
+  else console.log("I'm a player");
 
   const onStartGame = () => {
     gameAPI.start(gameInfo.id);
