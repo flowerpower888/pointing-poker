@@ -1,4 +1,5 @@
 import React, { useState, FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button, Col, Input } from 'antd';
 import {
   CheckOutlined,
@@ -32,6 +33,7 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
   const [newIssueTitle, setNewIssueTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<Issue>({} as Issue);
+  const { gameId } = useParams<{ gameId: string }>();
 
   const addIssue = (event: FormEvent) => {
     event.preventDefault();
@@ -43,19 +45,19 @@ const Issues: React.FunctionComponent<IssuesPropsType> = ({
     };
 
     if (newIssueTitle.length > 0) {
-      issuesAPI.add(newIssue);
+      issuesAPI.add(newIssue, gameId);
       setNewIssueTitle('');
     }
   };
 
   const editIssue = (event: FormEvent) => {
     event.preventDefault();
-    issuesAPI.update(currentItem, currentItem.id);
+    issuesAPI.update(currentItem, currentItem.id, gameId);
     setIsEditing(false);
   };
 
   const deleteIssue = (id: string) => () => {
-    issuesAPI.delete(id);
+    issuesAPI.delete(id, gameId);
   };
 
   return (

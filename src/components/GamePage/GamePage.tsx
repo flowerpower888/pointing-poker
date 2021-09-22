@@ -48,7 +48,7 @@ function GamePage(props: Game): JSX.Element {
 
   const onIssueClick = (issue: Issue) => {
     if (timerStatus !== 'started') {
-      issuesAPI.setCurrent(issue.id);
+      issuesAPI.setCurrent(issue.id, gameInfo.id);
     }
   };
 
@@ -175,6 +175,7 @@ function GamePage(props: Game): JSX.Element {
                           gameInfo.tasks[
                             gameInfo.tasks.indexOf(currentIssue) + 1
                           ].id,
+                          gameInfo.id,
                         )
                       }
                       disabled={timerStatus === 'started'}
