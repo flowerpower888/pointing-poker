@@ -7,7 +7,7 @@ import Timer from './Timer';
 import Votes from './Votes';
 import Cards from './Cards';
 import Statistics from './Statistics';
-import { RoundResult, CardModel } from '../../models/RoundResult/RoundModel';
+import { RoundResult } from '../../models/RoundResult/RoundModel';
 import {
   GameInfo,
   GameStatus,
@@ -18,6 +18,7 @@ import './gamePage.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
 import issuesAPI from '../../api/issuesAPI';
+import SocketHandler from '../../websockets-api/sockets';
 
 type Game = {
   info: GameInfo;
@@ -33,6 +34,7 @@ function GamePage(props: Game): JSX.Element {
     gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
     gameInfo.tasks[0];
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
+  const [timerTrigger, setTimerTrigger] = useState(false);
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [players, setPlayers] = useState<Member[]>(
     members.filter(member => member.userRole !== 'observer'),
@@ -54,6 +56,7 @@ function GamePage(props: Game): JSX.Element {
 
   const onRoundStart = () => {
     setRoundResult(null);
+    gameAPI.startRound(gameInfo.id);
   };
 
   const onRoundEnd = async () => {
@@ -112,6 +115,10 @@ function GamePage(props: Game): JSX.Element {
     }
   };
 
+  new SocketHandler(gameInfo.id).handlerStartTimer(() => {
+    setTimerTrigger(true);
+  });
+
   return (
     <div className="container">
       <Row justify="space-between" style={{ marginBottom: 30 }}>
@@ -161,6 +168,8 @@ function GamePage(props: Game): JSX.Element {
                   onRoundEnd={onRoundEnd}
                   onRoundStart={onRoundStart}
                   showTimerBtn={currentPlayer.isOwner}
+                  externalTrigger={timerTrigger}
+                  setExternalTrigger={setTimerTrigger}
                 />
                 {gameInfo.tasks.findIndex(
                   issue => issue.id === currentIssue.id,
