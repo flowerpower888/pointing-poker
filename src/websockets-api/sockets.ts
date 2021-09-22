@@ -50,5 +50,13 @@ class SocketHandler {
       setGameStatus(status);
     });
   }
+
+  handlerStartTimer(callback: () => void): void {
+    this.socket.on('roundStatusChange', status => {
+      if (status === 'started') {
+        callback();
+      }
+    });
+  }
 }
 export default SocketHandler;
