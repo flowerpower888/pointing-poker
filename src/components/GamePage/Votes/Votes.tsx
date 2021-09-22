@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Table } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Table } from 'antd';
 import UserCard from '../../LobbyPage/UserCard';
 import columns from '../../../utils/votesTableColumns';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
@@ -9,7 +8,6 @@ import './votes.scss';
 type VotesPropsType = {
   players: Member[];
   score?: string[];
-  onPlayerKick: (id: string) => Promise<void>;
 };
 
 type PlayerInfoForTable = {
@@ -18,31 +16,14 @@ type PlayerInfoForTable = {
   score: string | number;
 };
 
-const Votes: React.FunctionComponent<VotesPropsType> = ({
-  players,
-  score,
-  onPlayerKick,
-}) => {
-  const { confirm } = Modal;
+const Votes: React.FunctionComponent<VotesPropsType> = ({ players, score }) => {
+  const currentPlayer = players.find(
+    player => player.id === localStorage.getItem('userId'),
+  );
 
   const [data, setData] = useState<PlayerInfoForTable[] | null>(null);
 
   useEffect(() => {
-    const showPlayerKickConfirm = (id: string, firstname: string) => {
-      confirm({
-        title: `Do you really want to kick member ${firstname}?`,
-        icon: <ExclamationCircleOutlined />,
-        okText: 'Yes',
-        okType: 'danger',
-        cancelText: 'No',
-        onOk() {
-          onPlayerKick(id);
-        },
-        centered: true,
-        maskClosable: true,
-      });
-    };
-
     setData(
       players.map((member, i) => {
         const player = {
@@ -54,7 +35,7 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({
               firstName={member.firstName}
               userRole={member.userRole}
               imagePath={member.imagePath}
-              showPlayerKickConfirm={showPlayerKickConfirm}
+              isCurrentPlayerMaster={currentPlayer?.isOwner}
             />
           ),
           score: score?.[i] || 'In progress',
@@ -63,7 +44,7 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({
         return player;
       }),
     );
-  }, [score, players, onPlayerKick, confirm]);
+  }, [score, players, currentPlayer?.isOwner]);
 
   return (
     <div className="voting">

@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { Avatar, Button, Card } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Modal } from 'antd';
+import { CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
 
-type UserCardPropsType = Member & {
-  showPlayerKickConfirm?: (id: string, firstname: string) => void;
-} & { isUserOwner?: boolean };
+type UserCardPropsType = Member & { isCurrentPlayerMaster?: boolean };
 
 function UserCard(props: UserCardPropsType): JSX.Element {
   const {
@@ -18,18 +16,34 @@ function UserCard(props: UserCardPropsType): JSX.Element {
     imagePath,
     isOwner,
     id,
-    isUserOwner,
-    showPlayerKickConfirm,
+    isCurrentPlayerMaster,
   } = props;
-  const { Meta } = Card;
 
-  const deleteMember = () => {
+  const { Meta } = Card;
+  const { confirm } = Modal;
+
+  const onPlayerKick = async (playerId: string) => {
     const gameId = localStorage.getItem('gameId');
-    if (gameId && id) {
-      memberAPI.delete(id, gameId);
+
+    if (gameId && playerId) {
+      memberAPI.delete(playerId, gameId);
     }
   };
-  const deleteByVote = () => {};
+
+  const showPlayerKickConfirm = (playerId: string, firstname: string) => {
+    confirm({
+      title: `Do you really want to kick member ${firstname}?`,
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        onPlayerKick(playerId);
+      },
+      centered: true,
+      maskClosable: true,
+    });
+  };
 
   return (
     <Card
@@ -41,11 +55,10 @@ function UserCard(props: UserCardPropsType): JSX.Element {
           className="delete_member"
           htmlType="button"
           icon={<CloseOutlined />}
-          onClick={
-            showPlayerKickConfirm && isUserOwner
-              ? () => showPlayerKickConfirm(id || '', firstName)
-              : undefined
-          }
+          onClick={() => {
+            if (isCurrentPlayerMaster)
+              showPlayerKickConfirm(id || '', firstName);
+          }}
         />
       )}
       <p className="user-card_userRole">

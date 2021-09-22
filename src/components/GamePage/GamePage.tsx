@@ -7,7 +7,7 @@ import Timer from './Timer';
 import Votes from './Votes';
 import Cards from './Cards';
 import Statistics from './Statistics';
-import { RoundResult, CardModel } from '../../models/RoundResult/RoundModel';
+import { RoundResult } from '../../models/RoundResult/RoundModel';
 import {
   GameInfo,
   GameStatus,
@@ -33,11 +33,12 @@ function GamePage(props: Game): JSX.Element {
     gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
     gameInfo.tasks[0];
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
-  const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
-  const [players, setPlayers] = useState<Member[]>(
-    members.filter(member => member.userRole !== 'observer'),
-  );
 
+  const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
+
+  const players: Member[] = members.filter(
+    member => member.userRole !== 'observer',
+  );
   const currentPlayer = gameInfo.members.filter(
     member => member.id === localStorage.getItem('userId'),
   )[0];
@@ -82,21 +83,6 @@ function GamePage(props: Game): JSX.Element {
     };
 
     setRoundResult(await getRoundResult());
-  };
-
-  const onPlayerKick = async (id: string) => {
-    setPlayers(prev => prev.filter(player => player.id !== id));
-
-    if (roundResult) {
-      setRoundResult({
-        ...roundResult,
-        score: roundResult?.score.filter(
-          playerScore => playerScore.playerId !== id,
-        ),
-      });
-    }
-
-    await memberAPI.delete(id, gameInfo.id);
   };
 
   const onStopGame = () => {
@@ -197,7 +183,6 @@ function GamePage(props: Game): JSX.Element {
           <Votes
             players={players}
             score={roundResult?.score.map(player => player.card.value)}
-            onPlayerKick={onPlayerKick}
           />
         </Col>
       </Row>
