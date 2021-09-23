@@ -27,6 +27,19 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
   const [timerInterval, setTimerInterval] = useState<number | null>(null);
 
   useEffect(() => {
+    const start = () => {
+      onRoundStart();
+      setTimerInterval(
+        window.setInterval(() => {
+          setSeconds(prev => prev - 1);
+        }, 1000),
+      );
+    };
+
+    if (status === 'started') start();
+  }, [status, onRoundStart]);
+
+  useEffect(() => {
     setBtnText('Run round');
   }, [currentIssue]);
 
@@ -40,24 +53,11 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
       setStatus('stopped');
       setBtnText('Restart round');
     };
-
     if (seconds === 0) {
       stop();
       onRoundEnd();
     }
   }, [seconds, limit, timerInterval, status, setStatus, onRoundEnd]);
-
-  const start = () => {
-    if (status === 'stopped') {
-      setStatus('started');
-      onRoundStart();
-      setTimerInterval(
-        window.setInterval(() => {
-          setSeconds(prev => prev - 1);
-        }, 1000),
-      );
-    }
-  };
 
   const isSingleDigit = (number: number): boolean => number % 10 === number;
 
@@ -81,7 +81,7 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
             type="primary"
             size="large"
             disabled={status === 'started'}
-            onClick={start}
+            onClick={() => setStatus('started')}
           >
             {btnText}
           </Button>

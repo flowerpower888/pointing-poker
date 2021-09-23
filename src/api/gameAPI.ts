@@ -41,6 +41,9 @@ const gameAPI = {
   getGameInfo(id: string): Promise<AxiosResponse<GameInfo>> {
     return instance.get<GameInfo>(`/api/games/${id}`);
   },
+  setRoundStatus(gameId: string, roundStatus: string): Promise<AxiosResponse> {
+    return instance.post(`api/round/${gameId}`, { roundStatus });
+  },
 };
 
 export default gameAPI;
