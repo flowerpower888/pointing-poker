@@ -92,7 +92,11 @@ function GamePage(props: Game): JSX.Element {
         currentIssue.id,
         activeCard || cards.filter(card => card.value === '?')[0],
       )
-      .then(() => votingAPI.getVotesByTask(gameInfo.id, currentIssue.id));
+      .then(() =>
+        votingAPI.getVotesByTask(gameInfo.id, currentIssue.id).then(res => {
+          setRoundResult(res.data);
+        }),
+      );
 
     setActiveCard(null);
   };
@@ -194,10 +198,7 @@ function GamePage(props: Game): JSX.Element {
         <Divider type="vertical" style={{ height: 'auto' }} />
 
         <Col lg={7} sm={24} xs={24}>
-          <Votes
-            players={players}
-            score={roundResult?.score?.map(player => player.card.value)}
-          />
+          <Votes players={players} score={roundResult?.score} />
         </Col>
       </Row>
 

@@ -4,6 +4,7 @@ import { CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
+import votingAPI from '../../../api/votingAPI';
 
 type UserCardPropsType = Member & { isCurrentPlayerMaster?: boolean };
 
@@ -27,6 +28,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
 
     if (gameId && playerId) {
       memberAPI.delete(playerId, gameId);
+      votingAPI.removeVote(gameId, playerId);
     }
   };
 

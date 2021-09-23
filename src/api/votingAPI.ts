@@ -24,7 +24,9 @@ const votingAPI = {
       card,
     });
   },
-  // TODO: delete vote on player kick
+  removeVote(gameId: string, playerId: string): Promise<AxiosResponse> {
+    return instance.delete(`/api/votes/${gameId}/${playerId}`);
+  },
 };
 
 export default votingAPI;
