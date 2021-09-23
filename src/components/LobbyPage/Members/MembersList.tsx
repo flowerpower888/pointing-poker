@@ -9,24 +9,25 @@ type MembersListPropsType = {
 
 function MembersList(props: MembersListPropsType): JSX.Element {
   const { members } = props;
-  const isUserOwner =
-    members.filter(el => localStorage.getItem('userId') === el.id).length === 0;
+  const currentPlayer = members.find(
+    member => member.id === localStorage.getItem('userId'),
+  );
 
   return (
     <>
       <h2 className="lobby-title">Members:</h2>
       <div className="members-list">
-        {members.map(el => (
+        {members.map(member => (
           <UserCard
-            key={el.id}
-            firstName={el.firstName}
-            lastName={el.lastName}
-            isOwner={el.isOwner}
-            userRole={el.userRole}
-            imagePath={el.imagePath}
-            jobPosition={el.jobPosition}
-            id={el.id}
-            isUserOwner={isUserOwner}
+            key={member.id}
+            firstName={member.firstName}
+            lastName={member.lastName}
+            isOwner={member.isOwner}
+            userRole={member.userRole}
+            imagePath={member.imagePath}
+            jobPosition={member.jobPosition}
+            id={member.id}
+            isCurrentPlayerMaster={currentPlayer?.isOwner}
           />
         ))}
       </div>
