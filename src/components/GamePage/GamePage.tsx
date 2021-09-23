@@ -34,7 +34,6 @@ function GamePage(props: Game): JSX.Element {
     gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
     gameInfo.tasks[0];
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
-  const [timerTrigger, setTimerTrigger] = useState(false);
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [players, setPlayers] = useState<Member[]>(
     members.filter(member => member.userRole !== 'observer'),
@@ -43,6 +42,11 @@ function GamePage(props: Game): JSX.Element {
   const currentPlayer = gameInfo.members.filter(
     member => member.id === localStorage.getItem('userId'),
   )[0];
+
+  useEffect(() => {
+    gameAPI.setRoundStatus(gameInfo.id, timerStatus);
+    new SocketHandler(gameInfo.id).handleUpdateTimerStatus(setTimerStatus);
+  }, [timerStatus]);
 
   useEffect(() => {
     setRoundResult(null);
@@ -56,7 +60,6 @@ function GamePage(props: Game): JSX.Element {
 
   const onRoundStart = () => {
     setRoundResult(null);
-    gameAPI.startRound(gameInfo.id);
   };
 
   const onRoundEnd = async () => {
@@ -115,10 +118,6 @@ function GamePage(props: Game): JSX.Element {
     }
   };
 
-  new SocketHandler(gameInfo.id).handlerStartTimer(() => {
-    setTimerTrigger(true);
-  });
-
   return (
     <div className="container">
       <Row justify="space-between" style={{ marginBottom: 30 }}>
@@ -168,8 +167,6 @@ function GamePage(props: Game): JSX.Element {
                   onRoundEnd={onRoundEnd}
                   onRoundStart={onRoundStart}
                   showTimerBtn={currentPlayer.isOwner}
-                  externalTrigger={timerTrigger}
-                  setExternalTrigger={setTimerTrigger}
                 />
                 {gameInfo.tasks.findIndex(
                   issue => issue.id === currentIssue.id,

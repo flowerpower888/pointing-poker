@@ -51,11 +51,11 @@ class SocketHandler {
     });
   }
 
-  handlerStartTimer(callback: () => void): void {
+  handleUpdateTimerStatus(
+    setTimerStatus: React.Dispatch<React.SetStateAction<string>>,
+  ): void {
     this.socket.on('roundStatusChange', status => {
-      if (status === 'started') {
-        callback();
-      }
+      setTimerStatus(status);
     });
   }
 }

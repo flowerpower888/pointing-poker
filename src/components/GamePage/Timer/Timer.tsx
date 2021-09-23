@@ -11,8 +11,6 @@ type TimerPropsType = {
   onRoundEnd: () => void;
   onRoundStart: () => void;
   showTimerBtn?: boolean;
-  externalTrigger: boolean;
-  setExternalTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Timer: React.FunctionComponent<TimerPropsType> = ({
@@ -23,12 +21,23 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
   onRoundEnd,
   onRoundStart,
   showTimerBtn = true,
-  externalTrigger = false,
-  setExternalTrigger,
 }) => {
   const [btnText, setBtnText] = useState('Run round');
   const [seconds, setSeconds] = useState(limit);
   const [timerInterval, setTimerInterval] = useState<number | null>(null);
+
+  useEffect(() => {
+    const start = () => {
+      onRoundStart();
+      setTimerInterval(
+        window.setInterval(() => {
+          setSeconds(prev => prev - 1);
+        }, 1000),
+      );
+    };
+
+    if (status === 'started') start();
+  }, [status]);
 
   useEffect(() => {
     setBtnText('Run round');
@@ -49,25 +58,6 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
       onRoundEnd();
     }
   }, [seconds, limit, timerInterval, status, setStatus, onRoundEnd]);
-
-  const start = () => {
-    if (status === 'stopped') {
-      setStatus('started');
-      onRoundStart();
-      setTimerInterval(
-        window.setInterval(() => {
-          setSeconds(prev => prev - 1);
-        }, 1000),
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (externalTrigger) {
-      start();
-      setExternalTrigger(false);
-    }
-  }, [externalTrigger]);
 
   const isSingleDigit = (number: number): boolean => number % 10 === number;
 
@@ -91,7 +81,7 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
             type="primary"
             size="large"
             disabled={status === 'started'}
-            onClick={start}
+            onClick={() => setStatus('started')}
           >
             {btnText}
           </Button>
