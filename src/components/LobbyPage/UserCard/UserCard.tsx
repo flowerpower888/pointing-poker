@@ -56,8 +56,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
           htmlType="button"
           icon={<CloseOutlined />}
           onClick={() => {
-            if (isCurrentPlayerMaster)
-              showPlayerKickConfirm(id || '', firstName);
+            showPlayerKickConfirm(id || '', firstName);
           }}
         />
       )}
