@@ -5,19 +5,11 @@ import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
 
-type UserCardPropsType = Member & { isCurrentPlayerMaster?: boolean };
+type UserCardPropsType = Member;
 
 function UserCard(props: UserCardPropsType): JSX.Element {
-  const {
-    firstName,
-    lastName,
-    jobPosition,
-    userRole,
-    imagePath,
-    isOwner,
-    id,
-    isCurrentPlayerMaster,
-  } = props;
+  const { firstName, lastName, jobPosition, userRole, imagePath, isOwner, id } =
+    props;
 
   const { Meta } = Card;
   const { confirm } = Modal;
@@ -56,8 +48,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
           htmlType="button"
           icon={<CloseOutlined />}
           onClick={() => {
-            if (isCurrentPlayerMaster)
-              showPlayerKickConfirm(id || '', firstName);
+            showPlayerKickConfirm(id || '', firstName);
           }}
         />
       )}
