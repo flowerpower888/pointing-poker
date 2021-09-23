@@ -9,7 +9,7 @@ export type Stats = {
 };
 
 export type RoundResult = {
-  issue: string;
+  taskId: string;
   score: {
     playerId?: string;
     card: CardModel;

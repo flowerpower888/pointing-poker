@@ -7,18 +7,19 @@ import Timer from './Timer';
 import Votes from './Votes';
 import Cards from './Cards';
 import Statistics from './Statistics';
-import { RoundResult } from '../../models/RoundResult/RoundModel';
+import { CardModel, RoundResult } from '../../models/RoundResult/RoundModel';
 import {
   GameInfo,
   GameStatus,
   Issue,
   Member,
 } from '../../models/GameInfoAggregate/GameInfoModel';
-import './gamePage.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
 import issuesAPI from '../../api/issuesAPI';
+import votingAPI from '../../api/votingAPI';
 import SocketHandler from '../../websockets-api/sockets';
+import './gamePage.scss';
 
 type Game = {
   info: GameInfo;
@@ -34,8 +35,9 @@ function GamePage(props: Game): JSX.Element {
     gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
     gameInfo.tasks[0];
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
-
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
+  const [activeCard, setActiveCard] = useState<CardModel | null>(null);
+  const [cards, setCards] = useState<CardModel[]>([]);
 
   const players: Member[] = members.filter(
     member => member.userRole !== 'observer',
@@ -45,13 +47,32 @@ function GamePage(props: Game): JSX.Element {
   )[0];
 
   useEffect(() => {
-    gameAPI.setRoundStatus(gameInfo.id, timerStatus);
-    new SocketHandler(gameInfo.id).handleUpdateTimerStatus(setTimerStatus);
-  }, [timerStatus, gameInfo.id]);
+    const socketConnect = new SocketHandler(gameInfo.id);
+    socketConnect.handleUpdateTimerStatus(setTimerStatus);
+    socketConnect.handleUpdateRoundResult(setRoundResult);
+
+    const getCards = async () => {
+      await fetch('/cardSet.json')
+        .then(res => res.json())
+        .then(data => setCards(data));
+    };
+
+    getCards();
+  }, [gameInfo.id]);
 
   useEffect(() => {
-    setRoundResult(null);
-  }, [currentIssue]);
+    const getRoundInfo = async () => {
+      await votingAPI
+        .getVotesByTask(gameInfo.id, currentIssue.id)
+        .then(res => setRoundResult(res.data));
+    };
+
+    getRoundInfo();
+  }, [currentIssue, gameInfo.id]);
+
+  useEffect(() => {
+    gameAPI.setRoundStatus(gameInfo.id, timerStatus);
+  }, [timerStatus, gameInfo.id]);
 
   const onIssueClick = (issue: Issue) => {
     if (timerStatus !== 'started') {
@@ -64,31 +85,16 @@ function GamePage(props: Game): JSX.Element {
   }, []);
 
   const onRoundEnd = async () => {
-    const getRoundResult = async (): Promise<RoundResult> => {
-      const cards = await fetch('/cardSet.json').then(res => res.json());
+    await votingAPI
+      .sendVote(
+        gameInfo.id,
+        currentPlayer.id || '',
+        currentIssue.id,
+        activeCard || cards.filter(card => card.value === '?')[0],
+      )
+      .then(() => votingAPI.getVotesByTask(gameInfo.id, currentIssue.id));
 
-      const result: RoundResult = {
-        issue: currentIssue.id,
-        score: players
-          .filter(player => player.userRole !== 'observer')
-          .map(player => {
-            const { id } = player;
-
-            const playerScore = {
-              playerId: id,
-              card: cards[Math.floor(Math.random() * cards.length)],
-            };
-
-            return playerScore;
-          }),
-      };
-
-      return new Promise(resolve => {
-        resolve(result);
-      });
-    };
-
-    setRoundResult(await getRoundResult());
+    setActiveCard(null);
   };
 
   const onStopGame = () => {
@@ -180,7 +186,9 @@ function GamePage(props: Game): JSX.Element {
             </Col>
           </Row>
 
-          {roundResult && <Statistics roundResult={roundResult} />}
+          {roundResult && (
+            <Statistics cards={roundResult.score.map(player => player.card)} />
+          )}
         </Col>
 
         <Divider type="vertical" style={{ height: 'auto' }} />
@@ -188,14 +196,14 @@ function GamePage(props: Game): JSX.Element {
         <Col lg={7} sm={24} xs={24}>
           <Votes
             players={players}
-            score={roundResult?.score.map(player => player.card.value)}
+            score={roundResult?.score?.map(player => player.card.value)}
           />
         </Col>
       </Row>
 
       {currentPlayer.userRole !== 'observer' && (
         <Row className="cards-container" justify="center" gutter={[16, 16]}>
-          <Cards />
+          <Cards activeCard={activeCard} setActiveCard={setActiveCard} />
         </Row>
       )}
     </div>
