@@ -1,5 +1,5 @@
 import { Button, Col, Divider, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
@@ -46,7 +46,7 @@ function GamePage(props: Game): JSX.Element {
   useEffect(() => {
     gameAPI.setRoundStatus(gameInfo.id, timerStatus);
     new SocketHandler(gameInfo.id).handleUpdateTimerStatus(setTimerStatus);
-  }, [timerStatus]);
+  }, [timerStatus, gameInfo.id]);
 
   useEffect(() => {
     setRoundResult(null);
@@ -58,9 +58,9 @@ function GamePage(props: Game): JSX.Element {
     }
   };
 
-  const onRoundStart = () => {
+  const onRoundStart = useCallback(() => {
     setRoundResult(null);
-  };
+  }, []);
 
   const onRoundEnd = async () => {
     const getRoundResult = async (): Promise<RoundResult> => {

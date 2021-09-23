@@ -37,7 +37,7 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
     };
 
     if (status === 'started') start();
-  }, [status]);
+  }, [status, onRoundStart]);
 
   useEffect(() => {
     setBtnText('Run round');
