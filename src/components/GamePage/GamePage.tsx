@@ -140,52 +140,55 @@ function GamePage(props: Game): JSX.Element {
             )}
           </Row>
 
-          <Row align="middle" justify="space-between">
-            <Issues
-              editable={false}
-              onIssueClick={currentPlayer.isOwner ? onIssueClick : undefined}
-              currentIssue={currentIssue}
-              showAddIssueInput={currentPlayer.isOwner}
-              showDeleteBtn={currentPlayer.isOwner}
-              tasks={gameInfo.tasks}
-            />
+          {(currentPlayer.isOwner ||
+            (!currentPlayer.isOwner && gameInfo.tasks.length > 0)) && (
+            <Row align="middle" justify="space-between">
+              <Issues
+                editable={false}
+                onIssueClick={currentPlayer.isOwner ? onIssueClick : undefined}
+                currentIssue={currentIssue}
+                showAddIssueInput={currentPlayer.isOwner}
+                showDeleteBtn={currentPlayer.isOwner}
+                tasks={gameInfo.tasks}
+              />
 
-            <Col span={12}>
-              <Row justify="center">
-                <Timer
-                  limit={3}
-                  status={timerStatus}
-                  setStatus={setTimerStatus}
-                  currentIssue={currentIssue}
-                  onRoundEnd={onRoundEnd}
-                  onRoundStart={onRoundStart}
-                  showTimerBtn={currentPlayer.isOwner}
-                />
-                {gameInfo.tasks.findIndex(
-                  issue => issue.id === currentIssue.id,
-                ) !==
-                  gameInfo.tasks.length - 1 &&
-                  currentPlayer.isOwner && (
-                    <Button
-                      type="primary"
-                      size="large"
-                      onClick={() =>
-                        issuesAPI.setCurrent(
-                          gameInfo.tasks[
-                            gameInfo.tasks.indexOf(currentIssue) + 1
-                          ].id,
-                          gameInfo.id,
-                        )
-                      }
-                      disabled={timerStatus === 'started'}
-                      style={{ marginTop: 60, marginLeft: 10 }}
-                    >
-                      Next issue
-                    </Button>
-                  )}
-              </Row>
-            </Col>
-          </Row>
+              <Col span={12}>
+                <Row justify="center">
+                  <Timer
+                    limit={3}
+                    status={timerStatus}
+                    setStatus={setTimerStatus}
+                    currentIssue={currentIssue}
+                    onRoundEnd={onRoundEnd}
+                    onRoundStart={onRoundStart}
+                    showTimerBtn={currentPlayer.isOwner}
+                  />
+                  {gameInfo.tasks.findIndex(
+                    issue => issue.id === currentIssue.id,
+                  ) !==
+                    gameInfo.tasks.length - 1 &&
+                    currentPlayer.isOwner && (
+                      <Button
+                        type="primary"
+                        size="large"
+                        onClick={() =>
+                          issuesAPI.setCurrent(
+                            gameInfo.tasks[
+                              gameInfo.tasks.indexOf(currentIssue) + 1
+                            ].id,
+                            gameInfo.id,
+                          )
+                        }
+                        disabled={timerStatus === 'started'}
+                        style={{ marginTop: 60, marginLeft: 10 }}
+                      >
+                        Next issue
+                      </Button>
+                    )}
+                </Row>
+              </Col>
+            </Row>
+          )}
 
           {roundResult && currentIssue && (
             <Statistics cards={roundResult.score.map(player => player.card)} />
