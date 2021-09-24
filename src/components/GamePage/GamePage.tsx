@@ -32,10 +32,13 @@ function GamePage(props: Game): JSX.Element {
   const { members } = gameInfo;
 
   const currentIssue =
-    gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
-    gameInfo.tasks[0];
+    gameInfo.tasks.find(task => task.id === gameInfo.currentTaskId) ||
+    gameInfo.tasks[0] ||
+    null;
   const [timerStatus, setTimerStatus] = useState<string>('stopped');
-  const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
+  const [roundResult, setRoundResult] = useState<RoundResult | null>(
+    gameInfo.votes.find(task => task.taskId === currentIssue?.id) || null,
+  );
   const [activeCard, setActiveCard] = useState<CardModel | null>(null);
   const [cards, setCards] = useState<CardModel[]>([]);
 
@@ -61,13 +64,7 @@ function GamePage(props: Game): JSX.Element {
   }, [gameInfo.id]);
 
   useEffect(() => {
-    const getRoundInfo = async () => {
-      await votingAPI
-        .getVotesByTask(gameInfo.id, currentIssue.id)
-        .then(res => setRoundResult(res.data));
-    };
-
-    getRoundInfo();
+    if (currentIssue) votingAPI.getVotesByTask(gameInfo.id, currentIssue?.id);
   }, [currentIssue, gameInfo.id]);
 
   useEffect(() => {
@@ -190,7 +187,7 @@ function GamePage(props: Game): JSX.Element {
             </Col>
           </Row>
 
-          {roundResult && (
+          {roundResult && currentIssue && (
             <Statistics cards={roundResult.score.map(player => player.card)} />
           )}
         </Col>
@@ -198,7 +195,7 @@ function GamePage(props: Game): JSX.Element {
         <Divider type="vertical" style={{ height: 'auto' }} />
 
         <Col lg={7} sm={24} xs={24}>
-          <Votes players={players} score={roundResult?.score} />
+          <Votes players={players} score={currentIssue && roundResult?.score} />
         </Col>
       </Row>
 

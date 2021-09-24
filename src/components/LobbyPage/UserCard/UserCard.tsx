@@ -6,7 +6,9 @@ import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
 import votingAPI from '../../../api/votingAPI';
 
-type UserCardPropsType = Member & { isCurrentPlayerMaster?: boolean };
+type UserCardPropsType = Member & {
+  isCurrentPlayerMaster?: boolean;
+};
 
 function UserCard(props: UserCardPropsType): JSX.Element {
   const {
@@ -23,15 +25,6 @@ function UserCard(props: UserCardPropsType): JSX.Element {
   const { Meta } = Card;
   const { confirm } = Modal;
 
-  const onPlayerKick = async (playerId: string) => {
-    const gameId = localStorage.getItem('gameId');
-
-    if (gameId && playerId) {
-      memberAPI.delete(playerId, gameId);
-      votingAPI.removeVote(gameId, playerId);
-    }
-  };
-
   const showPlayerKickConfirm = (playerId: string, firstname: string) => {
     confirm({
       title: `Do you really want to kick member ${firstname}?`,
@@ -40,7 +33,12 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        onPlayerKick(playerId);
+        const gameId = localStorage.getItem('gameId');
+
+        if (gameId && playerId) {
+          memberAPI.delete(playerId, gameId);
+          votingAPI.removeVote(gameId, playerId);
+        }
       },
       centered: true,
       maskClosable: true,
