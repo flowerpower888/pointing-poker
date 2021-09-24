@@ -1,42 +1,40 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import {
-  CardModel,
-  RoundResult,
-  Stats,
-} from '../../../models/RoundResult/RoundModel';
+import { CardModel, Stats } from '../../../models/RoundResult/RoundModel';
 import Card from '../Cards/Card';
 import './statistics.scss';
 
 type StatPropsType = {
-  roundResult: RoundResult;
+  cards: CardModel[];
 };
 
-const Statistics: React.FunctionComponent<StatPropsType> = ({
-  roundResult,
-}) => {
+const Statistics: React.FunctionComponent<StatPropsType> = ({ cards }) => {
   const [statistics, setStatistics] = useState<Stats[] | null>(null);
 
   useEffect(() => {
-    const getPercentage = (cards: CardModel[]) => {
-      let percentage: { card: CardModel; percents: string }[] = [];
-      const uniqueCards = Array.from(new Set(cards));
+    const getPercentage = (cardValues: string[]) => {
+      let percentage: Stats[] = [];
+      const uniqueCards = Array.from(new Set(cardValues));
 
       uniqueCards.forEach(cur => {
-        const occurrences = cards.filter(card => card.value === cur.value);
+        const occurrences = cardValues.filter(cardValue => cardValue === cur);
 
-        const percents = `${((occurrences.length * 100) / cards.length).toFixed(
-          0,
-        )}%`;
+        const percents = `${(
+          (occurrences.length * 100) /
+          cardValues.length
+        ).toFixed(0)}%`;
 
-        percentage = [...percentage, { card: cur, percents }];
+        percentage = [
+          ...percentage,
+          { card: cards.filter(card => card.value === cur)[0], percents },
+        ];
       });
 
       return percentage;
     };
 
-    setStatistics(getPercentage(roundResult.score.map(player => player.card)));
-  }, [roundResult.score]);
+    setStatistics(getPercentage(cards.map(card => card.value)));
+  }, [cards]);
 
   return (
     <div className="statistics">
@@ -48,7 +46,7 @@ const Statistics: React.FunctionComponent<StatPropsType> = ({
             const { card, percents } = vote;
 
             return (
-              <Col lg={4} sm={5} xs={6}>
+              <Col lg={4} sm={5} xs={6} key={card.value}>
                 <p className="percents">{percents}</p>
                 <Card value={card.value} imagePath={card.imagePath} />
               </Col>
