@@ -1,0 +1,36 @@
+.card {
+  max-width: 190px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.editedIcon,
+.deletedIcon {
+  display: inline-block;
+  font-size: 18px;
+  padding: 1px;
+  margin: auto 5px;
+  color: #2b3a67;
+}
+
+.deletedIcon {
+  color: #d70505;
+}
+
+.addedIcon {
+  font-size: 18px;
+  color: #2b3a67;
+}
+
+.addedIcon:hover {
+  color: #66999b;
+}
