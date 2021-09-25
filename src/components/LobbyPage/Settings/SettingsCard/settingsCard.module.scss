@@ -1,0 +1,102 @@
+.container {
+  max-width: 100px;
+  height: 150px;
+  perspective: 30rem;
+}
+
+.front,
+.back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+}
+
+.front {
+  z-index: 2;
+}
+.back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  transition: 0.2s ease;
+  transform-style: preserve-3d;
+  transition: all 0.4s;
+
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    height: 100px;
+  }
+}
+
+.cardValue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  color: #393939;
+}
+
+.cardImage {
+  cursor: pointer;
+  width: 70%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.closeCross {
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+}
+
+.edit {
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+}
+
+.input {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: #393939;
+  text-align: center;
+}
+
+.btn {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Col } from 'antd';
+import { Button, Col, message } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import UserCard from './UserCard';
 import MembersList from './Members';
@@ -8,10 +8,13 @@ import Issues from './Issues';
 import {
   GameInfo,
   GameStatus,
+  SettingsType,
 } from '../../models/GameInfoAggregate/GameInfoModel';
 import './lobbyPage.scss';
 import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
+import Settings from './Settings';
+import settingsAPI from '../../api/settingsAPI';
 
 type Game = {
   info: GameInfo;
@@ -19,18 +22,34 @@ type Game = {
 };
 
 function LobbyPage(props: Game): JSX.Element {
-  const history = useHistory();
-
   const { info: gameInfo, setGameStatus } = props;
+  const history = useHistory();
+  const initialSettings: SettingsType = {
+    isOwnerAPlayer: gameInfo.members[0].userRole === 'player',
+    isAutoEnteringPlayers: false,
+    isAutoReversingCardsAfterVoting: false,
+    cardsSet: 'fibonacci',
+    ownCardsSet: [],
+    isChangingCardInRoundEnd: false,
+    isTimerNeeded: false,
+    roundTime: 0,
+  };
+  const [settings, setSettings] = useState<SettingsType>(initialSettings);
+
   const owner = gameInfo.members.find(member => member.isOwner) || null;
   const players = gameInfo.members.filter(member => !member.isOwner);
   const isUserAnOwner = owner
     ? owner.id === localStorage.getItem('userId')
     : false;
 
-  const onStartGame = () => {
-    gameAPI.start(gameInfo.id);
-    setGameStatus('started');
+  const onStartGame = async () => {
+    try {
+      await settingsAPI.set(settings, gameInfo.id);
+      await gameAPI.start(gameInfo.id);
+      setGameStatus('started');
+    } catch {
+      message.error('Game was not started!');
+    }
   };
 
   const onExit = async () => {
@@ -115,6 +134,9 @@ function LobbyPage(props: Game): JSX.Element {
             showDeleteBtn={isUserAnOwner}
             tasks={gameInfo.tasks}
           />
+          {isUserAnOwner && (
+            <Settings settings={settings} setSettings={setSettings} />
+          )}
         </>
       )}
     </div>

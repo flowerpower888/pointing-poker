@@ -26,4 +26,21 @@ export type GameInfo = {
   id: string;
   status: GameStatus;
   members: Array<Member>;
+  settings: SettingsType;
+};
+
+export type SettingsType = {
+  isOwnerAPlayer: boolean;
+  cardsSet: 'fibonacci' | 'own';
+  ownCardsSet: { value: number; id: string }[];
+  isAutoEnteringPlayers: boolean;
+  isAutoReversingCardsAfterVoting: boolean;
+  isChangingCardInRoundEnd: boolean;
+  isTimerNeeded: boolean;
+  roundTime: number;
+};
+
+export type SettingsCardsType = {
+  value: number;
+  id: string;
 };

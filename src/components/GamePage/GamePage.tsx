@@ -28,7 +28,7 @@ type Game = {
 function GamePage(props: Game): JSX.Element {
   const history = useHistory();
   const { info: gameInfo, setGameStatus } = props;
-  const { members } = gameInfo;
+  const { members, settings } = gameInfo;
 
   const currentIssue =
     gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
