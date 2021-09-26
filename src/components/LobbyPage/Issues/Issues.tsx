@@ -1,8 +1,5 @@
-import React, { useState, FormEvent } from 'react';
-import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import React from 'react';
 import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
-import issuesAPI from '../../../api/issuesAPI';
 import styles from './issues.module.scss';
 import IssueCard from './IssueCard';
 
