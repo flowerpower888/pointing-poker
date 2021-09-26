@@ -1,3 +1,5 @@
+import { RoundResult } from '../RoundResult/RoundModel';
+
 export type Member = {
   id?: string;
   firstName: string;
@@ -26,4 +28,5 @@ export type GameInfo = {
   id: string;
   status: GameStatus;
   members: Array<Member>;
+  votes: RoundResult[];
 };
