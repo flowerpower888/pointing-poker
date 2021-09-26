@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
@@ -20,6 +20,7 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  const history = useHistory();
 
   useEffect(() => {
     async function getGameStatus() {
@@ -34,9 +35,17 @@ const MainPage: React.FC = () => {
       socketConnect.handleUpdateCurrentIssue(setGameData);
       setIsLoaded(true);
     }
-
     getGameStatus();
   }, [gameId]);
+
+  useEffect(() => {
+    if (
+      gameData.members &&
+      !gameData.members.find(el => el.id === localStorage.getItem('userId'))
+    ) {
+      history.push('/');
+    }
+  }, [gameData]);
 
   return (
     <div className="main-page">
