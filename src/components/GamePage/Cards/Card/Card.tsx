@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { CardModel } from '../../../../models/RoundResult/RoundModel';
 import './card.scss';
 
 type CardPropsType = {
   value: string;
   active?: string | null;
-  setActive?: React.Dispatch<React.SetStateAction<string | null>>;
+  setActiveCard?: React.Dispatch<React.SetStateAction<CardModel | null>>;
   imagePath?: string;
 };
 
 const Card: React.FunctionComponent<CardPropsType> = ({
   value,
   active,
-  setActive,
+  setActiveCard,
   imagePath,
 }) => {
   const [cardImage, setCardImage] = useState<string | null>(null);
@@ -30,7 +31,9 @@ const Card: React.FunctionComponent<CardPropsType> = ({
   return (
     <div
       className={`card ${value === active ? 'active' : ''}`}
-      onClick={setActive ? () => setActive(value) : undefined}
+      onClick={
+        setActiveCard ? () => setActiveCard({ value, imagePath }) : undefined
+      }
       role="presentation"
     >
       {cardImage ? (

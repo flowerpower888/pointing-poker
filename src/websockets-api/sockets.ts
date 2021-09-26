@@ -4,6 +4,7 @@ import {
   GameInfo,
   GameStatus,
 } from '../models/GameInfoAggregate/GameInfoModel';
+import { RoundResult } from '../models/RoundResult/RoundModel';
 
 class SocketHandler {
   socket = io('http://localhost:3001');
@@ -58,5 +59,14 @@ class SocketHandler {
       setTimerStatus(status);
     });
   }
+
+  handleUpdateRoundResult(
+    setRoundResult: React.Dispatch<React.SetStateAction<RoundResult | null>>,
+  ): void {
+    this.socket.on('roundResultChange', roundResult => {
+      setRoundResult(roundResult);
+    });
+  }
 }
+
 export default SocketHandler;
