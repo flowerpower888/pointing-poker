@@ -1,51 +1,12 @@
 .issues {
   margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 20px;
+  row-gap: 10px;
 }
 
-#lobby-input_add-issue,
-#lobby-input_edit-issue {
+.issues.vertical {
   display: flex;
-  margin-bottom: 10px;
-}
-
-.new-issue_icon {
-  font-size: 16px;
-  color: #2b3a67;
-}
-
-.new-issue_icon:hover {
-  color: #66999b;
-}
-
-.issue-item {
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  font-size: 16px;
-  margin-bottom: 10px;
-  padding: 1px;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.issue-item:hover {
-  background: rgba(80, 215, 195, 0.2);
-}
-
-.issue-item.current {
-  background: rgba(81, 215, 194, 0.3);
-}
-
-.edit-issue_icon,
-.delete-issue_icon {
-  display: inline-block;
-  font-size: 16px;
-  padding: 1px;
-  margin: auto 5px;
-  color: #2b3a67;
-}
-
-.delete-issue_icon {
-  color: #d70505;
+  flex-direction: column;
 }

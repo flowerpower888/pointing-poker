@@ -1,5 +1,6 @@
 .card {
-  max-width: 190px;
+  width: 100%;
+  min-width: 190px;
   border: 1px solid #d9d9d9;
   border-radius: 2px;
   font-size: 18px;
@@ -7,10 +8,28 @@
   cursor: pointer;
 }
 
+.card:hover {
+  background: rgba(80, 215, 195, 0.2);
+}
+
+.card.current {
+  background: rgba(81, 215, 194, 0.3);
+}
+
 .container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
+}
+
+.text {
+  max-width: 80px;
+}
+.priority {
+  font-weight: 400;
+  font-size: 9px;
+  margin-top: -5px;
 }
 
 .editedIcon,
