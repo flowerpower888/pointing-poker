@@ -6,11 +6,21 @@ import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
 import votingAPI from '../../../api/votingAPI';
 
-type UserCardPropsType = Member;
+type UserCardPropsType = Member & {
+  isCurrentPlayerMaster?: boolean;
+};
 
 function UserCard(props: UserCardPropsType): JSX.Element {
-  const { firstName, lastName, jobPosition, userRole, imagePath, isOwner, id } =
-    props;
+  const {
+    firstName,
+    lastName,
+    jobPosition,
+    userRole,
+    imagePath,
+    isOwner,
+    id,
+    isCurrentPlayerMaster,
+  } = props;
 
   const { Meta } = Card;
   const { confirm } = Modal;
