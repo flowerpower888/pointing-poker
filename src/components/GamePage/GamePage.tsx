@@ -45,9 +45,9 @@ function GamePage(props: Game): JSX.Element {
   const players: Member[] = members.filter(
     member => member.userRole !== 'observer',
   );
-  const currentPlayer = gameInfo.members.filter(
+  const currentPlayer = gameInfo.members.find(
     member => member.id === localStorage.getItem('userId'),
-  )[0];
+  );
 
   useEffect(() => {
     const socketConnect = new SocketHandler(gameInfo.id);
@@ -85,7 +85,7 @@ function GamePage(props: Game): JSX.Element {
     await votingAPI
       .sendVote(
         gameInfo.id,
-        currentPlayer.id || '',
+        currentPlayer?.id || '',
         currentIssue.id,
         activeCard || cards.filter(card => card.value === '?')[0],
       )
@@ -104,13 +104,17 @@ function GamePage(props: Game): JSX.Element {
   };
 
   const onExitGame = async () => {
-    if (currentPlayer.id) {
+    if (currentPlayer?.id) {
       history.push('/');
       await memberAPI.delete(currentPlayer.id, gameInfo.id);
       localStorage.removeItem('userId');
     }
   };
 
+  if (!currentPlayer) {
+    history.push('/');
+    return <></>;
+  }
   return (
     <div className="container">
       <Row justify="space-between" style={{ marginBottom: 30 }}>
