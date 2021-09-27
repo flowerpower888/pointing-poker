@@ -29,4 +29,10 @@ export type GameInfo = {
   status: GameStatus;
   members: Array<Member>;
   votes: RoundResult[];
+  chat: Array<Message>;
+};
+
+export type Message = {
+  text: string;
+  userId: string;
 };

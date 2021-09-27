@@ -67,6 +67,14 @@ class SocketHandler {
       setRoundResult(roundResult);
     });
   }
+
+  handleUpdateChat(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('messagesChanging', chat => {
+      setGameData(prev => ({ ...prev, chat }));
+    });
+  }
 }
 
 export default SocketHandler;
