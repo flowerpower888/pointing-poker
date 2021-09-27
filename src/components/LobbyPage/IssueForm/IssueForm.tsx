@@ -12,6 +12,7 @@ type FormValuesType = {
 };
 
 type IssueFormPropsType = {
+  isIssueFormShown: boolean;
   setIsIssueFormShown: React.Dispatch<React.SetStateAction<boolean>>;
   editable: boolean;
   isAdding: boolean;
@@ -19,6 +20,7 @@ type IssueFormPropsType = {
 };
 
 const IssueForm: FC<IssueFormPropsType> = ({
+  isIssueFormShown,
   setIsIssueFormShown,
   editable,
   isAdding,
@@ -57,8 +59,10 @@ const IssueForm: FC<IssueFormPropsType> = ({
   const onCancel = () => setIsIssueFormShown(false);
 
   return (
-    <Modal visible onCancel={onCancel} footer={null}>
-      <Title style={{ textAlign: 'center' }}>Create Issue</Title>
+    <Modal visible={isIssueFormShown} onCancel={onCancel} footer={null}>
+      <Title style={{ textAlign: 'center' }}>
+        {isAdding ? 'Create Issue' : 'Edit issue'}
+      </Title>
 
       <Form
         labelCol={{ span: 8 }}
@@ -83,12 +87,12 @@ const IssueForm: FC<IssueFormPropsType> = ({
           <Select style={{ width: 120 }} defaultValue="low">
             <Option value="low">Low</Option>
             <Option value="medium">Medium</Option>
-            <Option value="hight">Hight</Option>
+            <Option value="hight">High</Option>
           </Select>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{ marginRight: 10 }}>
             Yes
           </Button>
           <Button htmlType="button" onClick={onCancel}>

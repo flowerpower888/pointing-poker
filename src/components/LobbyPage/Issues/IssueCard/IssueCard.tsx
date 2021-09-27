@@ -52,14 +52,13 @@ const IssueCard: FC<IssueCardPropsType> = ({
           <div className={styles.priority}>{issue ? issue.priority : ''}</div>
         </div>
         <div>
-          {isIssueFormShown && (
-            <IssueForm
-              setIsIssueFormShown={setIsIssueFormShown}
-              isAdding={isAdding}
-              editable={editable}
-              issue={issue}
-            />
-          )}
+          <IssueForm
+            isIssueFormShown={isIssueFormShown}
+            setIsIssueFormShown={setIsIssueFormShown}
+            isAdding={isAdding}
+            editable={editable}
+            issue={issue}
+          />
           {isAdding && (
             <PlusOutlined
               className={styles.addedIcon}
