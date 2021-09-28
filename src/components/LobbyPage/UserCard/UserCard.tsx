@@ -5,6 +5,7 @@ import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
 import votingAPI from '../../../api/votingAPI';
+import kickByVoteAPI from '../../../api/kickByVoteAPI';
 
 type UserCardPropsType = Member & {
   isCurrentPlayerMaster?: boolean;
@@ -34,10 +35,20 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       cancelText: 'No',
       onOk() {
         const gameId = localStorage.getItem('gameId');
-
-        if (gameId && playerId) {
-          memberAPI.delete(playerId, gameId);
-          votingAPI.removeVote(gameId, playerId);
+        const kickProposeById = localStorage.getItem('userId');
+        if (gameId && playerId && kickProposeById) {
+          if (isCurrentPlayerMaster) {
+            memberAPI.delete(playerId, gameId);
+            votingAPI.removeVote(gameId, playerId);
+          } else {
+            kickByVoteAPI.sendVotes(
+              gameId,
+              playerId,
+              kickProposeById,
+              'start kicking',
+              true,
+            );
+          }
         }
       },
       centered: true,
