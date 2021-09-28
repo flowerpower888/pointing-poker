@@ -7,12 +7,14 @@ import Preloader from '../common/Preloader/Preloader';
 import {
   GameInfo,
   GameStatus,
+  Member,
 } from '../../models/GameInfoAggregate/GameInfoModel';
 import SocketHandler from '../../websockets-api/sockets';
 import LobbyPage from '../LobbyPage';
 import GamePage from '../GamePage';
 import Chat from '../Chat';
 import styles from './mainPage.module.scss';
+import KickByVotes from '../KickByVotes';
 
 type GameParams = {
   gameId: string;
@@ -24,6 +26,9 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  const [showKickProposal, setShowKickProposal] = useState<boolean>(false);
+  const [playerToKick, setPlayerToKick] = useState<Member | null>(null);
+  const [kickProposeBy, setKickProposeBy] = useState<Member | null>(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -38,6 +43,12 @@ const MainPage: React.FC = () => {
       socketConnect.handleUpdateIssues(setGameData);
       socketConnect.handleUpdateCurrentIssue(setGameData);
       socketConnect.handleUpdateChat(setGameData);
+      socketConnect.handleKickPlayer(
+        setShowKickProposal,
+        setPlayerToKick,
+        setKickProposeBy,
+        gameInfo.data.members,
+      );
       setIsLoaded(true);
     }
     getGameStatus();
@@ -75,6 +86,16 @@ const MainPage: React.FC = () => {
           isChatShown={isChatShown}
         />
       )}
+      {isLoaded &&
+        kickProposeBy &&
+        playerToKick &&
+        kickProposeBy.id !== localStorage.getItem('userId') &&
+        KickByVotes(
+          kickProposeBy,
+          playerToKick,
+          showKickProposal,
+          setShowKickProposal,
+        )}
     </div>
   );
 };
