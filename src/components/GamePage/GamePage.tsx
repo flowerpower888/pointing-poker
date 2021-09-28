@@ -196,7 +196,12 @@ function GamePage(props: Game): JSX.Element {
           )}
 
           {roundResult && currentIssue && (
-            <Statistics cards={roundResult.score.map(player => player.card)} />
+            <Col lg={24} md={16} className="statistics">
+              <h2 className="title">Statistics</h2>
+              <Statistics
+                cards={roundResult.score.map(player => player.card)}
+              />
+            </Col>
           )}
         </Col>
 

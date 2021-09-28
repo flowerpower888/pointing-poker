@@ -37,23 +37,20 @@ const Statistics: React.FunctionComponent<StatPropsType> = ({ cards }) => {
   }, [cards]);
 
   return (
-    <div className="statistics">
-      <h2 className="title">Statistics</h2>
-      <Row gutter={[16, 16]} justify="center">
-        {statistics
-          ?.sort((a, b) => parseInt(b.percents, 10) - parseInt(a.percents, 10))
-          .map(vote => {
-            const { card, percents } = vote;
+    <Row gutter={[16, 16]} justify="center">
+      {statistics
+        ?.sort((a, b) => parseInt(b.percents, 10) - parseInt(a.percents, 10))
+        .map(vote => {
+          const { card, percents } = vote;
 
-            return (
-              <Col lg={4} sm={5} xs={6} key={card.value}>
-                <p className="percents">{percents}</p>
-                <Card value={card.value} imagePath={card.imagePath} />
-              </Col>
-            );
-          })}
-      </Row>
-    </div>
+          return (
+            <Col lg={4} sm={5} xs={6} key={card.value}>
+              <p className="percents">{percents}</p>
+              <Card value={card.value} imagePath={card.imagePath} />
+            </Col>
+          );
+        })}
+    </Row>
   );
 };
 

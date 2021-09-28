@@ -60,6 +60,14 @@ class SocketHandler {
     });
   }
 
+  handleUpdateVotes(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('votesChange', votes => {
+      setGameData(prev => ({ ...prev, votes }));
+    });
+  }
+
   handleUpdateRoundResult(
     setRoundResult: React.Dispatch<React.SetStateAction<RoundResult | null>>,
   ): void {

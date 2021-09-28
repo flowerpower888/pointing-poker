@@ -1,0 +1,14 @@
+.results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .card {
+    height: 170px;
+  }
+
+  .issue-container {
+    margin: 20px;
+  }
+}
