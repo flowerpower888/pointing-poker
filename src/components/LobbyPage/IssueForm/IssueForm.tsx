@@ -1,29 +1,74 @@
 import React, { FC } from 'react';
-import { Form, Input, Button, Select, Typography, Modal } from 'antd';
+import { Form, Input, Button, Select, Typography, Modal, message } from 'antd';
+import { v4 as uuidv4 } from 'uuid';
+import { useParams } from 'react-router-dom';
+import issuesAPI from '../../../api/issuesAPI';
+import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
 
 type FormValuesType = {
   title: string;
   link?: string;
-  priority: 'low' | 'middle' | 'high';
+  priority: 'low' | 'medium' | 'high';
 };
 
-const IssueForm: FC = () => {
+type IssueFormPropsType = {
+  isIssueFormShown: boolean;
+  setIsIssueFormShown: React.Dispatch<React.SetStateAction<boolean>>;
+  editable: boolean;
+  isAdding: boolean;
+  issue?: Issue;
+};
+
+const IssueForm: FC<IssueFormPropsType> = ({
+  isIssueFormShown,
+  setIsIssueFormShown,
+  editable,
+  isAdding,
+  issue,
+}) => {
   const { Option } = Select;
   const { Title } = Typography;
+  const { gameId } = useParams<{ gameId: string }>();
 
-  const onFinish = (values: FormValuesType) => console.log(values);
+  const onFinish = async (values: FormValuesType) => {
+    if (isAdding) {
+      const newIssue: Issue = {
+        id: uuidv4(),
+        ...values,
+      };
+      try {
+        await issuesAPI.add(newIssue, gameId);
+      } catch {
+        message.error('The issue was not added');
+      }
+    } else if (issue && editable) {
+      try {
+        const newIssue: Issue = {
+          id: issue.id,
+          ...values,
+        };
+        await issuesAPI.update(newIssue, issue.id, gameId);
+      } catch {
+        message.error('The issue was not updated');
+      }
+    }
 
-  const onCancel = () => console.log('cancel');
+    setIsIssueFormShown(false);
+  };
+
+  const onCancel = () => setIsIssueFormShown(false);
 
   return (
-    <Modal visible onCancel={onCancel} footer={null}>
-      <Title style={{ textAlign: 'center' }}>Create Issue</Title>
+    <Modal visible={isIssueFormShown} onCancel={onCancel} footer={null}>
+      <Title style={{ textAlign: 'center' }}>
+        {isAdding ? 'Create Issue' : 'Edit issue'}
+      </Title>
 
       <Form
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 12 }}
         onFinish={onFinish}
-        initialValues={{ priority: 'low' }}
+        initialValues={issue}
         autoComplete="off"
       >
         <Form.Item
@@ -39,15 +84,15 @@ const IssueForm: FC = () => {
         </Form.Item>
 
         <Form.Item label="Priority:" name="priority">
-          <Select style={{ width: 120 }}>
+          <Select style={{ width: 120 }} defaultValue="low">
             <Option value="low">Low</Option>
-            <Option value="middle">Middle</Option>
-            <Option value="hight">Hight</Option>
+            <Option value="medium">Medium</Option>
+            <Option value="hight">High</Option>
           </Select>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{ marginRight: 10 }}>
             Yes
           </Button>
           <Button htmlType="button" onClick={onCancel}>

@@ -154,6 +154,7 @@ function GamePage(props: Game): JSX.Element {
                 showAddIssueInput={currentPlayer.isOwner}
                 showDeleteBtn={currentPlayer.isOwner}
                 tasks={gameInfo.tasks}
+                direction="vertical"
               />
 
               <Col span={12}>

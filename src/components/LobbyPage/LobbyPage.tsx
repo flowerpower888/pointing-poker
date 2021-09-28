@@ -109,7 +109,7 @@ function LobbyPage(props: Game): JSX.Element {
 
           {gameInfo.members.length - 1 > 0 && <MembersList members={players} />}
 
-          {(isUserAnOwner || (!isUserAnOwner && gameInfo.tasks.length > 0)) && (
+          {(isUserAnOwner || gameInfo.tasks.length > 0) && (
             <Issues
               editable={isUserAnOwner}
               showAddIssueInput={isUserAnOwner}
