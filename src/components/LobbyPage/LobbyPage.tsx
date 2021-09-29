@@ -25,16 +25,18 @@ function LobbyPage(props: Game): JSX.Element {
   const { info: gameInfo, setGameStatus } = props;
   const history = useHistory();
   const initialSettings: SettingsType = {
-    isOwnerAPlayer: gameInfo.members[0].userRole === 'player',
     isAutoEnteringPlayers: false,
-    isAutoReversingCardsAfterVoting: false,
     cardsSet: 'fibonacci',
     ownCardsSet: [],
     isChangingCardInRoundEnd: false,
     isTimerNeeded: false,
     roundTime: 0,
   };
-  const [settings, setSettings] = useState<SettingsType>(initialSettings);
+  const [settings, setSettings] = useState<SettingsType>(
+    gameInfo.settings && Object.keys(gameInfo.settings).length
+      ? gameInfo.settings
+      : initialSettings,
+  );
 
   const owner = gameInfo.members.find(member => member.isOwner) || null;
   const players = gameInfo.members.filter(member => !member.isOwner);
@@ -43,6 +45,14 @@ function LobbyPage(props: Game): JSX.Element {
     : false;
 
   const onStartGame = async () => {
+    if (
+      settings &&
+      settings.cardsSet === 'own' &&
+      settings.ownCardsSet.length < 2
+    ) {
+      message.error('Should be two cards at least');
+      return;
+    }
     try {
       await settingsAPI.set(settings, gameInfo.id);
       await gameAPI.start(gameInfo.id);
@@ -135,7 +145,13 @@ function LobbyPage(props: Game): JSX.Element {
             tasks={gameInfo.tasks}
           />
           {isUserAnOwner && (
-            <Settings settings={settings} setSettings={setSettings} />
+            <Settings
+              settings={settings}
+              setSettings={setSettings}
+              ownerRole={owner.userRole}
+              gameId={gameInfo.id}
+              userId={gameInfo.members[0].id}
+            />
           )}
         </>
       )}

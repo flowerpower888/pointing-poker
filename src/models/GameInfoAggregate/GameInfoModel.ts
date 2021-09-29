@@ -1,3 +1,5 @@
+import { CardModel } from '../RoundResult/RoundModel';
+
 export type Member = {
   id?: string;
   firstName: string;
@@ -6,6 +8,18 @@ export type Member = {
   imagePath: string;
   isOwner?: boolean;
   userRole: Role;
+  userStatus?: UserStatus;
+};
+
+export type UserStatus = 'admitted' | 'pending' | 'rejected';
+export type MemberProperties = {
+  firstName?: string;
+  lastName?: string;
+  jobPosition?: string;
+  imagePath?: string;
+  isOwner?: boolean;
+  userRole?: Role;
+  userStatus?: UserStatus;
 };
 
 export type Role = 'observer' | 'player';
@@ -30,17 +44,12 @@ export type GameInfo = {
 };
 
 export type SettingsType = {
-  isOwnerAPlayer: boolean;
-  cardsSet: 'fibonacci' | 'own';
-  ownCardsSet: { value: number; id: string }[];
+  cardsSet: CardsSetType;
+  ownCardsSet: CardModel[];
   isAutoEnteringPlayers: boolean;
-  isAutoReversingCardsAfterVoting: boolean;
   isChangingCardInRoundEnd: boolean;
   isTimerNeeded: boolean;
   roundTime: number;
 };
 
-export type SettingsCardsType = {
-  value: number;
-  id: string;
-};
+export type CardsSetType = 'fibonacci' | 'powersOfTwo' | 'own';

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import gameAPI from '../../api/gameAPI';
 import Preloader from '../common/Preloader/Preloader';
 import {
   GameInfo,
   GameStatus,
+  Member,
 } from '../../models/GameInfoAggregate/GameInfoModel';
 import SocketHandler from '../../websockets-api/sockets';
 import LobbyPage from '../LobbyPage';
@@ -20,6 +21,7 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  const [currentPlayer, setCurrentPlayer] = useState<Member | null>(null);
 
   useEffect(() => {
     async function getGameStatus() {
@@ -31,17 +33,38 @@ const MainPage: React.FC = () => {
       socketConnect.handleUpdateStatus(setGameData, setGameStatus);
       socketConnect.handleUpdateIssues(setGameData);
       socketConnect.handleUpdateCurrentIssue(setGameData);
+      socketConnect.handleUpdateSettings(setGameData);
+      setCurrentPlayer(
+        gameInfo.data.members.filter(
+          member => member.id === localStorage.getItem('userId'),
+        )[0],
+      );
       setIsLoaded(true);
     }
 
     getGameStatus();
   }, [gameId]);
 
+  useEffect(() => {
+    if (gameData && gameData.members) {
+      setCurrentPlayer(
+        gameData.members.filter(
+          member => member.id === localStorage.getItem('userId'),
+        )[0] || null,
+      );
+    }
+  }, [gameData]);
+
+  if (currentPlayer && currentPlayer.userStatus === 'rejected') {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div className="main-page">
       {!isLoaded ? (
         <Preloader />
-      ) : gameStatus === 'started' ? (
+      ) : gameStatus === 'started' &&
+        currentPlayer?.userStatus !== 'pending' ? (
         <GamePage info={gameData} setGameStatus={setGameStatus} />
       ) : (
         <LobbyPage info={gameData} setGameStatus={setGameStatus} />

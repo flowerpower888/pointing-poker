@@ -1,6 +1,6 @@
 import { Button, Col, Divider, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
@@ -19,6 +19,7 @@ import gameAPI from '../../api/gameAPI';
 import memberAPI from '../../api/memberAPI';
 import issuesAPI from '../../api/issuesAPI';
 import SocketHandler from '../../websockets-api/sockets';
+import AdmittingUserPopup from './AdmittingUserPopup/AdmittingUserPopup';
 
 type Game = {
   info: GameInfo;
@@ -29,6 +30,13 @@ function GamePage(props: Game): JSX.Element {
   const history = useHistory();
   const { info: gameInfo, setGameStatus } = props;
   const { members, settings } = gameInfo;
+  const [waitingPlayer, setWaitingPlayer] = useState<Member | null>(null);
+
+  useEffect(() => {
+    setWaitingPlayer(
+      members.find(member => member.userStatus === 'pending') || null,
+    );
+  }, [members]);
 
   const currentIssue =
     gameInfo.tasks.find(el => el.id === gameInfo.currentTaskId) ||
@@ -38,7 +46,8 @@ function GamePage(props: Game): JSX.Element {
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
 
   const players: Member[] = members.filter(
-    member => member.userRole !== 'observer',
+    member =>
+      member.userRole !== 'observer' && member.userStatus === 'admitted',
   );
   const currentPlayer = gameInfo.members.filter(
     member => member.id === localStorage.getItem('userId'),
@@ -195,8 +204,18 @@ function GamePage(props: Game): JSX.Element {
 
       {currentPlayer.userRole !== 'observer' && (
         <Row className="cards-container" justify="center" gutter={[16, 16]}>
-          <Cards />
+          <Cards
+            cardsSet={settings.cardsSet}
+            ownCardsSet={settings.ownCardsSet}
+          />
         </Row>
+      )}
+      {waitingPlayer && (
+        <AdmittingUserPopup
+          waitingPlayer={waitingPlayer}
+          isVisible={waitingPlayer && currentPlayer.isOwner}
+          setWaitingPlayer={setWaitingPlayer}
+        />
       )}
     </div>
   );

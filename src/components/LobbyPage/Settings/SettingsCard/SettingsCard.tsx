@@ -5,12 +5,12 @@ import styles from './settingsCard.module.scss';
 import closeCross from '../../../../assets/closeCross.png';
 import plus from '../../../../assets/plus.png';
 import edit from '../../../../assets/edit.png';
-import { SettingsCardsType } from '../../../../models/GameInfoAggregate/GameInfoModel';
+import { CardModel } from '../../../../models/RoundResult/RoundModel';
 
 type SettingsCardPropsType = {
-  card: SettingsCardsType;
-  editCard?: (cardValue: number, id: string) => void;
-  addNewCard?: (cardValue: number, id: string) => void;
+  card: CardModel;
+  editCard?: (cardValue: string, id: string) => void;
+  addNewCard?: (cardValue: string, id: string) => void;
   isAddingCard?: boolean;
 };
 
@@ -20,7 +20,7 @@ const SettingsCard: FC<SettingsCardPropsType> = ({
   editCard,
   isAddingCard = false,
 }) => {
-  const [newCardValue, setNewCardValue] = useState<number>(card.value);
+  const [newCardValue, setNewCardValue] = useState<string>(card.value);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -31,7 +31,7 @@ const SettingsCard: FC<SettingsCardPropsType> = ({
       message.error(errorText);
     } else {
       setError('');
-      setNewCardValue(+inputValue);
+      setNewCardValue(inputValue);
     }
   };
   const onButtonClick = () => {
@@ -43,15 +43,15 @@ const SettingsCard: FC<SettingsCardPropsType> = ({
 
     if (!error && newCardValue && addNewCard) {
       const id = uuidv4();
-      addNewCard(+newCardValue, id);
+      addNewCard(newCardValue, id);
       setIsFlipped(false);
-      setNewCardValue(0);
+      setNewCardValue('');
     }
 
     if (!error && newCardValue && editCard) {
-      editCard(+newCardValue, card.id);
+      editCard(newCardValue, card.id);
       setIsFlipped(false);
-      setNewCardValue(+newCardValue);
+      setNewCardValue(newCardValue);
     }
   };
 
