@@ -80,7 +80,7 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
           <Button
             type="primary"
             size="large"
-            disabled={status === 'started'}
+            disabled={status === 'started' || !currentIssue}
             onClick={() => setStatus('started')}
           >
             {btnText}

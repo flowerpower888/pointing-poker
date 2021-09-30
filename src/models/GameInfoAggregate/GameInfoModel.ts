@@ -1,4 +1,5 @@
 import { CardModel } from '../RoundResult/RoundModel';
+import { RoundResult } from '../RoundResult/RoundModel';
 
 export type Member = {
   id?: string;
@@ -40,6 +41,8 @@ export type GameInfo = {
   id: string;
   status: GameStatus;
   members: Array<Member>;
+  votes: RoundResult[];
+  chat: Array<Message>;
   settings: SettingsType;
 };
 
@@ -50,6 +53,11 @@ export type SettingsType = {
   isChangingCardInRoundEnd: boolean;
   isTimerNeeded: boolean;
   roundTime: number;
+};
+
+export type Message = {
+  text: string;
+  userId: string;
 };
 
 export type CardsSetType = 'fibonacci' | 'powersOfTwo' | 'own';

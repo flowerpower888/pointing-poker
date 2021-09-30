@@ -9,11 +9,13 @@ export type Stats = {
   percents: string;
 };
 
+export type TaskScore = {
+  playerId?: string;
+  card: CardModel;
+};
+
 export type RoundResult = {
-  issue: string;
-  score: {
-    playerId?: string;
-    card: CardModel;
-  }[];
+  taskId: string;
+  score: TaskScore[];
   statistics?: Stats[];
 };

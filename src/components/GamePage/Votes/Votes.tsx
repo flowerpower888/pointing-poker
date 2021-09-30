@@ -4,10 +4,11 @@ import UserCard from '../../LobbyPage/UserCard';
 import columns from '../../../utils/votesTableColumns';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import './votes.scss';
+import { TaskScore } from '../../../models/RoundResult/RoundModel';
 
 type VotesPropsType = {
   players: Member[];
-  score?: string[];
+  score?: TaskScore[];
 };
 
 type PlayerInfoForTable = {
@@ -25,9 +26,9 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({ players, score }) => {
 
   useEffect(() => {
     setData(
-      players.map((member, i) => {
+      players.map(member => {
         const player = {
-          key: member.firstName,
+          key: member.id || '',
           player: (
             <UserCard
               isOwner={member.isOwner}
@@ -38,7 +39,9 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({ players, score }) => {
               isCurrentPlayerMaster={currentPlayer?.isOwner}
             />
           ),
-          score: score?.[i] || 'In progress',
+          score:
+            score?.find(x => x.playerId === member.id)?.card.value ||
+            'In progress',
         };
 
         return player;

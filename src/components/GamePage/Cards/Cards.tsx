@@ -7,12 +7,15 @@ import Card from './Card';
 type CardsPropsType = {
   cardsSet: CardsSetType;
   ownCardsSet: Array<CardModel>;
+  activeCard: CardModel | null;
+  setActiveCard: React.Dispatch<React.SetStateAction<CardModel | null>>;
 };
 const Cards: React.FunctionComponent<CardsPropsType> = ({
   cardsSet,
   ownCardsSet,
+  activeCard,
+  setActiveCard,
 }) => {
-  const [active, setActive] = useState<string | null>(null);
   const [cardSet, setCardSet] = useState<CardModel[]>(ownCardsSet);
 
   useEffect(() => {
@@ -38,9 +41,9 @@ const Cards: React.FunctionComponent<CardsPropsType> = ({
             <Col lg={4} sm={5} xs={5}>
               <Card
                 value={value}
-                active={active}
-                setActive={setActive}
                 imagePath={imagePath}
+                active={activeCard?.value}
+                setActiveCard={setActiveCard}
               />
             </Col>
           );
