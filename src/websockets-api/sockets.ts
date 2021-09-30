@@ -60,11 +60,11 @@ class SocketHandler {
     });
   }
 
-  handleUpdateTimerStatus(
-    setTimerStatus: React.Dispatch<React.SetStateAction<string>>,
+  handleUpdateRoundStatus(
+    setRoundStatus: React.Dispatch<React.SetStateAction<string>>,
   ): void {
     this.socket.on('roundStatusChange', status => {
-      setTimerStatus(status);
+      setRoundStatus(status);
     });
   }
 

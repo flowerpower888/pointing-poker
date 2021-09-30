@@ -43,7 +43,7 @@ function GamePage(props: Game): JSX.Element {
     gameInfo.tasks.find(task => task.id === gameInfo.currentTaskId) ||
     gameInfo.tasks[0] ||
     null;
-  const [timerStatus, setTimerStatus] = useState<string>('pending');
+  const [roundStatus, setRoundStatus] = useState<string>('pending');
   const [btnText, setBtnText] = useState('Run round');
   const [roundResult, setRoundResult] = useState<RoundResult | null>(
     gameInfo.votes.find(task => task.taskId === currentIssue?.id) || null,
@@ -60,7 +60,7 @@ function GamePage(props: Game): JSX.Element {
 
   useEffect(() => {
     const socketConnect = new SocketHandler(gameInfo.id);
-    socketConnect.handleUpdateTimerStatus(setTimerStatus);
+    socketConnect.handleUpdateRoundStatus(setRoundStatus);
     socketConnect.handleUpdateRoundResult(setRoundResult);
   }, [gameInfo.id]);
 
@@ -91,9 +91,9 @@ function GamePage(props: Game): JSX.Element {
   }, []);
 
   useEffect(() => {
-    gameAPI.setRoundStatus(gameInfo.id, timerStatus);
+    gameAPI.setRoundStatus(gameInfo.id, roundStatus);
 
-    switch (timerStatus) {
+    switch (roundStatus) {
       case 'started':
         setBtnText('Stop round');
         onRoundStart();
@@ -108,10 +108,10 @@ function GamePage(props: Game): JSX.Element {
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timerStatus, gameInfo.id]);
+  }, [roundStatus, gameInfo.id]);
 
   const onIssueClick = (issue: Issue) => {
-    if (timerStatus !== 'started') {
+    if (roundStatus !== 'started') {
       issuesAPI.setCurrent(issue.id, gameInfo.id);
     }
   };
@@ -183,8 +183,8 @@ function GamePage(props: Game): JSX.Element {
                     {settings.isTimerNeeded && (
                       <Timer
                         limit={settings.roundTime}
-                        status={timerStatus}
-                        setStatus={setTimerStatus}
+                        status={roundStatus}
+                        setStatus={setRoundStatus}
                       />
                     )}
 
@@ -195,11 +195,11 @@ function GamePage(props: Game): JSX.Element {
                           size="large"
                           disabled={
                             (settings.isTimerNeeded &&
-                              timerStatus === 'started') ||
+                              roundStatus === 'started') ||
                             !currentIssue
                           }
                           onClick={() =>
-                            setTimerStatus(prev =>
+                            setRoundStatus(prev =>
                               prev === 'started' ? 'stopped' : 'started',
                             )
                           }
@@ -224,7 +224,7 @@ function GamePage(props: Game): JSX.Element {
                                 gameInfo.id,
                               )
                             }
-                            disabled={timerStatus === 'started'}
+                            disabled={roundStatus === 'started'}
                             style={{ marginLeft: 10 }}
                           >
                             Next issue
