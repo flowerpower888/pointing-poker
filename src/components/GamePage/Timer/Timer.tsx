@@ -1,34 +1,22 @@
-import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Issue } from '../../../models/GameInfoAggregate/GameInfoModel';
 import './timer.scss';
 
 type TimerPropsType = {
   limit: number;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
-  currentIssue: Issue;
-  onRoundEnd: () => void;
-  onRoundStart: () => void;
-  showTimerBtn?: boolean;
 };
 
 const Timer: React.FunctionComponent<TimerPropsType> = ({
   limit,
   status,
   setStatus,
-  currentIssue,
-  onRoundEnd,
-  onRoundStart,
-  showTimerBtn = true,
 }) => {
-  const [btnText, setBtnText] = useState('Run round');
   const [seconds, setSeconds] = useState(limit);
   const [timerInterval, setTimerInterval] = useState<number | null>(null);
 
   useEffect(() => {
     const start = () => {
-      onRoundStart();
       setTimerInterval(
         window.setInterval(() => {
           setSeconds(prev => prev - 1);
@@ -37,11 +25,7 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
     };
 
     if (status === 'started') start();
-  }, [status, onRoundStart]);
-
-  useEffect(() => {
-    setBtnText('Run round');
-  }, [currentIssue]);
+  }, [status]);
 
   useEffect(() => {
     const stop = () => {
@@ -51,17 +35,15 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
       setTimerInterval(null);
       setSeconds(limit);
       setStatus('stopped');
-      setBtnText('Restart round');
     };
     if (seconds === 0) {
       stop();
-      onRoundEnd();
     }
-  }, [seconds, limit, timerInterval, status, setStatus, onRoundEnd]);
-
-  const isSingleDigit = (number: number): boolean => number % 10 === number;
+  }, [seconds, limit, timerInterval, setStatus]);
 
   const format = (timeInSeconds: number): string => {
+    const isSingleDigit = (number: number): boolean => number % 10 === number;
+
     const secondsInAMinute = 60;
     const minutesInAnHour = 60;
     const minutesInTime = Math.floor(timeInSeconds / secondsInAMinute);
@@ -76,16 +58,6 @@ const Timer: React.FunctionComponent<TimerPropsType> = ({
     <>
       <div className="timer">
         <div className="time">{format(seconds)}</div>
-        {showTimerBtn && (
-          <Button
-            type="primary"
-            size="large"
-            disabled={status === 'started' || !currentIssue}
-            onClick={() => setStatus('started')}
-          >
-            {btnText}
-          </Button>
-        )}
       </div>
     </>
   );
