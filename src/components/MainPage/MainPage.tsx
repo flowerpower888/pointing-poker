@@ -12,6 +12,7 @@ import SocketHandler from '../../websockets-api/sockets';
 import LobbyPage from '../LobbyPage';
 import GamePage from '../GamePage';
 import Chat from '../Chat';
+import GameResults from '../GameResults';
 import styles from './mainPage.module.scss';
 
 type GameParams = {
@@ -37,6 +38,7 @@ const MainPage: React.FC = () => {
       socketConnect.handleUpdateStatus(setGameData, setGameStatus);
       socketConnect.handleUpdateIssues(setGameData);
       socketConnect.handleUpdateCurrentIssue(setGameData);
+      socketConnect.handleUpdateVotes(setGameData);
       socketConnect.handleUpdateChat(setGameData);
       setIsLoaded(true);
     }
@@ -64,6 +66,8 @@ const MainPage: React.FC = () => {
         <Preloader />
       ) : gameStatus === 'started' ? (
         <GamePage info={gameData} setGameStatus={setGameStatus} />
+      ) : gameStatus === 'completed' ? (
+        <GameResults roundResults={gameData.votes} tasks={gameData.tasks} />
       ) : (
         <LobbyPage info={gameData} setGameStatus={setGameStatus} />
       )}
