@@ -1,10 +1,12 @@
 import React from 'react';
+import { CSVLink, CSVDownload } from 'react-csv';
 import { Col } from 'antd';
 import Statistics from '../GamePage/Statistics';
 import IssueCard from '../LobbyPage/Issues/IssueCard';
 import { RoundResult } from '../../models/RoundResult/RoundModel';
 import { Issue } from '../../models/GameInfoAggregate/GameInfoModel';
 import './gameResults.scss';
+import getPercentage from '../../utils/getPercentage';
 
 type GameResultsProps = {
   roundResults: RoundResult[] | null;
@@ -29,6 +31,28 @@ const GameResults: React.FunctionComponent<GameResultsProps> = ({
           </Col>
         </>
       ))}
+    <CSVLink
+      data={[
+        ['issue', 'votes'],
+        ...(roundResults?.map(roundResult => {
+          const cards = roundResult.score.map(player => player.card);
+
+          return [
+            tasks.find(task => task.id === roundResult.taskId)?.title,
+            getPercentage(
+              cards.map(card => card.value),
+              cards,
+            )
+              .map(result => `${result.card.value}: ${result.percents}`)
+              .join(', '),
+          ];
+        }) || []),
+      ]}
+      filename="results.csv"
+      className="ant-btn ant-btn-primary ant-btn-lg result-btn"
+    >
+      Download results
+    </CSVLink>
   </div>
 );
 
