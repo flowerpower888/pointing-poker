@@ -34,20 +34,19 @@ const Settings: FC<SettingsPropsType> = ({
   gameId,
   userId,
 }) => {
-  const addNewCard = (cardValue: string, id: string) => {
+  const addNewCard = (newValue: string) => {
     setSettings(prevSet => ({
       ...prevSet,
-      ownCardsSet: [...prevSet.ownCardsSet, { value: cardValue, id }],
+      ownCardsSet: [...prevSet.ownCardsSet, { value: newValue }],
     }));
   };
-  const editCard = (cardValue: string, id: string) => {
+  const editCard = (oldValue: string, newValue: string) => {
     setSettings(prevSet => {
       const searchedCardIndex = prevSet.ownCardsSet.findIndex(
-        card => card.id === id,
+        card => card.value === oldValue,
       );
       prevSet.ownCardsSet.splice(searchedCardIndex, 1, {
-        value: cardValue,
-        id,
+        value: newValue,
       });
       return { ...prevSet, ownCardsSet: [...prevSet.ownCardsSet] };
     });
@@ -104,12 +103,18 @@ const Settings: FC<SettingsPropsType> = ({
           {settings.cardsSet === 'own' && (
             <div className="cards">
               {settings.ownCardsSet.map(card => (
-                <SettingsCard card={card} key={card.id} editCard={editCard} />
+                <SettingsCard
+                  card={card}
+                  key={card.value}
+                  editCard={editCard}
+                  allCards={settings.ownCardsSet}
+                />
               ))}
               <SettingsCard
                 key={uuidv4()}
                 isAddingCard
-                card={{ value: '', id: uuidv4() }}
+                card={{ value: '' }}
+                allCards={settings.ownCardsSet}
                 addNewCard={addNewCard}
               />
             </div>

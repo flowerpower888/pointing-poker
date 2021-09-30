@@ -226,7 +226,7 @@ function GamePage(props: Game): JSX.Element {
           <Cards
             cardsSet={settings.cardsSet}
             ownCardsSet={settings.ownCardsSet}
-            activeCard={activeCard} 
+            activeCard={activeCard}
             setActiveCard={setActiveCard}
           />
         </Row>

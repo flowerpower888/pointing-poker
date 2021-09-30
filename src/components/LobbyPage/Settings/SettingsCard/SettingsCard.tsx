@@ -9,9 +9,10 @@ import { CardModel } from '../../../../models/RoundResult/RoundModel';
 
 type SettingsCardPropsType = {
   card: CardModel;
-  editCard?: (cardValue: string, id: string) => void;
-  addNewCard?: (cardValue: string, id: string) => void;
+  editCard?: (oldValue: string, newValue: string) => void;
+  addNewCard?: (newValue: string) => void;
   isAddingCard?: boolean;
+  allCards: CardModel[];
 };
 
 const SettingsCard: FC<SettingsCardPropsType> = ({
@@ -19,6 +20,7 @@ const SettingsCard: FC<SettingsCardPropsType> = ({
   addNewCard,
   editCard,
   isAddingCard = false,
+  allCards,
 }) => {
   const [newCardValue, setNewCardValue] = useState<string>(card.value);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
@@ -41,15 +43,21 @@ const SettingsCard: FC<SettingsCardPropsType> = ({
       message.error(errorText);
     }
 
+    if (allCards.some(c => c.value === newCardValue)) {
+      const errorText = 'Cards should not repeat';
+      setError(errorText);
+      message.error(errorText);
+      return;
+    }
+
     if (!error && newCardValue && addNewCard) {
-      const id = uuidv4();
-      addNewCard(newCardValue, id);
+      addNewCard(newCardValue);
       setIsFlipped(false);
       setNewCardValue('');
     }
 
     if (!error && newCardValue && editCard) {
-      editCard(newCardValue, card.id);
+      editCard(card.value, newCardValue);
       setIsFlipped(false);
       setNewCardValue(newCardValue);
     }
