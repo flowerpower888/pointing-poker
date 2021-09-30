@@ -1,5 +1,8 @@
 import { AxiosResponse } from 'axios';
-import { Member } from '../models/GameInfoAggregate/GameInfoModel';
+import {
+  Member,
+  MemberProperties,
+} from '../models/GameInfoAggregate/GameInfoModel';
 import instance from './api';
 
 const memberAPI = {
@@ -14,6 +17,16 @@ const memberAPI = {
 
   delete(userId: string, gameId: string): Promise<AxiosResponse> {
     return instance.delete(`/api/members/${gameId}/${userId}`);
+  },
+
+  update(
+    gameId: string,
+    userId: string,
+    memberProperties: MemberProperties,
+  ): Promise<AxiosResponse> {
+    return instance.patch(`/api/members/${gameId}/${userId}`, {
+      ...memberProperties,
+    });
   },
 };
 

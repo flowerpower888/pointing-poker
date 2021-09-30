@@ -1,12 +1,13 @@
 import { Button, Col, Divider, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import Issues from '../LobbyPage/Issues';
 import UserCard from '../LobbyPage/UserCard';
 import Timer from './Timer';
 import Votes from './Votes';
 import Cards from './Cards';
 import Statistics from './Statistics';
+import AdmittingUserPopup from './AdmittingUserPopup/AdmittingUserPopup';
 import { CardModel, RoundResult } from '../../models/RoundResult/RoundModel';
 import {
   GameInfo,
@@ -29,7 +30,14 @@ type Game = {
 function GamePage(props: Game): JSX.Element {
   const history = useHistory();
   const { info: gameInfo, setGameStatus } = props;
-  const { members } = gameInfo;
+  const { members, settings } = gameInfo;
+  const [waitingPlayer, setWaitingPlayer] = useState<Member | null>(null);
+
+  useEffect(() => {
+    setWaitingPlayer(
+      members.find(member => member.userStatus === 'pending') || null,
+    );
+  }, [members]);
 
   const currentIssue =
     gameInfo.tasks.find(task => task.id === gameInfo.currentTaskId) ||
@@ -43,7 +51,8 @@ function GamePage(props: Game): JSX.Element {
   const [cards, setCards] = useState<CardModel[]>([]);
 
   const players: Member[] = members.filter(
-    member => member.userRole !== 'observer',
+    member =>
+      member.userRole !== 'observer' && member.userStatus === 'admitted',
   );
   const currentPlayer = gameInfo.members.find(
     member => member.id === localStorage.getItem('userId'),
@@ -214,8 +223,20 @@ function GamePage(props: Game): JSX.Element {
 
       {currentPlayer.userRole !== 'observer' && (
         <Row className="cards-container" justify="center" gutter={[16, 16]}>
-          <Cards activeCard={activeCard} setActiveCard={setActiveCard} />
+          <Cards
+            cardsSet={settings.cardsSet}
+            ownCardsSet={settings.ownCardsSet}
+            activeCard={activeCard} 
+            setActiveCard={setActiveCard}
+          />
         </Row>
+      )}
+      {waitingPlayer && (
+        <AdmittingUserPopup
+          waitingPlayer={waitingPlayer}
+          isVisible={waitingPlayer && currentPlayer.isOwner}
+          setWaitingPlayer={setWaitingPlayer}
+        />
       )}
     </div>
   );

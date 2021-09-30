@@ -1,3 +1,4 @@
+import { CardModel } from '../RoundResult/RoundModel';
 import { RoundResult } from '../RoundResult/RoundModel';
 
 export type Member = {
@@ -8,6 +9,18 @@ export type Member = {
   imagePath: string;
   isOwner?: boolean;
   userRole: Role;
+  userStatus?: UserStatus;
+};
+
+export type UserStatus = 'admitted' | 'pending' | 'rejected';
+export type MemberProperties = {
+  firstName?: string;
+  lastName?: string;
+  jobPosition?: string;
+  imagePath?: string;
+  isOwner?: boolean;
+  userRole?: Role;
+  userStatus?: UserStatus;
 };
 
 export type Role = 'observer' | 'player';
@@ -30,9 +43,21 @@ export type GameInfo = {
   members: Array<Member>;
   votes: RoundResult[];
   chat: Array<Message>;
+  settings: SettingsType;
+};
+
+export type SettingsType = {
+  cardsSet: CardsSetType;
+  ownCardsSet: CardModel[];
+  isAutoEnteringPlayers: boolean;
+  isChangingCardInRoundEnd: boolean;
+  isTimerNeeded: boolean;
+  roundTime: number;
 };
 
 export type Message = {
   text: string;
   userId: string;
 };
+
+export type CardsSetType = 'fibonacci' | 'powersOfTwo' | 'own';

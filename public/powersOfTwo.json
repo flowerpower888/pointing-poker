@@ -1,0 +1,40 @@
+[
+  {
+    "value": "1",
+    "id": "1"
+  },
+  {
+    "value": "2",
+    "id": "2"
+  },
+  {
+    "value": "4",
+    "id": "4"
+  },
+  {
+    "value": "8",
+    "id": "8"
+  },
+  {
+    "value": "16",
+    "id": "16"
+  },
+  {
+    "value": "32",
+    "id": "32"
+  },
+  {
+    "value": "64",
+    "id": "64"
+  },
+  {
+    "id": "?",
+    "value": "?",
+    "imagePath": "question-mark.png"
+  },
+  {
+    "id": "coffeeCup",
+    "value": "coffeeCup",
+    "imagePath": "coffee-cup.png"
+  }
+]

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { WechatOutlined } from '@ant-design/icons';
 import gameAPI from '../../api/gameAPI';
@@ -7,6 +7,7 @@ import Preloader from '../common/Preloader/Preloader';
 import {
   GameInfo,
   GameStatus,
+  Member,
 } from '../../models/GameInfoAggregate/GameInfoModel';
 import SocketHandler from '../../websockets-api/sockets';
 import LobbyPage from '../LobbyPage';
@@ -25,6 +26,7 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  const [currentPlayer, setCurrentPlayer] = useState<Member | null>(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -38,12 +40,28 @@ const MainPage: React.FC = () => {
       socketConnect.handleUpdateStatus(setGameData, setGameStatus);
       socketConnect.handleUpdateIssues(setGameData);
       socketConnect.handleUpdateCurrentIssue(setGameData);
+      socketConnect.handleUpdateSettings(setGameData);
+      setCurrentPlayer(
+        gameInfo.data.members.filter(
+          member => member.id === localStorage.getItem('userId'),
+        )[0],
+      );
       socketConnect.handleUpdateVotes(setGameData);
       socketConnect.handleUpdateChat(setGameData);
       setIsLoaded(true);
     }
     getGameStatus();
   }, [gameId]);
+
+  useEffect(() => {
+    if (gameData && gameData.members) {
+      setCurrentPlayer(
+        gameData.members.filter(
+          member => member.id === localStorage.getItem('userId'),
+        )[0] || null,
+      );
+    }
+  }, [gameData]);
 
   useEffect(() => {
     if (
@@ -53,6 +71,10 @@ const MainPage: React.FC = () => {
       history.push('/');
     }
   }, [gameData]);
+
+  if (currentPlayer && currentPlayer.userStatus === 'rejected') {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="main-page">
@@ -64,7 +86,8 @@ const MainPage: React.FC = () => {
       )}
       {!isLoaded ? (
         <Preloader />
-      ) : gameStatus === 'started' ? (
+      ) : gameStatus === 'started' &&
+        currentPlayer?.userStatus !== 'pending' ? (
         <GamePage info={gameData} setGameStatus={setGameStatus} />
       ) : gameStatus === 'completed' ? (
         <GameResults roundResults={gameData.votes} tasks={gameData.tasks} />

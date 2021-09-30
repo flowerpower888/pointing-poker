@@ -34,6 +34,14 @@ class SocketHandler {
     });
   }
 
+  handleUpdateSettings(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('createSettings', settings => {
+      setGameData(prev => ({ ...prev, settings }));
+    });
+  }
+
   handleUpdateCurrentIssue(
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {

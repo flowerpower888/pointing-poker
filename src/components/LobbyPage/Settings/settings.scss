@@ -1,0 +1,36 @@
+.settings__container {
+  max-width: 480px;
+}
+
+.settings__container .ant-form-item {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1000px;
+}
+
+.settings__container .ant-form-item-control {
+  max-width: 200px;
+}
+
+.settings__container .cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2vw;
+  margin-bottom: 20px;
+}
+.settings__container .cards .card {
+  height: 150px;
+  width: 100px;
+}
+
+.settings__container .ant-switch {
+  display: block;
+  margin-left: auto;
+}
+.settings__container .ant-picker {
+  display: block;
+}
+
+.timepicker .ant-picker-footer {
+  display: "none";
+}
