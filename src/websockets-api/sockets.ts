@@ -35,6 +35,14 @@ class SocketHandler {
     });
   }
 
+  handleUpdateSettings(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('createSettings', settings => {
+      setGameData(prev => ({ ...prev, settings }));
+    });
+  }
+
   handleUpdateCurrentIssue(
     setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
   ): void {
@@ -53,11 +61,19 @@ class SocketHandler {
     });
   }
 
-  handleUpdateTimerStatus(
-    setTimerStatus: React.Dispatch<React.SetStateAction<string>>,
+  handleUpdateRoundStatus(
+    setRoundStatus: React.Dispatch<React.SetStateAction<string>>,
   ): void {
     this.socket.on('roundStatusChange', status => {
-      setTimerStatus(status);
+      setRoundStatus(status);
+    });
+  }
+
+  handleUpdateVotes(
+    setGameData: React.Dispatch<React.SetStateAction<GameInfo>>,
+  ): void {
+    this.socket.on('votesChange', votes => {
+      setGameData(prev => ({ ...prev, votes }));
     });
   }
 

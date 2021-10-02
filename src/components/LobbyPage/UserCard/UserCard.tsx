@@ -84,7 +84,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
             }
             size="large"
             alt="user avatar"
-            src={imagePath}
+            src={imagePath ?? ''}
           >
             {firstName[0] + (lastName ? lastName[0] : '')}
           </Avatar>

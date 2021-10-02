@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { WechatOutlined } from '@ant-design/icons';
 import gameAPI from '../../api/gameAPI';
@@ -13,6 +13,7 @@ import SocketHandler from '../../websockets-api/sockets';
 import LobbyPage from '../LobbyPage';
 import GamePage from '../GamePage';
 import Chat from '../Chat';
+import GameResults from '../GameResults';
 import styles from './mainPage.module.scss';
 import KickByVotes from '../KickByVotes';
 
@@ -29,6 +30,7 @@ const MainPage: React.FC = () => {
   const [showKickProposal, setShowKickProposal] = useState<boolean>(false);
   const [playerToKick, setPlayerToKick] = useState<Member | null>(null);
   const [kickProposeBy, setKickProposeBy] = useState<Member | null>(null);
+  const [currentPlayer, setCurrentPlayer] = useState<Member | null>(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -42,6 +44,13 @@ const MainPage: React.FC = () => {
       socketConnect.handleUpdateStatus(setGameData, setGameStatus);
       socketConnect.handleUpdateIssues(setGameData);
       socketConnect.handleUpdateCurrentIssue(setGameData);
+      socketConnect.handleUpdateSettings(setGameData);
+      setCurrentPlayer(
+        gameInfo.data.members.filter(
+          member => member.id === localStorage.getItem('userId'),
+        )[0],
+      );
+      socketConnect.handleUpdateVotes(setGameData);
       socketConnect.handleUpdateChat(setGameData);
       socketConnect.handleKickPlayer(
         setShowKickProposal,
@@ -55,6 +64,16 @@ const MainPage: React.FC = () => {
   }, [gameId]);
 
   useEffect(() => {
+    if (gameData && gameData.members) {
+      setCurrentPlayer(
+        gameData.members.filter(
+          member => member.id === localStorage.getItem('userId'),
+        )[0] || null,
+      );
+    }
+  }, [gameData]);
+
+  useEffect(() => {
     if (
       gameData.members &&
       !gameData.members.find(el => el.id === localStorage.getItem('userId'))
@@ -62,6 +81,10 @@ const MainPage: React.FC = () => {
       history.push('/');
     }
   }, [gameData]);
+
+  if (currentPlayer && currentPlayer.userStatus === 'rejected') {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="main-page">
@@ -73,8 +96,11 @@ const MainPage: React.FC = () => {
       )}
       {!isLoaded ? (
         <Preloader />
-      ) : gameStatus === 'started' ? (
+      ) : gameStatus === 'started' &&
+        currentPlayer?.userStatus !== 'pending' ? (
         <GamePage info={gameData} setGameStatus={setGameStatus} />
+      ) : gameStatus === 'completed' ? (
+        <GameResults roundResults={gameData.votes} tasks={gameData.tasks} />
       ) : (
         <LobbyPage info={gameData} setGameStatus={setGameStatus} />
       )}

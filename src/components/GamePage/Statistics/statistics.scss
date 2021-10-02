@@ -1,12 +1,14 @@
 .statistics {
   text-align: center;
+  margin-bottom: 20px;
 
   .card {
     height: 120px;
   }
+}
 
-  .percents {
-    font-size: 20px;
-    font-weight: normal;
-  }
+.percents {
+  text-align: center;
+  font-size: 20px;
+  font-weight: normal;
 }

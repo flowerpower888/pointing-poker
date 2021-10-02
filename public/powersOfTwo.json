@@ -1,0 +1,31 @@
+[
+  {
+    "value": "1"
+  },
+  {
+    "value": "2"
+  },
+  {
+    "value": "4"
+  },
+  {
+    "value": "8"
+  },
+  {
+    "value": "16"
+  },
+  {
+    "value": "32"
+  },
+  {
+    "value": "64"
+  },
+  {
+    "value": "?",
+    "imagePath": "question-mark.png"
+  },
+  {
+    "value": "coffeeCup",
+    "imagePath": "coffee-cup.png"
+  }
+]
