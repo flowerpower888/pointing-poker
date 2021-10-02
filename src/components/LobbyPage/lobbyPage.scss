@@ -58,4 +58,14 @@ div.lobby-copy-link {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 20px;
+  }
+
+  &__user-card {
+    margin-left: -20px;
+  }
 }

@@ -46,7 +46,7 @@ const Chat: FC<ChatPropsType> = ({
       title="Chat"
       placement="right"
       visible={isChatShown}
-      width={500}
+      contentWrapperStyle={{ maxWidth: 500, width: '100%' }}
       className={styles.chat}
       onClose={() => setIsChatShown(false)}
       footer={
