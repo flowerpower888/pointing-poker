@@ -27,7 +27,7 @@ function MembersList(props: MembersListPropsType): JSX.Element {
             imagePath={member.imagePath}
             jobPosition={member.jobPosition}
             id={member.id}
-            isCurrentPlayerMaster={currentPlayer?.isOwner}
+            isCurrentPlayerMaster={!currentPlayer || currentPlayer.isOwner}
           />
         ))}
       </div>

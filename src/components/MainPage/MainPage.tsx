@@ -15,6 +15,7 @@ import GamePage from '../GamePage';
 import Chat from '../Chat';
 import GameResults from '../GameResults';
 import styles from './mainPage.module.scss';
+import KickByVotes from '../KickByVotes';
 
 type GameParams = {
   gameId: string;
@@ -26,6 +27,9 @@ const MainPage: React.FC = () => {
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
+  const [showKickProposal, setShowKickProposal] = useState<boolean>(false);
+  const [playerToKick, setPlayerToKick] = useState<Member | null>(null);
+  const [kickProposeBy, setKickProposeBy] = useState<Member | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Member | null>(null);
   const history = useHistory();
 
@@ -48,6 +52,12 @@ const MainPage: React.FC = () => {
       );
       socketConnect.handleUpdateVotes(setGameData);
       socketConnect.handleUpdateChat(setGameData);
+      socketConnect.handleKickPlayer(
+        setShowKickProposal,
+        setPlayerToKick,
+        setKickProposeBy,
+        gameInfo.data.members,
+      );
       setIsLoaded(true);
     }
     getGameStatus();
@@ -102,6 +112,16 @@ const MainPage: React.FC = () => {
           isChatShown={isChatShown}
         />
       )}
+      {isLoaded &&
+        kickProposeBy &&
+        playerToKick &&
+        kickProposeBy.id !== localStorage.getItem('userId') &&
+        KickByVotes(
+          kickProposeBy,
+          playerToKick,
+          showKickProposal,
+          setShowKickProposal,
+        )}
     </div>
   );
 };
