@@ -86,6 +86,17 @@ function GamePage(props: Game): JSX.Element {
     setActiveCard(null);
   };
 
+  useEffect(() => {
+    if (
+      settings.isChangingCardInRoundEnd &&
+      roundStatus === 'stopped' &&
+      activeCard
+    ) {
+      onRoundEnd();
+      setActiveCard(null);
+    }
+  }, [activeCard]);
+
   const onRoundStart = useCallback(() => {
     setRoundResult(null);
   }, []);
