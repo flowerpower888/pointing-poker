@@ -31,8 +31,16 @@ export type Issue = {
   id: string;
   title: string;
   link?: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: IssuePriority;
 };
+
+export type IssueWithoutId = {
+  title: string;
+  link?: string;
+  priority: IssuePriority;
+};
+
+export type IssuePriority = 'low' | 'medium' | 'high';
 
 export type GameInfo = {
   tasks: Array<Issue>;
