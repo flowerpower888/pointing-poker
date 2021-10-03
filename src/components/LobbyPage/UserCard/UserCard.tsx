@@ -9,6 +9,7 @@ import kickByVoteAPI from '../../../api/kickByVoteAPI';
 
 type UserCardPropsType = Member & {
   isCurrentPlayerMaster?: boolean;
+  extraStyles?: React.CSSProperties;
 };
 
 function UserCard(props: UserCardPropsType): JSX.Element {
@@ -21,6 +22,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
     isOwner,
     id,
     isCurrentPlayerMaster,
+    extraStyles,
   } = props;
 
   const { Meta } = Card;
@@ -59,7 +61,7 @@ function UserCard(props: UserCardPropsType): JSX.Element {
   return (
     <Card
       className="user-card_container"
-      style={{ marginLeft: '20px', marginTop: '20px' }}
+      style={{ marginLeft: '20px', marginTop: '20px', ...extraStyles }}
     >
       {id !== localStorage.getItem('userId') && !isOwner && (
         <Button

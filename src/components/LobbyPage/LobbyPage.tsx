@@ -81,7 +81,7 @@ function LobbyPage(props: Game): JSX.Element {
           <h2 className="lobby-title"> Spring planning</h2>
 
           <div className="card_container">
-            <Col span={10}>
+            <Col span={10} className="card_container__user-card">
               <UserCard
                 isOwner={owner.isOwner}
                 imagePath={owner.imagePath}
