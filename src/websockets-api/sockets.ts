@@ -102,7 +102,6 @@ class SocketHandler {
     this.socket.on('kickPlayer', ({ playerToKickId, kickProposeById }) => {
       const playerToKick = members.find(el => el.id === playerToKickId);
       const kickProposeBy = members.find(el => el.id === kickProposeById);
-      console.log('get about kicking!', playerToKickId, kickProposeById);
       if (playerToKick && kickProposeBy) {
         setPlayerToKick(playerToKick);
         setKickProposeBy(kickProposeBy);

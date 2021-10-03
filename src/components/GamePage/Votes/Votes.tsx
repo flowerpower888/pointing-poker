@@ -26,26 +26,22 @@ const Votes: React.FunctionComponent<VotesPropsType> = ({ players, score }) => {
 
   useEffect(() => {
     setData(
-      players.map(member => {
-        const player = {
-          key: member.id || '',
-          player: (
-            <UserCard
-              isOwner={member.isOwner}
-              id={member.id}
-              firstName={member.firstName}
-              userRole={member.userRole}
-              imagePath={member.imagePath}
-              isCurrentPlayerMaster={currentPlayer?.isOwner}
-            />
-          ),
-          score:
-            score?.find(x => x.playerId === member.id)?.card.value ||
-            'In progress',
-        };
-
-        return player;
-      }),
+      players.map(member => ({
+        key: member.id || '',
+        player: (
+          <UserCard
+            isOwner={member.isOwner}
+            id={member.id}
+            firstName={member.firstName}
+            userRole={member.userRole}
+            imagePath={member.imagePath}
+            isCurrentPlayerMaster={currentPlayer?.isOwner}
+          />
+        ),
+        score:
+          score?.find(x => x.playerId === member.id)?.card.value ||
+          'In progress',
+      })),
     );
   }, [score, players, currentPlayer?.isOwner]);
 

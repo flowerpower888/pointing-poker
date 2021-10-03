@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Button, Input, message } from 'antd';
 import styles from './settingsCard.module.scss';
 import closeCross from '../../../../assets/closeCross.png';

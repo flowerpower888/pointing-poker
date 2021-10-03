@@ -154,11 +154,21 @@ function GamePage(props: Game): JSX.Element {
                   jobPosition={currentPlayer.jobPosition}
                 />
                 {currentPlayer.isOwner ? (
-                  <Button type="default" size="large" onClick={onStopGame}>
+                  <Button
+                    className="gameBtn"
+                    type="default"
+                    size="large"
+                    onClick={onStopGame}
+                  >
                     Stop game
                   </Button>
                 ) : (
-                  <Button type="default" size="large" onClick={onExitGame}>
+                  <Button
+                    className="gameBtn"
+                    type="default"
+                    size="large"
+                    onClick={onExitGame}
+                  >
                     Exit
                   </Button>
                 )}

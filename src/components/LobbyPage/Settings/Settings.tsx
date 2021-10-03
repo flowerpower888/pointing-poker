@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Form, TimePicker, Switch, Select } from 'antd';
 import './settings.scss';
