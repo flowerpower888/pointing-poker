@@ -29,7 +29,7 @@ const Cards: React.FunctionComponent<CardsPropsType> = ({
     };
 
     fetchCardSet();
-  }, []);
+  }, [cardsSet]);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Form, TimePicker, Switch, Select } from 'antd';
+import { Moment } from 'moment';
 import './settings.scss';
 import {
   CardsSetType,
@@ -19,12 +20,12 @@ type SettingsPropsType = {
 };
 
 type FormValuesType = {
-  isOwnerAPlayer?: boolean;
-  cardsSet?: CardsSetType;
-  isAutoEnteringPlayers?: boolean;
-  isChangingCardInRoundEnd?: boolean;
-  isTimerNeeded?: boolean;
-  roundTime?: any;
+  isOwnerAPlayer: boolean;
+  cardsSet: CardsSetType;
+  isAutoEnteringPlayers: boolean;
+  isChangingCardInRoundEnd: boolean;
+  isTimerNeeded: boolean;
+  roundTime: Moment;
 };
 
 const Settings: FC<SettingsPropsType> = ({
@@ -52,18 +53,34 @@ const Settings: FC<SettingsPropsType> = ({
     });
   };
   const onFormValuesChange = async (values: FormValuesType) => {
-    if (typeof values.isOwnerAPlayer === 'boolean' && gameId && userId) {
+    const {
+      isOwnerAPlayer,
+      cardsSet,
+      isAutoEnteringPlayers,
+      isChangingCardInRoundEnd,
+      isTimerNeeded,
+      roundTime,
+    } = values;
+    if (gameId && userId) {
       await memberAPI.update(gameId, userId, {
-        userRole: values.isOwnerAPlayer ? 'player' : 'observer',
+        userRole: isOwnerAPlayer ? 'player' : 'observer',
       });
-    } else if (values.roundTime) {
-      const minutes = values.roundTime.minutes();
-      const seconds = values.roundTime.seconds();
+    }
+    if (roundTime) {
+      const minutes = roundTime.minutes();
+      const seconds = roundTime.seconds();
       const secondsInAMinute = 60;
       const roundTimeInSeconds = minutes * secondsInAMinute + seconds;
       setSettings({ ...settings, roundTime: roundTimeInSeconds });
     } else {
-      setSettings({ ...settings, ...values });
+      setSettings({
+        ...settings,
+        cardsSet,
+        isAutoEnteringPlayers,
+        isChangingCardInRoundEnd,
+        isTimerNeeded,
+        roundTime,
+      });
     }
   };
 

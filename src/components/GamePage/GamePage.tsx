@@ -93,9 +93,9 @@ function GamePage(props: Game): JSX.Element {
       activeCard
     ) {
       onRoundEnd();
-      setActiveCard(null);
     }
-  }, [activeCard]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCard, settings.isChangingCardInRoundEnd, roundStatus]);
 
   const onRoundStart = useCallback(() => {
     setRoundResult(null);
