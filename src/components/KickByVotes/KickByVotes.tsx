@@ -29,7 +29,11 @@ function KickByVotes(
   }
   return (
     <Modal
-      title={`${kickProposeByFirstName} ${kickProposeByLastName} wants to kick member ${playerToKickFirstName} ${playerToKickLastName}.
+      title={`${kickProposeByFirstName} ${
+        kickProposeByLastName || ''
+      } wants to kick member ${playerToKickFirstName} ${
+        playerToKickLastName || ''
+      }.
     Do you agree with it?`}
       okText="Yes"
       okType="danger"
