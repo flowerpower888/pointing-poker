@@ -1,6 +1,6 @@
 import { CardModel, Stats } from '../models/RoundResult/RoundModel';
 
-const getPercentage = (cardValues: string[], cards: CardModel[]) => {
+const getPercentage = (cardValues: string[], cards: CardModel[]): Stats[] => {
   let percentage: Stats[] = [];
   const uniqueCards = Array.from(new Set(cardValues));
 

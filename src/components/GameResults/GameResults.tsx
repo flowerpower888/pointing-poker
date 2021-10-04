@@ -1,5 +1,5 @@
 import React from 'react';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import { Col } from 'antd';
 import Statistics from '../GamePage/Statistics';
 import IssueCard from '../LobbyPage/Issues/IssueCard';

@@ -58,6 +58,7 @@ const LobbyForm: React.FunctionComponent<LobbyFormPropsType> = ({
         }
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.log(e);
     } finally {
       closePopup();

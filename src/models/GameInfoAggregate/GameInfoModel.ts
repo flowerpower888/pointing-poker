@@ -1,5 +1,4 @@
-import { CardModel } from '../RoundResult/RoundModel';
-import { RoundResult } from '../RoundResult/RoundModel';
+import { CardModel, RoundResult } from '../RoundResult/RoundModel';
 
 export type Member = {
   id?: string;
