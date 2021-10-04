@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import Title from 'antd/lib/typography/Title';
-import { List, Avatar } from 'antd';
+import { Row, Col } from 'antd';
+import { GithubFilled, YoutubeOutlined } from '@ant-design/icons';
 import styles from './footer.module.scss';
 
 const Footer: FC = () => {
@@ -10,14 +11,14 @@ const Footer: FC = () => {
       github: 'https://github.com/helenakrasnova',
       imgUrl: 'https://avatars.githubusercontent.com/u/44213581?v=4',
       name: 'Alena Krasnova',
-      role: 'Mentor',
+      role: 'mentor',
     },
     {
       id: 1,
       github: 'https://github.com/flowerpower888',
       imgUrl: 'https://avatars.githubusercontent.com/u/53803736?v=4',
       name: 'Maria Romantsova',
-      role: 'Member',
+      role: 'member',
     },
     {
       id: 2,
@@ -25,46 +26,61 @@ const Footer: FC = () => {
       imgUrl:
         'https://avatars.githubusercontent.com/u/73237985?s=400&u=faddf0dc7daba7e1e735dab5135f973a4b929342&v=4',
       name: 'Maksim Zhuk',
-      role: 'Member',
+      role: 'member',
     },
     {
       id: 3,
       github: 'https://github.com/kathrinematveeva',
       imgUrl: 'https://avatars.githubusercontent.com/u/70895448?v=4',
-      name: 'Kathrine Matveeva',
-      role: 'Member',
+      name: 'Kathrine Matveyeva',
+      role: 'member',
     },
   ];
   return (
     <footer className={styles.footer}>
-      <List
-        size="large"
-        bordered
-        header={
-          <>
-            <Title level={3}>Our school:</Title>
-            <div className={styles.rsschool}>
-              <a href="https://rs.school/react/">
-                <img
-                  src="https://rs.school/images/rs_school_js.svg"
-                  alt="RS School React"
-                />
-              </a>
-            </div>
-            <Title level={3}>Created in 2021 by: </Title>
-          </>
-        }
-        dataSource={members}
-        renderItem={item => (
-          <List.Item key={item.id}>
-            <List.Item.Meta
-              avatar={<Avatar src={item.imgUrl} size="large" alt={item.name} />}
-              title={<a href={item.github}>{item.name}</a>}
-              description={item.role}
-            />
-          </List.Item>
-        )}
-      />
+      <Row>
+        <Col span={6}>
+          <Title level={4} style={{ color: 'white' }}>
+            Created by:
+          </Title>
+          {members.map(el =>
+            el.role === 'member' ? (
+              <div key={el.id} className={styles.member}>
+                {el.name}
+                <GithubFilled className={styles.gitIcon} />
+              </div>
+            ) : (
+              ''
+            ),
+          )}
+        </Col>
+        <Col span={6}>
+          <Title level={4} style={{ color: 'white' }}>
+            Mentor:
+          </Title>
+          {members.map(el =>
+            el.role === 'mentor' ? (
+              <div key={el.id} className={styles.member}>
+                {el.name} <GithubFilled className={styles.gitIcon} />
+              </div>
+            ) : (
+              ''
+            ),
+          )}
+        </Col>
+        <Col span={6} style={{ display: 'flex' }} className={styles.date}>
+          2021
+        </Col>
+        <Col span={6} style={{ display: 'flex' }} className={styles.schoolLink}>
+          <a href="https://rs.school/react/" className={styles.link}>
+            q
+          </a>
+          <div>Watch our review here:</div>
+          <a href="https://www.youtube.com/" className={styles.linkYoutube}>
+            <YoutubeOutlined style={{ fontSize: 30 }} />
+          </a>
+        </Col>
+      </Row>
     </footer>
   );
 };
