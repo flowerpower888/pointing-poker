@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 import {
   GameInfo,
   GameStatus,
-  Member,
 } from '../models/GameInfoAggregate/GameInfoModel';
 import { RoundResult } from '../models/RoundResult/RoundModel';
 
@@ -94,20 +93,12 @@ class SocketHandler {
   }
 
   handleKickPlayer(
-    setShowKickProposal: React.Dispatch<React.SetStateAction<boolean>>,
-    setPlayerToKick: React.Dispatch<React.SetStateAction<Member | null>>,
-    setKickProposeBy: React.Dispatch<React.SetStateAction<Member | null>>,
-    members: Array<Member>,
+    setPlayerToKick: React.Dispatch<React.SetStateAction<string | null>>,
+    setKickProposeBy: React.Dispatch<React.SetStateAction<string | null>>,
   ): void {
     this.socket.on('kickPlayer', ({ playerToKickId, kickProposeById }) => {
-      const playerToKick = members.find(el => el.id === playerToKickId);
-      const kickProposeBy = members.find(el => el.id === kickProposeById);
-      console.log('get about kicking!', playerToKickId, kickProposeById);
-      if (playerToKick && kickProposeBy) {
-        setPlayerToKick(playerToKick);
-        setKickProposeBy(kickProposeBy);
-        setShowKickProposal(true);
-      }
+      setPlayerToKick(playerToKickId);
+      setKickProposeBy(kickProposeById);
     });
   }
 }

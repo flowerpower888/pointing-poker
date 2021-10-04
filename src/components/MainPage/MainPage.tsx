@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -28,6 +29,8 @@ const MainPage: React.FC = () => {
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
   const [showKickProposal, setShowKickProposal] = useState<boolean>(false);
+  const [playerToKickId, setPlayerToKickId] = useState<string | null>(null);
+  const [kickProposeById, setKickProposeById] = useState<string | null>(null);
   const [playerToKick, setPlayerToKick] = useState<Member | null>(null);
   const [kickProposeBy, setKickProposeBy] = useState<Member | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Member | null>(null);
@@ -52,70 +55,68 @@ const MainPage: React.FC = () => {
       );
       socketConnect.handleUpdateVotes(setGameData);
       socketConnect.handleUpdateChat(setGameData);
-      socketConnect.handleKickPlayer(
-        setShowKickProposal,
-        setPlayerToKick,
-        setKickProposeBy,
-        gameInfo.data.members,
-      );
+      socketConnect.handleKickPlayer(setPlayerToKickId, setKickProposeById);
       setIsLoaded(true);
     }
+
     getGameStatus();
   }, [gameId]);
 
   useEffect(() => {
-    if (gameData && gameData.members) {
-      setCurrentPlayer(
-        gameData.members.filter(
-          member => member.id === localStorage.getItem('userId'),
-        )[0] || null,
+    if (gameData.members) {
+      const foundCurrentMember = gameData.members.find(
+        el => el.id === localStorage.getItem('userId'),
       );
+      if (foundCurrentMember) {
+        setCurrentPlayer(foundCurrentMember);
+      } else {
+        history.push('/');
+      }
     }
   }, [gameData]);
 
   useEffect(() => {
-    if (
-      gameData.members &&
-      !gameData.members.find(el => el.id === localStorage.getItem('userId'))
-    ) {
-      history.push('/');
+    const toKick = gameData.members?.find(el => el.id === playerToKickId);
+    const proposeBy = gameData.members?.find(el => el.id === kickProposeById);
+    if (toKick && proposeBy) {
+      setPlayerToKick(toKick);
+      setKickProposeBy(proposeBy);
+      setShowKickProposal(true);
     }
-  }, [gameData]);
+  }, [playerToKickId, kickProposeById]);
 
   if (currentPlayer && currentPlayer.userStatus === 'rejected') {
     return <Redirect to="/" />;
   }
-
+  if (!isLoaded) {
+    return <Preloader />;
+  }
   return (
     <div className="main-page">
-      {isLoaded && (
-        <WechatOutlined
-          onClick={() => setIsChatShown(true)}
-          className={styles.openingIcon}
-        />
-      )}
-      {!isLoaded ? (
-        <Preloader />
-      ) : gameStatus === 'started' &&
-        currentPlayer?.userStatus !== 'pending' ? (
-        <GamePage info={gameData} setGameStatus={setGameStatus} />
-      ) : gameStatus === 'completed' ? (
-        <GameResults roundResults={gameData.votes} tasks={gameData.tasks} />
-      ) : (
+      <WechatOutlined
+        onClick={() => setIsChatShown(true)}
+        className={styles.openingIcon}
+      />
+      <Chat
+        messages={gameData.chat}
+        members={gameData.members}
+        setIsChatShown={setIsChatShown}
+        isChatShown={isChatShown}
+      />
+
+      {gameStatus === 'created' && (
         <LobbyPage info={gameData} setGameStatus={setGameStatus} />
       )}
-      {isLoaded && (
-        <Chat
-          messages={gameData.chat}
-          members={gameData.members}
-          setIsChatShown={setIsChatShown}
-          isChatShown={isChatShown}
-        />
+      {gameStatus === 'started' && currentPlayer?.userStatus !== 'pending' && (
+        <GamePage info={gameData} setGameStatus={setGameStatus} />
       )}
-      {isLoaded &&
+      {gameStatus === 'completed' && (
+        <GameResults roundResults={gameData.votes} tasks={gameData.tasks} />
+      )}
+
+      {showKickProposal &&
         kickProposeBy &&
         playerToKick &&
-        kickProposeBy.id !== localStorage.getItem('userId') &&
         KickByVotes(
           kickProposeBy,
           playerToKick,
