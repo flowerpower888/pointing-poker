@@ -97,13 +97,8 @@ class SocketHandler {
     setKickProposeBy: React.Dispatch<React.SetStateAction<string | null>>,
   ): void {
     this.socket.on('kickPlayer', ({ playerToKickId, kickProposeById }) => {
-      const playerToKick = members.find(member => member.id === playerToKickId);
-      const kickProposeBy = members.find(member => member.id === kickProposeById);
-      if (playerToKick && kickProposeBy) {
-        setPlayerToKick(playerToKick);
-        setKickProposeBy(kickProposeBy);
-        setShowKickProposal(true);
-      }
+      setPlayerToKick(playerToKickId);
+      setKickProposeBy(kickProposeById);
     });
   }
 }
