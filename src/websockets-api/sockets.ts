@@ -7,7 +7,7 @@ import {
 import { RoundResult } from '../models/RoundResult/RoundModel';
 
 class SocketHandler {
-  socket = io('http://localhost:3001');
+  socket = io('https://pointingpokerback.herokuapp.com');
 
   gameId: string;
 
