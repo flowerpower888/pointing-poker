@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -73,7 +72,7 @@ const MainPage: React.FC = () => {
         history.push('/');
       }
     }
-  }, [gameData]);
+  }, [gameData, history]);
 
   useEffect(() => {
     const toKick = gameData.members?.find(el => el.id === playerToKickId);
@@ -83,7 +82,7 @@ const MainPage: React.FC = () => {
       setKickProposeBy(proposeBy);
       setShowKickProposal(true);
     }
-  }, [playerToKickId, kickProposeById]);
+  }, [playerToKickId, kickProposeById, gameData.members]);
 
   if (currentPlayer && currentPlayer.userStatus === 'rejected') {
     return <Redirect to="/" />;
@@ -91,6 +90,7 @@ const MainPage: React.FC = () => {
   if (!isLoaded) {
     return <Preloader />;
   }
+
   return (
     <div className="main-page">
       <WechatOutlined

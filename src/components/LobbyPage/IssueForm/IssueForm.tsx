@@ -84,9 +84,9 @@ const IssueForm: FC<IssueFormPropsType> = ({
       const file = e.target.files[0];
 
       const reader = new FileReader();
-      reader.onload = function () {
+      reader.addEventListener('load', () => {
         if (reader.result && typeof reader.result === 'string') {
-          let tasksFromFile: any;
+          let tasksFromFile;
           try {
             tasksFromFile = JSON.parse(reader.result);
           } catch {
@@ -122,12 +122,12 @@ const IssueForm: FC<IssueFormPropsType> = ({
           setIsIssueFormShown(false);
           setFileList('');
         }
-      };
+      });
 
-      reader.onerror = function () {
+      reader.addEventListener('error', () => {
         message.error(reader.error);
         setIsLoading(false);
-      };
+      });
 
       try {
         reader.readAsText(file);
