@@ -11,6 +11,11 @@ const issuesAPI = {
       task,
     });
   },
+  addSome(tasks: Issue[], gameId: string): Promise<AxiosResponse> {
+    return instance.post(`/api/issues/${gameId}/some`, {
+      tasks,
+    });
+  },
 
   update(
     task: Issue,

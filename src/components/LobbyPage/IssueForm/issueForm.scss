@@ -1,0 +1,29 @@
+.ant-popover-inner-content {
+	height: 250px;
+	overflow-y: scroll;
+}
+
+pre {
+	width: 100%;
+	padding: 10px;
+	margin: 0;
+	overflow: auto;
+	overflow-y: hidden;
+	font-size: 12px;
+	line-height: 20px;
+	background: #efefef;
+	border: 1px solid #777;
+}
+pre code {
+	padding: 10px;
+	color: #333;
+}
+
+.issue_form__link {
+	margin: 15px 0;
+}
+
+.issue-form__text {
+	margin-top: 15px;
+	margin-bottom: 5px;
+}
