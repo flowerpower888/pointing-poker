@@ -136,6 +136,7 @@ function GamePage(props: Game): JSX.Element {
     if (currentPlayer?.id) {
       history.push('/');
       await memberAPI.delete(currentPlayer.id, gameInfo.id);
+      votingAPI.removeVote(gameInfo.id, currentPlayer.id);
       localStorage.removeItem('userId');
     }
   };
