@@ -204,7 +204,7 @@ function GamePage(props: Game): JSX.Element {
                   <Col lg={12} sm={13}>
                     {settings.isTimerNeeded && (
                       <Timer
-                        limit={settings.roundTime}
+                        limit={+settings.roundTime}
                         status={roundStatus}
                         setStatus={setRoundStatus}
                       />

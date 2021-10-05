@@ -10,6 +10,7 @@ type CardsPropsType = {
   activeCard: CardModel | null;
   setActiveCard: React.Dispatch<React.SetStateAction<CardModel | null>>;
 };
+
 const Cards: React.FunctionComponent<CardsPropsType> = ({
   cardsSet,
   ownCardsSet,
