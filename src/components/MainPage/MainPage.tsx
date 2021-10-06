@@ -77,12 +77,13 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const toKick = gameData.members?.find(el => el.id === playerToKickId);
     const proposeBy = gameData.members?.find(el => el.id === kickProposeById);
-    if (toKick && proposeBy) {
+    const notCurrentUser = currentPlayer?.id !== kickProposeById;
+    if (toKick && proposeBy && notCurrentUser) {
       setPlayerToKick(toKick);
       setKickProposeBy(proposeBy);
       setShowKickProposal(true);
     }
-  }, [playerToKickId, kickProposeById, gameData.members]);
+  }, [playerToKickId, kickProposeById, gameData.members, currentPlayer?.id]);
 
   if (currentPlayer && currentPlayer.userStatus === 'rejected') {
     return <Redirect to="/" />;
