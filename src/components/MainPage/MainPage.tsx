@@ -117,9 +117,7 @@ const MainPage: React.FC = () => {
       {gameStatus === 'started' && currentPlayer?.userStatus !== 'pending' && (
         <GamePage info={gameData} setGameStatus={setGameStatus} />
       )}
-      {gameStatus === 'completed' && (
-        <GameResults roundResults={gameData.votes} tasks={gameData.tasks} />
-      )}
+      {gameStatus === 'completed' && <GameResults tasks={gameData.tasks} />}
 
       {showKickProposal &&
         kickProposeBy &&
