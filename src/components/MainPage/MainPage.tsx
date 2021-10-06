@@ -104,7 +104,9 @@ const MainPage: React.FC = () => {
         isChatShown={isChatShown}
       />
 
-      {gameStatus === 'created' && (
+      {(gameStatus === 'created' ||
+        (gameStatus === 'started' &&
+          currentPlayer?.userStatus === 'pending')) && (
         <LobbyPage info={gameData} setGameStatus={setGameStatus} />
       )}
       {gameStatus === 'started' && currentPlayer?.userStatus !== 'pending' && (
