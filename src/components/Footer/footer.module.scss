@@ -1,0 +1,62 @@
+$fontColor: #fff;
+.footer {
+  margin: 0 auto;
+  background: #2b3a67;
+  color: $fontColor;
+  padding: 20px 20px 10px 20px;
+}
+
+.member {
+  font-size: 16px;
+  padding: 2px;
+}
+
+.gitIcon {
+  font-size: 18px;
+  color: $fontColor;
+  padding: 5px;
+}
+
+.gitIcon:hover {
+  cursor: pointer;
+  color: #ffc482;
+  transition: all .5s;
+}
+
+
+.date {
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.schoolLink {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.link {
+  color: transparent;
+  width: 100px;
+  height: 50px;
+  background: url("../../assets/rss.svg") no-repeat;
+}
+
+.link:hover {
+  color: transparent;
+  transform: scale(1.1);
+  transition: all .5s;
+}
+
+.linkYoutube {
+  padding: 5px;
+  color: $fontColor;
+}
+
+.linkYoutube:hover {
+  transform: scale(1.1);
+  transition: all .5s;
+  color: #66999b;
+}

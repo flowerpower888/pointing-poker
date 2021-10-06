@@ -1,0 +1,14 @@
+.openingIcon {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  font-size: 20px;
+  color: #2b3a67;
+  &:hover {
+    color: #ffc482;
+  }
+}
+
+.mainPage{
+  min-height: calc(100vh - 234px);
+}

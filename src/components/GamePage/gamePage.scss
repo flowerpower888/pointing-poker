@@ -1,0 +1,13 @@
+.user-card_container {
+  min-width: 170px;
+}
+
+.gameBtn{
+  border: 1px solid #8aa8a8;
+}
+
+@media (max-width: 988px) {
+  .ant-divider {
+    display: none;
+  }
+}

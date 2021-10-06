@@ -1,0 +1,64 @@
+$buttonWidth: 241px;
+$responsiveButtonWidth: 200px;
+
+.home {
+  max-width: 1000px;
+  min-height: calc(100vh - 234px);
+  margin: 0 auto;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 130px 26px 132px 26px;
+}
+
+.container {
+  max-width: 517px;
+}
+.siteName {
+  text-align: center;
+  margin-bottom: 30px;
+  @media screen and (max-width: 600px) {
+    & img {
+      width: 400px;
+    }
+  }
+}
+
+.firstStroke {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.search button {
+  width: $buttonWidth;
+  @media screen and (max-width: 535px) {
+    width: $responsiveButtonWidth;
+  }
+}
+
+.button {
+  width: $buttonWidth;
+  @media screen and (max-width: 535px) {
+    width: $responsiveButtonWidth;
+  }
+}
+
+.text {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 28px;
+}
+
+.marked {
+  text-transform: uppercase;
+  color: #66999b;
+}
+
+.error {
+  color: red;
+}
+.secondStroke {
+  margin-top: 6px;
+  margin-bottom: 20px;
+}

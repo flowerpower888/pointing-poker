@@ -1,0 +1,55 @@
+$messageWindowColor: #f5f5f5;
+
+.message {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  &.reversing {
+    flex-direction: row-reverse;
+  }
+}
+
+.message .text {
+  padding: 10px;
+  border-radius: 7px;
+  position: relative;
+  width: 60%;
+  background-color: $messageWindowColor;
+  &.right::before {
+    position: absolute;
+    content: '';
+    bottom: 0px;
+    border: 10px solid transparent;
+    border-bottom: 10px solid $messageWindowColor;
+    border-radius: 3px;
+    right: -10px;
+    border-left: 10px solid $messageWindowColor;
+  }
+  &.left::before {
+    position: absolute;
+    content: '';
+    bottom: 0px;
+    border: 10px solid transparent;
+    border-bottom: 10px solid $messageWindowColor;
+    border-radius: 3px;
+    left: -10px;
+    border-right: 10px solid $messageWindowColor;
+  }
+
+  &.left {
+    margin-left: 8px;
+  }
+  &.right {
+    margin-right: 8px;
+  }
+}
+
+.sendIcon {
+  color: #66999b;
+  font-size: 18px;
+}
+
+.name {
+  color: #47c2af;
+  font-weight: bold;
+}

@@ -1,0 +1,18 @@
+.issues {
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 20px;
+  row-gap: 10px;
+  @media screen and (max-width: 950px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (max-width: 720px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.issues.vertical {
+  display: flex;
+  flex-direction: column;
+}

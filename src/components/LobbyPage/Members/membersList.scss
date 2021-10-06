@@ -1,0 +1,18 @@
+.members-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  .user-card_container {
+    margin: 20px;
+    width: 280px;
+  }
+}
+
+.delete_member {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+  color: #2b3a67;
+}
