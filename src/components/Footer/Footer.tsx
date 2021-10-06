@@ -76,7 +76,10 @@ const Footer: FC = () => {
             q
           </a>
           <div>Watch our review here:</div>
-          <a href="https://www.youtube.com/" className={styles.linkYoutube}>
+          <a
+            href="https://www.youtube.com/watch?v=X3BykU-BqXE&ab_channel=KaterinaMatveyeva"
+            className={styles.linkYoutube}
+          >
             <YoutubeOutlined style={{ fontSize: 30 }} />
           </a>
         </Col>
