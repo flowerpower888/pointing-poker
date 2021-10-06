@@ -90,7 +90,8 @@ function GamePage(props: Game): JSX.Element {
     if (
       settings.isChangingCardInRoundEnd &&
       roundStatus === 'stopped' &&
-      activeCard
+      activeCard &&
+      roundResult?.score
     ) {
       onRoundEnd();
     }
