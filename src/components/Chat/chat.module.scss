@@ -1,9 +1,4 @@
-$messageWindowColor: #dabfbf;
-
-.chat {
-  background: rgb(81, 215, 194);
-  background: linear-gradient(90deg, rgba(81, 215, 194, 0.7763480392156863) 0%, rgba(218, 191, 191, 1) 79%);
-}
+$messageWindowColor: #f5f5f5;
 
 .message {
   display: flex;
@@ -22,7 +17,7 @@ $messageWindowColor: #dabfbf;
   background-color: $messageWindowColor;
   &.right::before {
     position: absolute;
-    content: "";
+    content: '';
     bottom: 0px;
     border: 10px solid transparent;
     border-bottom: 10px solid $messageWindowColor;
@@ -32,7 +27,7 @@ $messageWindowColor: #dabfbf;
   }
   &.left::before {
     position: absolute;
-    content: "";
+    content: '';
     bottom: 0px;
     border: 10px solid transparent;
     border-bottom: 10px solid $messageWindowColor;

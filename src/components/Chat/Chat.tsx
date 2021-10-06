@@ -1,4 +1,6 @@
-import { SendOutlined, SmileOutlined } from '@ant-design/icons';
+import React, { FC, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { SendOutlined, SmileOutlined, UserOutlined } from '@ant-design/icons';
 import {
   Avatar,
   Drawer,
@@ -7,12 +9,10 @@ import {
   Popover,
   Result,
 } from 'antd';
-import React, { FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import chatAPI from '../../api/chatAPI';
 import { Member, Message } from '../../models/GameInfoAggregate/GameInfoModel';
-import styles from './chat.module.scss';
 import ContextMenuPopup from './ContextMenuPopup';
+import styles from './chat.module.scss';
 
 type ChatPropsType = {
   messages: Array<Message>;
@@ -41,12 +41,20 @@ const Chat: FC<ChatPropsType> = ({
     }
     setNewMessage('');
   };
+
   return (
     <Drawer
       title="Chat"
       placement="right"
       visible={isChatShown}
-      contentWrapperStyle={{ maxWidth: 500, width: '100%' }}
+      contentWrapperStyle={{
+        position: 'absolute',
+        bottom: 0,
+        minWidth: 350,
+        maxWidth: 500,
+        height: 500,
+      }}
+      mask={false}
       className={styles.chat}
       onClose={() => setIsChatShown(false)}
       footer={
@@ -84,7 +92,13 @@ const Chat: FC<ChatPropsType> = ({
               }
               size="large"
               alt="user avatar"
-              src={ownerCurrentMessage ? ownerCurrentMessage.imagePath : ''}
+              src={
+                ownerCurrentMessage ? (
+                  ownerCurrentMessage.imagePath
+                ) : (
+                  <UserOutlined />
+                )
+              }
             >
               {ownerCurrentMessage &&
                 ownerCurrentMessage.firstName[0] +

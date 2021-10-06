@@ -41,6 +41,7 @@ const Settings: FC<SettingsPropsType> = ({
       ownCardsSet: [...prevSet.ownCardsSet, { value: newValue }],
     }));
   };
+
   const editCard = (oldValue: string, newValue: string) => {
     setSettings(prevSet => {
       const searchedCardIndex = prevSet.ownCardsSet.findIndex(
@@ -52,20 +53,16 @@ const Settings: FC<SettingsPropsType> = ({
       return { ...prevSet, ownCardsSet: [...prevSet.ownCardsSet] };
     });
   };
+
   const onFormValuesChange = async (values: FormValuesType) => {
-    const {
-      isOwnerAPlayer,
-      cardsSet,
-      isAutoEnteringPlayers,
-      isChangingCardInRoundEnd,
-      isTimerNeeded,
-      roundTime,
-    } = values;
-    if (gameId && userId) {
+    const { isOwnerAPlayer, roundTime } = values;
+
+    if (gameId && userId && isOwnerAPlayer !== undefined) {
       await memberAPI.update(gameId, userId, {
         userRole: isOwnerAPlayer ? 'player' : 'observer',
       });
     }
+
     if (roundTime) {
       const minutes = roundTime.minutes();
       const seconds = roundTime.seconds();
@@ -75,11 +72,7 @@ const Settings: FC<SettingsPropsType> = ({
     } else {
       setSettings({
         ...settings,
-        cardsSet,
-        isAutoEnteringPlayers,
-        isChangingCardInRoundEnd,
-        isTimerNeeded,
-        roundTime,
+        ...values,
       });
     }
   };
@@ -99,14 +92,14 @@ const Settings: FC<SettingsPropsType> = ({
           <Form.Item
             label="Scram master as player:"
             name="isOwnerAPlayer"
-            valuePropName="checked"
+            valuePropName={ownerRole === 'player' ? 'checked' : ''}
           >
             <Switch />
           </Form.Item>
           <Form.Item
             label="Automatically admit all new members:"
             name="isAutoEnteringPlayers"
-            valuePropName="checked"
+            valuePropName={settings.isAutoEnteringPlayers ? 'checked' : ''}
           >
             <Switch />
           </Form.Item>
@@ -139,14 +132,14 @@ const Settings: FC<SettingsPropsType> = ({
           <Form.Item
             label="Changing card in round end:"
             name="isChangingCardInRoundEnd"
-            valuePropName="checked"
+            valuePropName={settings.isChangingCardInRoundEnd ? 'checked' : ''}
           >
             <Switch />
           </Form.Item>
           <Form.Item
             label="Is timer needed:"
             name="isTimerNeeded"
-            valuePropName="checked"
+            valuePropName={settings.isTimerNeeded ? 'checked' : ''}
           >
             <Switch />
           </Form.Item>
