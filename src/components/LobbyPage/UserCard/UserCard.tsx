@@ -79,17 +79,14 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       <Meta
         avatar={
           <Avatar
-            style={
-              imagePath
-                ? { backgroundColor: 'transparent' }
-                : { backgroundColor: '#51d7c2' }
-            }
+            style={{ backgroundColor: 'transparent' }}
             size="large"
             alt="user avatar"
-            src={imagePath ?? ''}
-          >
-            {firstName[0] + (lastName ? lastName[0] : '')}
-          </Avatar>
+            src={
+              imagePath ||
+              'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+            }
+          />
         }
         title={`${firstName} ${lastName || ''}`}
         description={jobPosition}
