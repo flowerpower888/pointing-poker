@@ -1,4 +1,5 @@
 import { CardModel, RoundResult } from '../RoundResult/RoundModel';
+import { Moment } from 'moment';
 
 export type Member = {
   id?: string;
@@ -24,7 +25,7 @@ export type MemberProperties = {
 
 export type Role = 'observer' | 'player';
 
-export type GameStatus = 'created' | 'started' | 'completed';
+export type GameStatus = 'created' | 'started' | 'completed' | 'canceled';
 
 export type Issue = {
   id: string;
@@ -59,7 +60,7 @@ export type SettingsType = {
   isAutoEnteringPlayers: boolean;
   isChangingCardInRoundEnd: boolean;
   isTimerNeeded: boolean;
-  roundTime: number;
+  roundTime: number | Moment;
 };
 
 export type Message = {

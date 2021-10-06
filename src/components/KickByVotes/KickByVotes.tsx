@@ -29,12 +29,17 @@ function KickByVotes(
   }
   return (
     <Modal
-      title={`${kickProposeByFirstName} ${
-        kickProposeByLastName || ''
-      } wants to kick member ${playerToKickFirstName} ${
-        playerToKickLastName || ''
-      }.
-    Do you agree with it?`}
+      title={
+        <p
+          style={{
+            fontWeight: 'bold',
+            fontSize: 20,
+            textAlign: 'center',
+          }}
+        >
+          Kick
+        </p>
+      }
       okText="Yes"
       okType="danger"
       cancelText="No"
@@ -43,7 +48,18 @@ function KickByVotes(
       onCancel={() => sendVote(false)}
       centered
       maskClosable
-    />
+    >
+      <p style={{ fontSize: 16 }}>
+        <span style={{ color: '#66999b' }}>
+          {kickProposeByFirstName} {kickProposeByLastName || ''}
+        </span>{' '}
+        wants to kick member{' '}
+        <span style={{ color: '#66999b' }}>
+          {playerToKickFirstName} {playerToKickLastName || ''}
+        </span>
+        ! Do you agree with it?
+      </p>
+    </Modal>
   );
 }
 export default KickByVotes;

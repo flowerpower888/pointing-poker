@@ -23,7 +23,7 @@ type GameParams = {
 
 const MainPage: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [isChatShown, setIsChatShown] = useState<boolean>(false);
+  const [isChatShown, setIsChatShown] = useState<boolean>(true);
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
@@ -77,12 +77,13 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const toKick = gameData.members?.find(el => el.id === playerToKickId);
     const proposeBy = gameData.members?.find(el => el.id === kickProposeById);
-    if (toKick && proposeBy) {
+    const notCurrentUser = currentPlayer?.id !== kickProposeById;
+    if (toKick && proposeBy && notCurrentUser) {
       setPlayerToKick(toKick);
       setKickProposeBy(proposeBy);
       setShowKickProposal(true);
     }
-  }, [playerToKickId, kickProposeById, gameData.members]);
+  }, [playerToKickId, kickProposeById, gameData.members, currentPlayer?.id]);
 
   if (currentPlayer && currentPlayer.userStatus === 'rejected') {
     return <Redirect to="/" />;
@@ -91,8 +92,12 @@ const MainPage: React.FC = () => {
     return <Preloader />;
   }
 
+  if (gameStatus === 'canceled') {
+    return <Redirect to="/" />;
+  }
+
   return (
-    <div className="main-page">
+    <div className={styles.mainPage}>
       <WechatOutlined
         onClick={() => setIsChatShown(true)}
         className={styles.openingIcon}
@@ -104,7 +109,9 @@ const MainPage: React.FC = () => {
         isChatShown={isChatShown}
       />
 
-      {gameStatus === 'created' && (
+      {(gameStatus === 'created' ||
+        (gameStatus === 'started' &&
+          currentPlayer?.userStatus === 'pending')) && (
         <LobbyPage info={gameData} setGameStatus={setGameStatus} />
       )}
       {gameStatus === 'started' && currentPlayer?.userStatus !== 'pending' && (

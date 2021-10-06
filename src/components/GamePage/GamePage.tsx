@@ -90,7 +90,8 @@ function GamePage(props: Game): JSX.Element {
     if (
       settings.isChangingCardInRoundEnd &&
       roundStatus === 'stopped' &&
-      activeCard
+      activeCard &&
+      roundResult?.score
     ) {
       onRoundEnd();
     }
@@ -136,6 +137,7 @@ function GamePage(props: Game): JSX.Element {
     if (currentPlayer?.id) {
       history.push('/');
       await memberAPI.delete(currentPlayer.id, gameInfo.id);
+      votingAPI.removeVote(gameInfo.id, currentPlayer.id);
       localStorage.removeItem('userId');
     }
   };
@@ -150,7 +152,7 @@ function GamePage(props: Game): JSX.Element {
         <>
           <Row justify="space-between" style={{ marginBottom: 30, rowGap: 15 }}>
             <Col lg={15} sm={24} xs={24}>
-              <h2 className="lobby-title">Spring planning</h2>
+              <h2 className="lobby-title">Sprint planning</h2>
               <Row
                 justify="space-between"
                 align="bottom"
@@ -204,7 +206,7 @@ function GamePage(props: Game): JSX.Element {
                   <Col lg={12} sm={13}>
                     {settings.isTimerNeeded && (
                       <Timer
-                        limit={settings.roundTime}
+                        limit={+settings.roundTime}
                         status={roundStatus}
                         setStatus={setRoundStatus}
                       />

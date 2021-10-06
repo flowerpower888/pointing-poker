@@ -10,6 +10,7 @@ type CardsPropsType = {
   activeCard: CardModel | null;
   setActiveCard: React.Dispatch<React.SetStateAction<CardModel | null>>;
 };
+
 const Cards: React.FunctionComponent<CardsPropsType> = ({
   cardsSet,
   ownCardsSet,
@@ -38,7 +39,7 @@ const Cards: React.FunctionComponent<CardsPropsType> = ({
           const { value, imagePath } = card;
 
           return (
-            <Col lg={4} sm={5} xs={5}>
+            <Col key={cardSet + value} lg={4} sm={5} xs={5}>
               <Card
                 value={value}
                 imagePath={imagePath}
