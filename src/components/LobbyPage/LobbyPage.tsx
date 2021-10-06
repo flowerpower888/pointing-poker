@@ -116,10 +116,7 @@ function LobbyPage(props: Game): JSX.Element {
                   className="lobby-btn"
                   type="default"
                   size="large"
-                  onClick={() => {
-                    if (gameInfo.status === 'started')
-                      gameAPI.complete(gameInfo.id);
-                  }}
+                  onClick={() => gameAPI.cancel(gameInfo.id)}
                 >
                   Cancel game
                 </Button>

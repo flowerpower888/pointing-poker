@@ -91,6 +91,10 @@ const MainPage: React.FC = () => {
     return <Preloader />;
   }
 
+  if (gameStatus === 'canceled') {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div className={styles.mainPage}>
       <WechatOutlined

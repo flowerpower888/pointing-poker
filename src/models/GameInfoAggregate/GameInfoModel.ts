@@ -25,7 +25,7 @@ export type MemberProperties = {
 
 export type Role = 'observer' | 'player';
 
-export type GameStatus = 'created' | 'started' | 'completed';
+export type GameStatus = 'created' | 'started' | 'completed' | 'canceled';
 
 export type Issue = {
   id: string;

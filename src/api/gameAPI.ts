@@ -26,6 +26,12 @@ const gameAPI = {
       status,
     });
   },
+  cancel(gameId: string): Promise<AxiosResponse> {
+    const status: GameStatus = 'canceled';
+    return instance.put(`/api/status/${gameId}`, {
+      status,
+    });
+  },
   addPhoto(imageFile: Blob): Promise<AxiosResponse<string>> {
     const formData = new FormData();
     formData.append('image', imageFile);
