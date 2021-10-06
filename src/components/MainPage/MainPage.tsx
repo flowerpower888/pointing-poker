@@ -23,7 +23,7 @@ type GameParams = {
 
 const MainPage: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [isChatShown, setIsChatShown] = useState<boolean>(false);
+  const [isChatShown, setIsChatShown] = useState<boolean>(true);
   const { gameId } = useParams<GameParams>();
   const [gameData, setGameData] = useState({} as GameInfo);
   const [gameStatus, setGameStatus] = useState<GameStatus>('created');
@@ -90,6 +90,10 @@ const MainPage: React.FC = () => {
   }
   if (!isLoaded) {
     return <Preloader />;
+  }
+
+  if (gameStatus === 'canceled') {
+    return <Redirect to="/" />;
   }
 
   return (

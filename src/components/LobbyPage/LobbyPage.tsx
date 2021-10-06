@@ -78,7 +78,7 @@ function LobbyPage(props: Game): JSX.Element {
     <div className="lobby-page">
       {owner && (
         <>
-          <h2 className="lobby-title"> Spring planning</h2>
+          <h2 className="lobby-title"> Sprint planning</h2>
 
           <div className="card_container">
             <Col span={10} className="card_container__user-card">
@@ -116,10 +116,7 @@ function LobbyPage(props: Game): JSX.Element {
                   className="lobby-btn"
                   type="default"
                   size="large"
-                  onClick={() => {
-                    if (gameInfo.status === 'started')
-                      gameAPI.complete(gameInfo.id);
-                  }}
+                  onClick={() => gameAPI.cancel(gameInfo.id)}
                 >
                   Cancel game
                 </Button>
