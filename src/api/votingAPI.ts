@@ -3,6 +3,9 @@ import { CardModel, RoundResult } from '../models/RoundResult/RoundModel';
 import instance from './api';
 
 const votingAPI = {
+  getVotes(gameId: string): Promise<AxiosResponse<RoundResult[]>> {
+    return instance.get(`/api/votes/${gameId}`);
+  },
   getVotesByTask(
     gameId: string,
     taskId: string,
