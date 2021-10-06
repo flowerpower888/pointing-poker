@@ -152,7 +152,7 @@ function GamePage(props: Game): JSX.Element {
         <>
           <Row justify="space-between" style={{ marginBottom: 30, rowGap: 15 }}>
             <Col lg={15} sm={24} xs={24}>
-              <h2 className="lobby-title">Spring planning</h2>
+              <h2 className="lobby-title">Sprint planning</h2>
               <Row
                 justify="space-between"
                 align="bottom"
