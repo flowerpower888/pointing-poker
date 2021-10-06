@@ -92,7 +92,7 @@ const MainPage: React.FC = () => {
   }
 
   return (
-    <div className="main-page">
+    <div className={styles.mainPage}>
       <WechatOutlined
         onClick={() => setIsChatShown(true)}
         className={styles.openingIcon}

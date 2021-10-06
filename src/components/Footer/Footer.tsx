@@ -47,7 +47,9 @@ const Footer: FC = () => {
             el.role === 'member' ? (
               <div key={el.id} className={styles.member}>
                 {el.name}
-                <GithubFilled className={styles.gitIcon} />
+                <a href={el.github} style={{ color: 'white' }}>
+                  <GithubFilled className={styles.gitIcon} />
+                </a>
               </div>
             ) : (
               ''
@@ -61,7 +63,10 @@ const Footer: FC = () => {
           {members.map(el =>
             el.role === 'mentor' ? (
               <div key={el.id} className={styles.member}>
-                {el.name} <GithubFilled className={styles.gitIcon} />
+                {el.name}
+                <a href={el.github} style={{ color: 'white' }}>
+                  <GithubFilled className={styles.gitIcon} />
+                </a>
               </div>
             ) : (
               ''
