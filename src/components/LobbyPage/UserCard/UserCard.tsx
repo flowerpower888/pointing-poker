@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Avatar, Button, Card, Modal } from 'antd';
-import { CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  CloseOutlined,
+  ExclamationCircleOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import './userCard.scss';
 import { Member } from '../../../models/GameInfoAggregate/GameInfoModel';
 import memberAPI from '../../../api/memberAPI';
@@ -79,14 +83,17 @@ function UserCard(props: UserCardPropsType): JSX.Element {
       <Meta
         avatar={
           <Avatar
-            style={{ backgroundColor: 'transparent' }}
+            style={
+              imagePath
+                ? { backgroundColor: 'transparent' }
+                : { backgroundColor: '#51d7c2' }
+            }
             size="large"
             alt="user avatar"
-            src={
-              imagePath ||
-              'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-            }
-          />
+            src={imagePath || <UserOutlined />}
+          >
+            {`${firstName[0]}${lastName?.[0] || ''}`}
+          </Avatar>
         }
         title={`${firstName} ${lastName || ''}`}
         description={jobPosition}
